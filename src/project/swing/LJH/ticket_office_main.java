@@ -1,8 +1,10 @@
 package project.swing.LJH;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Frame;
 import java.awt.GridLayout;
 
 import javax.swing.JButton;
@@ -33,6 +35,7 @@ public class ticket_office_main extends JFrame {
 	String[] dates = {"임시상영표","이 리스트는","나중에","DB연동하기"};
 
 
+	
 	public ticket_office_main() {
 		super("매표소");
 		
@@ -43,7 +46,7 @@ public class ticket_office_main extends JFrame {
 		*/
 		v_point = new JPanel();
 		v_point.setLayout(new FlowLayout(FlowLayout.RIGHT)); 
-		v_point.setBorder(new EmptyBorder(5,0,30,0)); 
+		v_point.setBorder(new EmptyBorder(10,10,10,10)); 
 		/*각 패널별로 공간띄어주기함 */
 		point = new JLabel("잔여포인트:       ");		
 		show_point = new JLabel("10000"); //임의숫자	
@@ -117,7 +120,7 @@ public class ticket_office_main extends JFrame {
 		 */
 		c_movie = new JPanel();
 		c_movie.setLayout(new BorderLayout());		
-		c_movie.setPreferredSize(new Dimension(80,80)); /*각 패널의 크기 제한*/
+		c_movie.setPreferredSize(new Dimension(40,60)); /*각 패널의 크기 제한*/
 		c_movie.add(new JLabel(" [영화 선택] "),BorderLayout.NORTH);
 		JList movie_name = new JList(movies); 
 		/* *****나중에 여기에 db연동으로 집어넣기***** */
@@ -130,7 +133,7 @@ public class ticket_office_main extends JFrame {
 		c_room = new JPanel();
 		c_room.setLayout(new BorderLayout());
 		
-		c_room.setPreferredSize(new Dimension(80,80)); /*각 패널의 크기 제한*/
+		c_room.setPreferredSize(new Dimension(40,60)); /*각 패널의 크기 제한*/
 		c_room.add(new JLabel(" [극장 선택] "),BorderLayout.NORTH);
 		JList movie_room = new JList(rooms);
 		/* *****나중에 여기에 db연동으로 집어넣기***** */
@@ -141,7 +144,7 @@ public class ticket_office_main extends JFrame {
 		/*상영시간표 패널*/
 		c_time = new JPanel();
 		c_time.setLayout(new BorderLayout());		
-		c_time.setPreferredSize(new Dimension(80,80));  /*각 패널의 크기 제한*/
+		c_time.setPreferredSize(new Dimension(40,60));  /*각 패널의 크기 제한*/
 		c_time.add(new JLabel(" [상영 시간표] "),BorderLayout.NORTH);
 		JList movie_date = new JList(dates);
 		/* *****나중에 여기에 db연동으로 집어넣기***** */
@@ -153,10 +156,13 @@ public class ticket_office_main extends JFrame {
 		
 		c_date = new JPanel();
 		c_date.setLayout(new BorderLayout());
-		
+		c_date.setPreferredSize(new Dimension(250,300));
 		c_date.add(new JLabel(" [날짜 선택] "),BorderLayout.NORTH);
 		
 		/*  *******날짜 API 갖고오기******* */
+
+		
+		
 		
 		
 		

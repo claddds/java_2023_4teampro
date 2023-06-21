@@ -1,6 +1,7 @@
 package project.swing.LJH;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -21,7 +22,7 @@ public class ticket_before_pay extends JFrame{
 	JLabel point,show_point,pay,show_name,show_date,show_room,show_peo,show_seat,show_price;
 	JButton pay_bt, back_bt;
 	
-	
+
 	
 	
 	public ticket_before_pay() {
@@ -108,6 +109,7 @@ public class ticket_before_pay extends JFrame{
 		center.add(p5);
 		center.add(p6);
 		
+		
 	
 	    
 		/*버튼*/
@@ -136,7 +138,9 @@ public class ticket_before_pay extends JFrame{
 		
 	}
 	
-	
+
+
+
 	public static void main(String[] args) {
 		new ticket_before_pay();
 	}  //메인
