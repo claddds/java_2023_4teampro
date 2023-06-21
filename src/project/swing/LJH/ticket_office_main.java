@@ -50,7 +50,7 @@ public class ticket_office_main extends JFrame {
 		
 		v_point.add(point);
 		v_point.add(show_point);
-		
+		 
 		
 		/*선택한 영화정보가 보이는 패널
 		 *JList안에 있는 DB연동이 되어 보이는 것을 선택한대로
