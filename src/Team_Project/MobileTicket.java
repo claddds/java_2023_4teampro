@@ -23,6 +23,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
 public class MobileTicket extends JFrame {
+	//
 	JPanel MainP, CenterWrapperPanel, ButtonPanel;
 	JButton cancel;
 
