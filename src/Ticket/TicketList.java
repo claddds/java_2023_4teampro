@@ -1,4 +1,4 @@
-package Team_Project;
+package Ticket;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;

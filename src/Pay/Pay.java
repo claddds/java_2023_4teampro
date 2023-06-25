@@ -1,11 +1,18 @@
-package Team_Project;
+package Pay;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.util.Date;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -14,11 +21,16 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
-public class Pay extends JFrame {
+import common.Protocol;
+
+public class Pay extends JFrame{
 	JPanel northPanel, centerPanel, remainingPanel, payPanel, ButtonPanel;
 	JButton pay, cancel;
+	
+	Socket s;
+	ObjectOutputStream out;
+	ObjectInputStream in;
 
 	public Pay() {
 		super("결제");
@@ -77,7 +89,7 @@ public class Pay extends JFrame {
 
 		// 결제, 취소 버튼
 		ButtonPanel = new JPanel();
-		pay = new JButton("결제하기");
+		pay = new JButton("결제하기"); // 버튼클릭->티켓테이블INSERT, 포인트테이블INSERT
 		cancel = new JButton("취소하기");
 		ButtonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 10));
 		ButtonPanel.add(pay);
@@ -98,11 +110,57 @@ public class Pay extends JFrame {
 		setVisible(true); // 닫힐 때 프로그램이 종료
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false); // 크기 조절 비활성화
-
+		
+		// 접속
+		connected();
+		
+		//결제하기 버튼 -> DB에 영화 직접 삽입
+		pay.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					
+					Pay_VO pay_vo = new Pay_VO();
+					pay_vo.setTicket_num(1);
+					pay_vo.setMovie_id(2);
+					pay_vo.setCust_number(12);
+					pay_vo.setMovie_name("스파이더맨");
+					pay_vo.setTheater_id(3);
+					pay_vo.setMovie_date("2023-06-26");
+					pay_vo.setStart_time("13:30");
+					pay_vo.setEnd_time("15:50");
+					pay_vo.setTheater_seat("G열18");
+					
+					Protocol p = new Protocol();
+					p.setCmd(1); // cmd에 1를 담는다.
+					p.setPay_vo(pay_vo); // 프로토콜에 VO 객체를 설정
+					
+					out.writeObject(p); // objectOutputStream을 통해 Protocol 객체를 서버로 전송
+					out.flush(); // 출력 스트림을 비우는 역할
+					
+					System.out.println("영화 정보가 입력되었습니다.");
+				} catch (Exception e1) {
+				} 
+			}
+		});
+		
 	}
 
+	public void connected() {
+		try {
+			s = new Socket("192.168.0.11", 7789);
+			out = new ObjectOutputStream(s.getOutputStream());
+			in = new ObjectInputStream(s.getInputStream());
+			//new Thread(this).start();
+			
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
+		
+	
 	public static void main(String[] args) {
-		new Pay();
+				new Pay();
 	}
 }
-

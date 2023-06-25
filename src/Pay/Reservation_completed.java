@@ -1,4 +1,4 @@
-package Team_Project;
+package Pay;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
