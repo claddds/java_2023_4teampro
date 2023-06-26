@@ -6,17 +6,17 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/YW/Documents/JH_studyspace/ojdbc8.jar">
+	<classpathentry kind="lib" path="D:/PJH/util/ojdbc8.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/YW/Documents/JH_studyspace/mybatis-3.5.13.jar">
+	<classpathentry kind="lib" path="D:/PJH/util/json-simple-1.1.1.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/YW/Documents/JH_studyspace/json-simple-1.1.1.jar">
+	<classpathentry kind="lib" path="D:/PJH/util/mybatis-3.5.13/mybatis-3.5.13.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>

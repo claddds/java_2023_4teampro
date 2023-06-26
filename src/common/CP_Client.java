@@ -9,6 +9,7 @@ import Pay.Pay_DAO;
 import Pay.Pay_VO;
 
 public class CP_Client extends Thread {
+	// git test
     // 클라이언트와의 소켓 연결과 DB_Server 객체에 대한 참조를 저장하는 변수
 	Socket s;
     DB_Server server;
