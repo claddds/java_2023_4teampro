@@ -24,7 +24,7 @@ public class ticket_before_pay extends JFrame{
 	
 
 	
-	
+	 
 	public ticket_before_pay() {
 		super("결제확인창");
 		 

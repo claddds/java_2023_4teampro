@@ -1,11 +1,11 @@
 package project.swing.LJH;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.FlowLayout;
-import java.awt.Frame;
 import java.awt.GridLayout;
+import java.util.Calendar;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -13,12 +13,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+
+import com.toedter.calendar.JCalendar;
 
 //매표소 만들기 
 public class ticket_office_main extends JFrame {
@@ -28,13 +27,13 @@ public class ticket_office_main extends JFrame {
 	JComboBox<String> adult , child;
 //	JTextField point, show_room,show_peo, show_price,show_date;
 	JLabel point,show_point, show_room,show_peo, show_price,show_date;
-	JTextArea show_movie;
-	JScrollPane jsp1,jsp2, jsp3;
+	JTextArea show_movie;	JScrollPane jsp1,jsp2, jsp3;
 	String[] movies = {"임시영화","이 리스트는","나중에","DB연동하기"};
 	String[] rooms = {"임시극장","이 리스트는","나중에","DB연동하기"};
 	String[] dates = {"임시상영표","이 리스트는","나중에","DB연동하기"};
+	JCalendar cal = new JCalendar();
 
-
+ 
 	
 	public ticket_office_main() {
 		super("매표소");
@@ -72,8 +71,8 @@ public class ticket_office_main extends JFrame {
 
 	
 		
-		/* 포스터 보이는 영화칸 밑에 그리드 레이아웃 위해 만듦.
-		 * 선택된대로 텍스트 필드에 자동으로 get 으로 생기게 할 예정*/
+		/* 포스터 보이는 영화칸 밑에 그리드 레이아웃 위해 만듦.*/
+		 
 		show_room = new JLabel("ICT관");
 		show_date = new JLabel("2023/06/20");
 		show_peo = new JLabel("2 명");
@@ -134,7 +133,7 @@ public class ticket_office_main extends JFrame {
 		c_room.setLayout(new BorderLayout());
 		
 		c_room.setPreferredSize(new Dimension(40,60)); /*각 패널의 크기 제한*/
-		c_room.add(new JLabel(" [극장 선택] "),BorderLayout.NORTH);
+		c_room.add(new JLabel(" [상영관 선택] "),BorderLayout.NORTH);
 		JList movie_room = new JList(rooms);
 		/* *****나중에 여기에 db연동으로 집어넣기***** */
 		jsp2= new JScrollPane();
@@ -160,11 +159,13 @@ public class ticket_office_main extends JFrame {
 		c_date.add(new JLabel(" [날짜 선택] "),BorderLayout.NORTH);
 		
 		/*  *******날짜 API 갖고오기******* */
+	
+		c_date.add(cal,BorderLayout.CENTER);
+		//파일보낼때 캘린더jar파일 같이보내기
+
 
 		
-		
-		
-		
+	
 		
 		/*인원선택하는 패널*/
 		c_people = new JPanel();
@@ -222,10 +223,10 @@ public class ticket_office_main extends JFrame {
 		//여백주기 
 		
 		//모든 패널들 프레임에 붙이기
-		packall.add(v_point,BorderLayout.NORTH);
-		packall.add(info_movie,BorderLayout.EAST);
-		packall.add(pack,BorderLayout.CENTER);
-		packall.add(pg2,BorderLayout.SOUTH);
+		packall.add(v_point,BorderLayout.NORTH); //제일위의 포인트패널
+		packall.add(info_movie,BorderLayout.EAST); //오른쪽의 영화정보
+		packall.add(pack,BorderLayout.CENTER); //가운데의 그리드레이아웃들
+		packall.add(pg2,BorderLayout.SOUTH);  //하단의버튼
 		
 		
 		add(packall);
@@ -239,13 +240,16 @@ public class ticket_office_main extends JFrame {
 		
 		
 		
+	
 		
 		/* *******각 모든 사항들을 선택하게 되면 선택한 영화정보에 보일 수 있도록 하기******  */
 	}
 
 	
+
 	public static void main(String[] args) {
 		new ticket_office_main();
+		
 
 	} // 메인
 } // 클래스
