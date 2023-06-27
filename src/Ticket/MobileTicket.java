@@ -144,7 +144,6 @@ public class MobileTicket extends JFrame {
 		// 버튼 패널
 		ButtonPanel = new JPanel();
 		cancel = new JButton("예매취소");
-		// cancel.setFont(new Font("돋움", Font.BOLD, 10)); 버튼 크기
 		ButtonPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
 		// ButtonPanel의 테두리에 빈 여백 추가      상, 좌, 하, 우
 		ButtonPanel.add(cancel);

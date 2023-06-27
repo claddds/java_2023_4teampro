@@ -18,10 +18,6 @@ public class Reservation_completed extends JFrame {
 	public Reservation_completed() {
 		super("예매 완료");
 
-		// 배경색 설정
-		//getContentPane().setBackground(Color.WHITE);
-
-		// 레이아웃 매니저 설정 (여기서는 BorderLayout 사용)
 		setLayout(new BorderLayout());
 
 		// 예매 완료 메시지를 담을 라벨 생성 및 설정
@@ -37,9 +33,6 @@ public class Reservation_completed extends JFrame {
 		// 버튼 패널 생성
 		JPanel buttonPanel = new JPanel();
 
-		// 버튼 패널 배경색 설정 (흰색)
-		//buttonPanel.setBackground(Color.WHITE);
-
 		// 버튼 생성
 		JButton mobileTicketButton = new JButton("모바일티켓");
 		JButton homeButton = new JButton("처음으로");
@@ -53,11 +46,11 @@ public class Reservation_completed extends JFrame {
 		add(buttonPanel, BorderLayout.SOUTH);
 
 		
-		setSize(350, 250); // 창 크기 설정
-		setLocationRelativeTo(null); // 창을 화면 중앙에 위치시키기
-		setVisible(true); // 닫힐 때 프로그램이 종료
-		setDefaultCloseOperation(EXIT_ON_CLOSE); // 창 닫기 버튼 동작 설정
-		setResizable(false); // 창 크기 조절 불가능하도록 설정
+		setSize(350, 250); 
+		setLocationRelativeTo(null); 
+		setVisible(true);
+		setDefaultCloseOperation(EXIT_ON_CLOSE); 
+		setResizable(false); 
 
 	}
 

@@ -63,7 +63,6 @@ public class TicketList extends JFrame {
 		ButtonPanel.add(ticketButton);
 		Panel.add(ButtonPanel, BorderLayout.SOUTH);
 
-		// JFrame에 Panel 추가
 		add(Panel);
 
 		setSize(350, 600);

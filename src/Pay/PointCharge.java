@@ -75,7 +75,7 @@ public class PointCharge extends JFrame{
         // FlowLayout으로 변경하고 간격 조정
 		jp4.add(pay);
         jp4.add(Box.createHorizontalStrut(20)); 
-        // 가로 간격을 추가하기 위해 Box.createHorizontalStrut 사용
+        // 가로 간격을 추가하기 위해 사용
 		jp4.add(cancel);
 		
 		// 가운데 패널 생성 및 설정
@@ -98,4 +98,3 @@ public class PointCharge extends JFrame{
 		new PointCharge();
 	}
 }
-
