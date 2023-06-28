@@ -21,7 +21,8 @@ public class test01 {
 	}
 	
 	public static void ljh_prn() {
-		
+		System.out.println("지혜도 test 출력");
+		System.out.println("다시 출력 저장하기");
 	}
 	
 	public static void sms_prn() {
