@@ -12,6 +12,7 @@ import java.awt.event.ItemListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -21,7 +22,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-public class ticket_seat extends JFrame{
+public class ticket_seat2 extends JFrame{
 	JPanel bt_p, v_point,seat_p,con_seat,info_movie;
 	JLabel point,show_point,show_price,show_peo,show_date,show_room;
 	JButton re_bt, pay_bt;
@@ -33,7 +34,7 @@ public class ticket_seat extends JFrame{
 	JPanel seat_p4 ;
 	
 	
-	public ticket_seat() {
+	public ticket_seat2() {
 		super("좌석선택창");
 		
 		
@@ -63,7 +64,9 @@ public class ticket_seat extends JFrame{
 		room = new JComboBox<>(room_name);
 		
 		JPanel seat_p2 = new JPanel();
+		seat_p2.setLayout(new BoxLayout(seat_p2, BoxLayout.Y_AXIS));
 		seat_p2.add(seat_p);
+		seat_p2.add(Box.createVerticalStrut(20));
 		seat_p2.add(room);
 		
 		
@@ -223,7 +226,7 @@ public class ticket_seat extends JFrame{
 	}
 	
 	public static void main(String[] args) {
-		new ticket_seat();
+		new ticket_seat2();
 		
 	}
 }
