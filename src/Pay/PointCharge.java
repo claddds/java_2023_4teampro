@@ -69,7 +69,7 @@ public class PointCharge extends JFrame{
 		
 		//결재, 취소
 		jp4 = new JPanel();
-		pay = new JButton("신청하기");
+		pay = new JButton("충전하기");
 		cancel = new JButton("취소하기");
         jp4.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 10)); 
         // FlowLayout으로 변경하고 간격 조정

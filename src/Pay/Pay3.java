@@ -21,7 +21,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import common.Protocol;
 // 그냥 test
 public class Pay3 extends JFrame{
 	JPanel northPanel, centerPanel, remainingPanel, payPanel, ButtonPanel;
