@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.CardLayout;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 public class Main_login extends JFrame{
 	Movie_chart_view1 v1 = new Movie_chart_view1();
@@ -40,6 +41,16 @@ public class Main_login extends JFrame{
 		sign_out_bt.setFont(new Font("맑은 고딕", Font.BOLD, 16));
 		sign_out_bt.setBounds(619, 23, 122, 49);
 		sign_panel.add(sign_out_bt);
+		
+		JLabel login_name_label = new JLabel("XXX님");
+		login_name_label.setHorizontalAlignment(SwingConstants.CENTER);
+		login_name_label.setBounds(416, 23, 57, 15);
+		sign_panel.add(login_name_label);
+		
+		JLabel login_point_label = new JLabel("잔여포인트: XXX포인트");
+		login_point_label.setHorizontalAlignment(SwingConstants.CENTER);
+		login_point_label.setBounds(327, 43, 146, 15);
+		sign_panel.add(login_point_label);
 		
 		JPanel logo_panel = new JPanel();
 		logo_panel.setBounds(0, 85, 786, 151);
