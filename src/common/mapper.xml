@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.mybatis.example.BlogMapper">
 	<insert id="movieinsert" parameterType="Pay.Pay_VO">
-		insert into TICKET(ticket_num, movie_id, cust_number, movie_name, theater_id, movie_date, start_time, end_time, theater_seat)
-		values(TICKET_SEQ.nextval, #{movie_id},#{cust_number}, #{movie_name}, #{theater_id}, #{movie_date, jdbcType=VARCHAR}, #{start_time}, #{end_time}, #{theater_seat})
+		insert into TICKET(ticket_num, movie_id, cust_id, movie_name, theater_id, movie_date, start_time, end_time, theater_seat)
+		values(TICKET_SEQ.nextval, #{movie_id},#{cust_id}, #{movie_name}, #{theater_id}, #{movie_date}, #{start_time}, #{end_time}, #{theater_seat})
 	</insert>
 </mapper>

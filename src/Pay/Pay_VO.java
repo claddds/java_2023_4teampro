@@ -4,14 +4,33 @@ import java.io.Serializable;
 import java.sql.Date;
 
 public class Pay_VO implements Serializable{
-	private String movie_name, start_time, end_time, theater_seat, movie_date;
-	private int ticket_num, movie_id, cust_number, theater_id;
+	private String movie_id, cust_id, movie_name, theater_id, start_time, end_time, theater_seat;
+	private int ticket_num;
+	private Date movie_date;
 	
+	public String getMovie_id() {
+		return movie_id;
+	}
+	public void setMovie_id(String movie_id) {
+		this.movie_id = movie_id;
+	}
+	public String getCust_id() {
+		return cust_id;
+	}
+	public void setCust_id(String cust_id) {
+		this.cust_id = cust_id;
+	}
 	public String getMovie_name() {
 		return movie_name;
 	}
 	public void setMovie_name(String movie_name) {
 		this.movie_name = movie_name;
+	}
+	public String getTheater_id() {
+		return theater_id;
+	}
+	public void setTheater_id(String theater_id) {
+		this.theater_id = theater_id;
 	}
 	public String getStart_time() {
 		return start_time;
@@ -37,29 +56,10 @@ public class Pay_VO implements Serializable{
 	public void setTicket_num(int ticket_num) {
 		this.ticket_num = ticket_num;
 	}
-	public int getMovie_id() {
-		return movie_id;
-	}
-	public void setMovie_id(int movie_id) {
-		this.movie_id = movie_id;
-	}
-	public int getCust_number() {
-		return cust_number;
-	}
-	public void setCust_number(int cust_number) {
-		this.cust_number = cust_number;
-	}
-	public int getTheater_id() {
-		return theater_id;
-	}
-	public void setTheater_id(int theater_id) {
-		this.theater_id = theater_id;
-	}
-	public String getMovie_date() {
+	public Date getMovie_date() {
 		return movie_date;
 	}
-	public void setMovie_date(String movie_date) {
+	public void setMovie_date(Date movie_date) {
 		this.movie_date = movie_date;
 	}
-	
-} 
+}
