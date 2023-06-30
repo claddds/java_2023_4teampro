@@ -5,7 +5,7 @@ import java.sql.Date;
 
 public class Pay_VO implements Serializable{
 	private String movie_id, cust_id, movie_name, theater_id, start_time, end_time, theater_seat;
-	private int ticket_num;
+	private int ticket_num, point;
 	private Date movie_date;
 	
 	public String getMovie_id() {
@@ -61,5 +61,11 @@ public class Pay_VO implements Serializable{
 	}
 	public void setMovie_date(Date movie_date) {
 		this.movie_date = movie_date;
+	}
+	public int getPoint() {
+		return point;
+	}
+	public void setPoint(int point) {
+		this.point = point;
 	}
 }

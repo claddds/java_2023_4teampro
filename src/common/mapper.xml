@@ -5,4 +5,8 @@
 		insert into TICKET(ticket_num, movie_id, cust_id, movie_name, theater_id, movie_date, start_time, end_time, theater_seat)
 		values(TICKET_SEQ.nextval, #{movie_id},#{cust_id}, #{movie_name}, #{theater_id}, #{movie_date}, #{start_time}, #{end_time}, #{theater_seat})
 	</insert>
+	
+	<select id="getRemainingPoints" parameterType="Pay.Pay_VO">
+		SELET POINT FROM LOGIN_INFO WHERE CUST_ID = ?
+	</select>
 </mapper>
