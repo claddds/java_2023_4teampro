@@ -92,14 +92,25 @@ public class Main_logout extends JFrame{
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
-		sign_up_bt.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
 		mobile_ticket_bt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
+		
+		sign_in_bt.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		
+		sign_up_bt.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Sign_up frame = new Sign_up();
+			}
+		});
+		
+		
+
 	}
 	
 	
