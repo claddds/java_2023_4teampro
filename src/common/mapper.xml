@@ -6,7 +6,7 @@
 		values(TICKET_SEQ.nextval, #{movie_id},#{cust_id}, #{movie_name}, #{theater_id}, #{movie_date}, #{start_time}, #{end_time}, #{theater_seat})
 	</insert>
 	
-	<select id="getRemainingPoints" parameterType="Pay.Pay_VO">
-		SELET POINT FROM LOGIN_INFO WHERE CUST_ID = ?
+	<select id="getRemainingPoints" resultType="java.lang.Integer" parameterType="Pay.Pay_VO">
+		SELECT POINT FROM LOGIN_INFO WHERE CUST_ID = #{cust_id}
 	</select>
 </mapper>

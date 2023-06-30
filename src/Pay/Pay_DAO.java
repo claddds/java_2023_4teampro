@@ -22,14 +22,12 @@ public class Pay_DAO {
 	// TICKET 테이블에 예매 정보 삽입
 	public static int getInsert(Pay_VO pay_vo) {
 		int result = getsession().insert("movieinsert", pay_vo);
-		ss.commit();
 		return result;
 	}
 	
 	// 해당 회원의 잔여포인트 가져오기
 	public static int getRemainingPoints(Pay_VO pay_vo) {
 		int result = getsession().selectOne("getRemainingPoints", pay_vo);
-		ss.commit();
 		return result;
 	}
 }

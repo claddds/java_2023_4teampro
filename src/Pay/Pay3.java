@@ -28,6 +28,14 @@ public class Pay3 extends JFrame {
 
 	public Pay3() {
 		super("결제");
+		
+		// Pay_VO 객체를 생성하고 로그인한 회원의 ID를 설정
+		pay_vo = new Pay_VO();
+		pay_vo.setCust_id("TEST123");  //로그인한 사용자 아이디
+		
+		// DB에서 해당 회원의 잔여포인트(point) 가져와 Pay_VO 객체에 설정
+		int point = Pay_DAO.getRemainingPoints(pay_vo);
+		pay_vo.setPoint(point);
 
 		getContentPane().setBackground(Color.WHITE);
 
@@ -44,10 +52,8 @@ public class Pay3 extends JFrame {
 		JLabel jl1 = new JLabel("   잔여 포인트  :"); // 라벨 생성
 		jl1.setFont(jl1.getFont().deriveFont(Font.BOLD, 15)); // 큰 글꼴 크기(16)로 설정
 		
-		int remainingPoints = Pay_DAO.getRemainingPoints(pay_vo);
 		JLabel jl2 = new JLabel(); //POINT DB의 REMAINING_POINT 
-        jl2.setText(Integer.toString(remainingPoints));
-        
+		jl2.setText(Integer.toString(pay_vo.getPoint())); // Pay_VO 객체에서 point를 가져와 JLabel에 설정
 		jl2.setFont(jl1.getFont().deriveFont(Font.BOLD, 15));
 		jl2.setBorder(BorderFactory.createEmptyBorder()); // 테두리 설정
 
