@@ -19,7 +19,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-// 그냥 test
+// 마이바티스 test
 public class Pay3 extends JFrame {
 	JPanel northPanel, centerPanel, remainingPanel, payPanel, ButtonPanel;
 	JButton pay, cancel;

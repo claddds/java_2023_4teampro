@@ -25,7 +25,6 @@ hs_err_pid*
 *.pydevproject
 .project
 .metadata
-bin/**
 tmp/**
 tmp/**/*
 *.tmp
