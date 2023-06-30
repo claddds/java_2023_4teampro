@@ -21,7 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
-
+//콤보박스가 길쭉한 형태 
 public class ticket_seat2 extends JFrame{
 	JPanel bt_p, v_point,seat_p,con_seat,info_movie;
 	JLabel point,show_point,show_price,show_peo,show_date,show_room;

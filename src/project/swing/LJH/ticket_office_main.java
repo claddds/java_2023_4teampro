@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Calendar;
 
 import javax.swing.JButton;
@@ -22,15 +24,17 @@ import com.toedter.calendar.JCalendar;
 //매표소 만들기 
 public class ticket_office_main extends JFrame {
 	// 필요한 것들 선언하자
+	//DBService dbService = new DBService();
+
 	JPanel v_point, c_movie, c_room, c_date, c_time,  c_people, info_movie;
 	JButton ticket_bt;
 	JComboBox<String> adult , child;
 //	JTextField point, show_room,show_peo, show_price,show_date;
 	JLabel point,show_point, show_room,show_peo, show_price,show_date;
 	JTextArea show_movie;	JScrollPane jsp1,jsp2, jsp3;
-	String[] movies = {"임시영화","이 리스트는","나중에","DB연동하기"};
-	String[] rooms = {"임시극장","이 리스트는","나중에","DB연동하기"};
-	String[] dates = {"임시상영표","이 리스트는","나중에","DB연동하기"};
+	String[] movies = {};
+	//String[] rooms = {"임시극장","이 리스트는","나중에","DB연동하기"};
+	//String[] dates = {"임시상영표","이 리스트는","나중에","DB연동하기"};
 	JCalendar cal = new JCalendar();
 
  
@@ -73,10 +77,10 @@ public class ticket_office_main extends JFrame {
 		
 		/* 포스터 보이는 영화칸 밑에 그리드 레이아웃 위해 만듦.*/
 		 
-		show_room = new JLabel("ICT관");
-		show_date = new JLabel("2023/06/20");
-		show_peo = new JLabel("2 명");
-		show_price = new JLabel("15000");
+		show_room = new JLabel();
+		show_date = new JLabel();
+		show_peo = new JLabel();
+		show_price = new JLabel();
 		
 		JLabel j1 = new JLabel("극       장:    ");
 		JLabel j2 = new JLabel("날       짜:    ");
@@ -121,7 +125,7 @@ public class ticket_office_main extends JFrame {
 		c_movie.setLayout(new BorderLayout());		
 		c_movie.setPreferredSize(new Dimension(40,60)); /*각 패널의 크기 제한*/
 		c_movie.add(new JLabel(" [영화 선택] "),BorderLayout.NORTH);
-		JList movie_name = new JList(movies); 
+		JList movie_name = new JList(); 
 		/* *****나중에 여기에 db연동으로 집어넣기***** */
 		jsp1 = new JScrollPane();
 		jsp1.setViewportView(movie_name);
@@ -134,7 +138,7 @@ public class ticket_office_main extends JFrame {
 		
 		c_room.setPreferredSize(new Dimension(40,60)); /*각 패널의 크기 제한*/
 		c_room.add(new JLabel(" [상영관 선택] "),BorderLayout.NORTH);
-		JList movie_room = new JList(rooms);
+		JList movie_room = new JList();
 		/* *****나중에 여기에 db연동으로 집어넣기***** */
 		jsp2= new JScrollPane();
 		jsp2.setViewportView(movie_room);
@@ -145,7 +149,7 @@ public class ticket_office_main extends JFrame {
 		c_time.setLayout(new BorderLayout());		
 		c_time.setPreferredSize(new Dimension(40,60));  /*각 패널의 크기 제한*/
 		c_time.add(new JLabel(" [상영 시간표] "),BorderLayout.NORTH);
-		JList movie_date = new JList(dates);
+		JList movie_date = new JList();
 		/* *****나중에 여기에 db연동으로 집어넣기***** */
 		jsp3 = new JScrollPane(movie_date);
 		c_time.add(jsp3);
@@ -173,8 +177,8 @@ public class ticket_office_main extends JFrame {
 		c_people.add(new JLabel(" [인원 선택] "),BorderLayout.NORTH);
 		JLabel ad = new JLabel( " 성 인 " );
 		JLabel ch = new JLabel( " 아 동 " );
-		String[] a_peo = {"1","2","3","4","5","6","7","8","9","10"};
-		String[] c_peo = {"1","2","3","4","5","6","7","8","9","10"};
+		String[] a_peo = {"0","1","2","3","4","5","6","7","8","9","10"};
+		String[] c_peo = {"0","1","2","3","4","5","6","7","8","9","10"};
 		
 		
 		
@@ -239,7 +243,15 @@ public class ticket_office_main extends JFrame {
 		setResizable(false);
 		
 		
-		
+		ticket_bt.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ticket_seat con_seat = new ticket_seat();
+				setVisible(false);
+				
+			}
+		});
 	
 		
 		/* *******각 모든 사항들을 선택하게 되면 선택한 영화정보에 보일 수 있도록 하기******  */
