@@ -27,7 +27,7 @@ public class ticket_seat extends JFrame{
 	JButton re_bt, pay_bt;
 	ticket_Seat_Map seat = new ticket_Seat_Map();
 	JComboBox<String> room;
-	
+
 	JButton seat_bt = new JButton("SCREEN");
 	JPanel seat_p3 ;
 	JPanel seat_p4 ;
@@ -81,7 +81,7 @@ public class ticket_seat extends JFrame{
 		
 
 		seat_p3.add(seat_bt,BorderLayout.NORTH);
-		seat_bt.add(Box.createVerticalStrut(100));
+		seat_bt.add(Box.createVerticalStrut(50));
 		seat_p3.add(seat,BorderLayout.CENTER);
 		seat_pg.add(seat_p3,BorderLayout.CENTER); //좌석표
 		
@@ -113,10 +113,10 @@ public class ticket_seat extends JFrame{
 		
 		/* 포스터 보이는 영화칸 밑에 그리드 레이아웃 위해 만듦.*/
 		 
-		show_room = new JLabel("ICT관");
-		show_date = new JLabel("2023/06/20");
-		show_peo = new JLabel("2 명");
-		show_price = new JLabel("15000");
+		show_room = new JLabel();
+		show_date = new JLabel();
+		show_peo = new JLabel();
+		show_price = new JLabel();
 		
 		JLabel j1 = new JLabel("극       장:    ");
 		JLabel j2 = new JLabel("날       짜:    ");
@@ -186,7 +186,7 @@ public class ticket_seat extends JFrame{
 		
 		setSize(800, 800);
 		setVisible(true);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		//setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setResizable(false);
 		
@@ -199,8 +199,23 @@ public class ticket_seat extends JFrame{
 				
 			}
 		});
+		
+		
+		
+		pay_bt.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ticket_before_pay con_pay = new ticket_before_pay();
+				setVisible(false);
+			}
+		});
+		
+		
+	
 	}
 		
+
 	
 	private void updateSeatButtonPosition() {
 	    String selectedRoom = (String) room.getSelectedItem();
@@ -208,10 +223,12 @@ public class ticket_seat extends JFrame{
 	        seat_p3.setLayout(new BorderLayout());
 	        seat_p3.add(seat, BorderLayout.EAST);
 	        seat_p3.add(seat_bt, BorderLayout.CENTER);
+			seat_bt.add(Box.createHorizontalStrut(30));
 
 	    } else if (selectedRoom.equals("빛나리")) {
 	        seat_p3.setLayout(new BorderLayout());
 	        seat_p3.add(seat_bt, BorderLayout.CENTER);
+			seat_bt.add(Box.createHorizontalStrut(30));
 	        seat_p3.add(seat, BorderLayout.WEST);
 	    } else if(selectedRoom.equals("미나리")) {
 	        seat_p3.setLayout(new BorderLayout());
@@ -222,8 +239,10 @@ public class ticket_seat extends JFrame{
 	    seat_p3.repaint();
 	}
 	
+	
+	
 	public static void main(String[] args) {
 		new ticket_seat();
-		
+	
 	}
 }

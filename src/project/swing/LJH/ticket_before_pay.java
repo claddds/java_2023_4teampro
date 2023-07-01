@@ -6,6 +6,8 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Panel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -59,42 +61,42 @@ public class ticket_before_pay extends JFrame{
 		info_p = new JPanel();
 		JPanel p1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		show_name = new JLabel("영화제목:   ");
-		JLabel jl1 = new JLabel("뽀로로"); //임시로 나중에 DB연동하기
+		JLabel jl1 = new JLabel(); //임시로 나중에 DB연동하기
 		
 		p1.add(show_name);
 		p1.add(jl1);
 		
 		JPanel p2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		show_date= new JLabel("영화상영일:   ");
-		JLabel jl2 = new JLabel("2023/05/11");//임시로 나중에 DB연동하기
+		JLabel jl2 = new JLabel();//임시로 나중에 DB연동하기
 		
 		p2.add(show_date);
 		p2.add(jl2);
 		
 		JPanel p3 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		show_room= new JLabel("극장이름:   ");
-		JLabel jl3 = new JLabel("ICT관");//임시로 나중에 DB연동하기
+		JLabel jl3 = new JLabel();//임시로 나중에 DB연동하기
 		
 		p3.add(show_room);
 		p3.add(jl3);
 		
 		JPanel p4 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		show_peo= new JLabel("인  원:   ");
-		JLabel jl4 = new JLabel("2 명");//임시로 나중에 DB연동하기
+		JLabel jl4 = new JLabel();//임시로 나중에 DB연동하기
 		
 		p4.add(show_peo);
 		p4.add(jl4);
 		
 		JPanel p5 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		show_seat= new JLabel("좌석번호:   ");
-		JLabel jl5 = new JLabel("K1,K2");//임시로 나중에 DB연동하기
+		JLabel jl5 = new JLabel();//임시로 나중에 DB연동하기
 		
 		p5.add(show_seat);
 		p5.add(jl5);
 		
 		JPanel p6 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		show_price= new JLabel("결제금액:   ");
-		JLabel jl6 = new JLabel("15000 원");//임시로 나중에 DB연동하기
+		JLabel jl6 = new JLabel();//임시로 나중에 DB연동하기
 		
 		p6.add(show_price);
 		p6.add(jl6);
@@ -130,10 +132,20 @@ public class ticket_before_pay extends JFrame{
 		
 		setSize(350, 600);
 		setVisible(true);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		//setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setResizable(false);
 		
+		back_bt.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ticket_seat con_seat = new ticket_seat();
+				con_seat.setVisible(true);
+				setVisible(false);
+				
+			}
+		});
 		
 		
 	}
