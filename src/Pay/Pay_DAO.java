@@ -25,9 +25,15 @@ public class Pay_DAO {
 		return result;
 	}
 	
+	// 로그인 한 회원 ID 가져오기
+	public static String getMemberLogin(Pay_VO pay_vo) {
+		String cust_id= getsession().selectOne("getMemberLogin", pay_vo);
+		return cust_id;
+	}
+	
 	// 해당 회원의 잔여포인트 가져오기
 	public static int getRemainingPoints(Pay_VO pay_vo) {
-		int result = getsession().selectOne("getRemainingPoints", pay_vo);
-		return result;
+		int point = getsession().selectOne("getRemainingPoints", pay_vo);
+		return point;
 	}
 }

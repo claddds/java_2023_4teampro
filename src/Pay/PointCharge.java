@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -20,6 +22,7 @@ public class PointCharge extends JFrame{
 	JRadioButton jrb1, jrb2, jrb3, jrb4, jrb5, jrb6;
 	JButton pay, cancel;
 	ButtonGroup ButtonGroup;
+	
 	public PointCharge() {
 		super("포인트 충전");
 		
@@ -92,7 +95,28 @@ public class PointCharge extends JFrame{
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false); // 크기 조절 비활성화
+		
+		
+		// 충전하기 버튼 
+		pay.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int price;
+				
+				switch (price) {
+				case jrb1: price = 5000;
+					
+					break;
+
+				default:
+					break;
+				}
+				
+			}
+		});
 	}
+
 
 	public static void main(String[] args) {
 		new PointCharge();
