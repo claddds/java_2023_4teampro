@@ -17,6 +17,8 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.border.EmptyBorder;
 
+import common.Session;
+
 public class PointCharge extends JFrame{
 	JPanel jp1, jp2, jp3, jp4, centerPanel;
 	JRadioButton jrb1, jrb2, jrb3, jrb4, jrb5, jrb6;
@@ -102,21 +104,48 @@ public class PointCharge extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int price;
-				
-				switch (price) {
-				case jrb1: price = 5000;
-					
-					break;
-
-				default:
-					break;
+				int amount = getSelectedAmount(); //getSelectedAmount()의 return값을 amount에 저장
+				System.out.println("amount:" + amount); 
+				if(amount != 0) { // 0이 아닐때만 update = 값이 실제로 있을 때만
+					Pay_VO pay_vo = new Pay_VO();
+					pay_vo.setPoint(amount); //pay_vo에 있는 point에 amount를 setting.
+					//Session.getCurrentUserId의 값을 currentUserId라는 변수에 담았음.
+					String currentUserId = Session.getCurrentUserId();
+					//Cust_id를 currentUserId로 셋팅
+					pay_vo.setCust_id(currentUserId);
+					 System.out.println("actionPerformed: " + pay_vo.getCust_id());
+					//pay_vo.setCust_id(Pay.currentUserId); //현재 로그인한 회원의 ID를 전달
+					Pay_DAO.updatePoint(pay_vo);
 				}
 				
 			}
 		});
 	}
 
+	// 충전 금액 설정 메서드
+	private int getSelectedAmount() {
+		
+		if(jrb1.isSelected())
+			return 5000;
+		
+		if(jrb2.isSelected())
+			return 10000;
+		
+		if(jrb3.isSelected())
+			return 15000;
+		
+		if(jrb4.isSelected())
+			return 20000;
+		
+		if(jrb5.isSelected())
+			return 25000;
+		
+		if(jrb5.isSelected())
+			return 30000;
+		
+		return 0; //버튼 선택 안 했을 때
+		
+	}
 
 	public static void main(String[] args) {
 		new PointCharge();

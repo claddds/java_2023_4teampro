@@ -33,7 +33,23 @@ public class Pay_DAO {
 	
 	// 해당 회원의 잔여포인트 가져오기
 	public static int getRemainingPoints(Pay_VO pay_vo) {
-		int point = getsession().selectOne("getRemainingPoints", pay_vo);
-		return point;
+		int chargepoint = getsession().selectOne("getRemainingPoints", pay_vo);
+		return chargepoint;
+	}
+	
+	// 포인트 충전
+	public static void updatePoint(Pay_VO pay_vo) {
+		 System.out.println("Updating point: " + pay_vo.getPoint());
+		 System.out.println("Updating point: " + pay_vo.getCust_id());
+		
+		try {
+			getsession().update("updateCustomerPoint", pay_vo);
+			getsession().update("updateLoginInfoPoint", pay_vo);
+			getsession().update("updateRemainingPoint", pay_vo);
+			ss.commit(); // commit 호출
+		} catch (Exception e) {
+			e.printStackTrace();
+			ss.rollback(); // 에러 발생 시 rollback
+		}
 	}
 }

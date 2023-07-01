@@ -18,4 +18,26 @@
 		FROM LOGIN_INFO L, POINT P
 		WHERE L.CUST_ID = P.CUST_ID
 	</select>
+	
+	<!-- 포인트 충전 -->
+	<!-- CUSTOMER 테이블의 POINT 업데이트 -->
+	<update id="updateCustomerPoint"  parameterType="Pay.Pay_VO">
+		UPDATE CUSTOMER
+		SET POINT = POINT + #{point}
+		WHERE CUST_ID = #{cust_id}
+	</update>
+	
+	<!-- LOGIN_INFO 테이블의 POINT 업데이트 -->
+	<update id="updateLoginInfoPoint" parameterType="Pay.Pay_VO">
+		UPDATE LOGIN_INFO
+		SET POINT = POINT + #{point}
+		WHERE CUST_ID = #{cust_id}
+	</update>
+	
+	<!-- POINT 테이블의 REMAINING_POINT 업데이트 -->
+	<update id="updateRemainingPoint" parameterType="Pay.Pay_VO">
+		UPDATE POINT
+    	SET REMAINING_POINT = REMAINING_POINT + #{point}
+    	WHERE CUST_ID = #{cust_id}
+	</update>
 </mapper>
