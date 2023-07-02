@@ -13,6 +13,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.border.EmptyBorder;
@@ -116,8 +117,19 @@ public class PointCharge extends JFrame{
 					 System.out.println("actionPerformed: " + pay_vo.getCust_id());
 					//pay_vo.setCust_id(Pay.currentUserId); //현재 로그인한 회원의 ID를 전달
 					Pay_DAO.updatePoint(pay_vo);
+					
+					// 충전 완료 알럿창
+					Object[] paybutton = {"결제하기"}; //"결제하기"로 버튼 이름 바꾸기
+					int option = JOptionPane.showOptionDialog(PointCharge.this, "충전이 완료되었습니다.", "충전 완료", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, paybutton, paybutton[0]);
+					JOptionPane.getRootFrame().dispose(); // 알림창 닫기
+					
+					// 결제 확인창으로 돌아가기
+					if(option == 0) {
+						dispose(); //현재 창 닫기
+						Pay pay = new Pay(); //나중에 결제확인창으로 변경해야함! 확인을 위해 임시로 해둠!
+						pay.setVisible(true);
+					}
 				}
-				
 			}
 		});
 	}

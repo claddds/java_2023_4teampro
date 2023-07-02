@@ -4,12 +4,16 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import Ticket.TicketList;
 
 public class Reservation_completed extends JFrame {
 	JPanel mainPanel, textPanel, buttonPanel;
@@ -51,6 +55,17 @@ public class Reservation_completed extends JFrame {
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE); 
 		setResizable(false); 
+		
+		
+		// 모바일티켓 화면으로 전환
+		mobileTicketButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				TicketList ticketlist = new TicketList();
+				setVisible(false); // 현재 예매 완료창 숨기기				
+			}
+		});
 
 	}
 

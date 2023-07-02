@@ -23,12 +23,13 @@ public class Pay extends JFrame {
 	JPanel northPanel, centerPanel, remainingPanel, payPanel, ButtonPanel;
 	JButton pay, cancel;
 	Pay_VO pay_vo;
+	// 이 부분은 나중에 다른곳에 해야함. 로그인 후 메인화면에 해야할 듯.
 	public static String currentUserId; // 현재 로그인한 회원아이디 static 변수로 선언
-	
 
 	public Pay() {
 		super("결제");
 		
+		// 이 부분은 나중에 다른곳에 해야함. 로그인 후 메인화면에 해야할 듯.
 		// Pay_VO 객체를 생성하고 로그인한 회원의 ID
 		pay_vo = new Pay_VO();
 		currentUserId = Pay_DAO.getMemberLogin(pay_vo);
@@ -55,7 +56,7 @@ public class Pay extends JFrame {
 		jl1.setFont(jl1.getFont().deriveFont(Font.BOLD, 15)); // 큰 글꼴 크기(16)로 설정
 		
 		JLabel jl2 = new JLabel(); //POINT DB의 REMAINING_POINT 
-		jl2.setText(Integer.toString(pay_vo.getPoint())); // Pay_VO 객체에서 point를 가져와 JLabel에 설정
+		jl2.setText(" " + Integer.toString(pay_vo.getPoint())+ "원"); // Pay_VO 객체에서 point를 가져와 JLabel에 설정
 		jl2.setFont(jl1.getFont().deriveFont(Font.BOLD, 15));
 		jl2.setBorder(BorderFactory.createEmptyBorder()); // 테두리 설정
 
@@ -121,29 +122,26 @@ public class Pay extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				pay_vo.setTicket_num(1);
-				pay_vo.setMovie_id("1");
+				//pay_vo.setTicket_num();
+				pay_vo.setMovie_id("5");
 				pay_vo.setCust_id(currentUserId);
-				pay_vo.setMovie_name("스파이더맨");
-				pay_vo.setTheater_id("미나리");
-				String dateString = "2023-06-29"; // 날짜 문자열
+				System.out.println("현재 로그인한 회원은 " + currentUserId);
+				pay_vo.setMovie_name("토끼는잠꾸러기");
+				pay_vo.setTheater_id("개나리");
+				String dateString = "2023-07-01"; // 날짜 문자열
 				LocalDate localDate = LocalDate.parse(dateString); // 문자열을 LocalDate로 파싱
 				Date sqlDate = Date.valueOf(localDate); // LocalDate를 java.sql.Date로 변환
 				pay_vo.setMovie_date(sqlDate); // java.sql.Date 객체를 설정
 				pay_vo.setStart_time("13:30");
 				pay_vo.setEnd_time("15:50");
-				pay_vo.setTheater_seat("G열18");
-				try {
-					System.out.println("영화 입력 완료");
-					int result = Pay_DAO.getInsert(pay_vo);
-					System.out.println(result);
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-//				System.out.println("영화 입력 완료");
-//				int result = Pay_DAO.getInsert(pay_vo);
-//				System.out.println(result);
+				pay_vo.setTheater_seat("E열1");
+				int result = Pay_DAO.getInsert(pay_vo);
+				
+				// 예매 완료창으로 전환
+				Reservation_completed reservationCompleted = new Reservation_completed();
+		        setVisible(false); // 현재 Pay 창 숨기기
 			}
+			
 		});
 	}
 

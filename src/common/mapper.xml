@@ -40,4 +40,20 @@
     	SET REMAINING_POINT = REMAINING_POINT + #{point}
     	WHERE CUST_ID = #{cust_id}
 	</update>
+	
+	<!-- 로그인 한 회원의 티켓 리스트 -->
+	<select id="getTicketList" parameterType="String" resultType="Ticket.Ticket_VO">
+		SELECT ticket_num, movie_name, start_time, movie_date, theater_id, theater_seat
+        FROM TICKET
+        WHERE CUST_ID = #{cust_id}
+	</select>
+	
+	<!-- 예매 취소 -->
+	<update id="cancelTicket" parameterType="int">
+  		UPDATE TICKET
+  		SET is_canceled = 1
+  		WHERE ticket_num = #{ticket_num}
+	</update>
+	
+	
 </mapper>
