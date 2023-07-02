@@ -1,4 +1,4 @@
-package project.swing.LJH;
+package project.swing.LJH2;
 
 import java.awt.Component;
 import java.awt.GridLayout;

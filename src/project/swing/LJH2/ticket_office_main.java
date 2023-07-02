@@ -1,4 +1,4 @@
-package project.swing.LJH;
+package project.swing.LJH2;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -145,12 +145,13 @@ public class ticket_office_main extends JFrame {
 
 		c_movie.setPreferredSize(new Dimension(40, 60)); /* 각 패널의 크기 제한 */
 		c_movie.add(new JLabel(" [영화 선택] "), BorderLayout.NORTH);
-
+		
 		JList movie_name = new JList();
-		//movie_name = DAO.getMovieName();
+		
+		//VO vo = new VO();
+		//JList movie_name1 = DAO.getMovieName(vo);
 		/* *****나중에 여기에 db연동으로 집어넣기***** */
-		
-		
+			
 		
 		jsp1 = new JScrollPane();
 		jsp1.setViewportView(movie_name);
@@ -162,7 +163,7 @@ public class ticket_office_main extends JFrame {
 		c_room.setLayout(new BorderLayout());
 
 		c_room.setPreferredSize(new Dimension(40, 60)); /* 각 패널의 크기 제한 */
-		c_room.add(new JLabel(" [상영관 선택] "), BorderLayout.NORTH);
+		c_room.add(new JLabel(" [극장 선택] "), BorderLayout.NORTH);
 
 		JList movie_room = new JList();
 		/* *****나중에 여기에 db연동으로 집어넣기***** */
