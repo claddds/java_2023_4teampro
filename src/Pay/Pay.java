@@ -19,7 +19,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-// 마이바티스 test
 public class Pay extends JFrame {
 	JPanel northPanel, centerPanel, remainingPanel, payPanel, ButtonPanel;
 	JButton pay, cancel;
@@ -52,10 +51,10 @@ public class Pay extends JFrame {
 
 		JPanel remainingPanel_2 = new JPanel();
 		remainingPanel_2.setLayout(new BoxLayout(remainingPanel_2, BoxLayout.X_AXIS));
-		JLabel jl1 = new JLabel("   잔여 포인트  :"); // 라벨 생성
+		JLabel jl1 = new JLabel("   잔여 포인트 :"); // 라벨 생성
 		jl1.setFont(jl1.getFont().deriveFont(Font.BOLD, 15)); // 큰 글꼴 크기(16)로 설정
 		
-		JLabel jl2 = new JLabel( ); //POINT DB의 REMAINING_POINT 
+		JLabel jl2 = new JLabel(); //POINT DB의 REMAINING_POINT 
 		jl2.setText(Integer.toString(pay_vo.getPoint())); // Pay_VO 객체에서 point를 가져와 JLabel에 설정
 		jl2.setFont(jl1.getFont().deriveFont(Font.BOLD, 15));
 		jl2.setBorder(BorderFactory.createEmptyBorder()); // 테두리 설정
@@ -79,7 +78,7 @@ public class Pay extends JFrame {
 
 		JPanel payPanel_2 = new JPanel();
 		payPanel_2.setLayout(new BoxLayout(payPanel_2, BoxLayout.X_AXIS));
-		JLabel jl3 = new JLabel("   결제 포인트  :");
+		JLabel jl3 = new JLabel("   결제 포인트 :");
 		jl3.setFont(jl3.getFont().deriveFont(Font.BOLD, 15));
 		JLabel jl4 = new JLabel("  30,000 ");
 		jl4.setFont(jl1.getFont().deriveFont(Font.BOLD, 15));
@@ -121,21 +120,29 @@ public class Pay extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Pay_VO pay_vo = new Pay_VO();
+
+				pay_vo.setTicket_num(1);
+				pay_vo.setMovie_id("1");
+				pay_vo.setCust_id(currentUserId);
+				pay_vo.setMovie_name("스파이더맨");
+				pay_vo.setTheater_id("미나리");
 				String dateString = "2023-06-29"; // 날짜 문자열
 				LocalDate localDate = LocalDate.parse(dateString); // 문자열을 LocalDate로 파싱
 				Date sqlDate = Date.valueOf(localDate); // LocalDate를 java.sql.Date로 변환
-
-				pay_vo.setTicket_num(1);
-				pay_vo.setMovie_id("2");
-				pay_vo.setCust_id("TEST123");
-				pay_vo.setMovie_name("스파이더맨");
 				pay_vo.setMovie_date(sqlDate); // java.sql.Date 객체를 설정
-				pay_vo.setTheater_id("미나리");
 				pay_vo.setStart_time("13:30");
 				pay_vo.setEnd_time("15:50");
 				pay_vo.setTheater_seat("G열18");
-				int result = Pay_DAO.getInsert(pay_vo);
+				try {
+					System.out.println("영화 입력 완료");
+					int result = Pay_DAO.getInsert(pay_vo);
+					System.out.println(result);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+//				System.out.println("영화 입력 완료");
+//				int result = Pay_DAO.getInsert(pay_vo);
+//				System.out.println(result);
 			}
 		});
 	}

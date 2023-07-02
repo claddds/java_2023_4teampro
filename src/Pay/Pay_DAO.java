@@ -21,8 +21,15 @@ public class Pay_DAO {
 	
 	// TICKET 테이블에 예매 정보 삽입
 	public static int getInsert(Pay_VO pay_vo) {
-		int result = getsession().insert("movieinsert", pay_vo);
-		return result;
+//		int result = getsession().insert("movieinsert", pay_vo);
+//		ss.commit();
+//		return result;
+		System.out.println("getInsert 시작");  // 로깅 시작
+	    int result = getsession().insert("movieinsert", pay_vo);
+	    System.out.println("insert 완료");  // 삽입 완료 로깅
+	    ss.commit();
+	    System.out.println("commit 완료");  // 커밋 완료 로깅
+	    return result;
 	}
 	
 	// 로그인 한 회원 ID 가져오기

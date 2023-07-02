@@ -3,7 +3,7 @@
 <mapper namespace="org.mybatis.example.BlogMapper">
 	<!-- TICKET 테이블에 예매 정보 삽입 -->
 	<insert id="movieinsert" parameterType="Pay.Pay_VO">
-		insert into TICKET(ticket_num, movie_id, cust_id, movie_name, theater_id, movie_date, start_time, end_time, theater_seat)
+		INSERT INTO TICKET(ticket_num, movie_id, cust_id, movie_name, theater_id, movie_date, start_time, end_time, theater_seat)
 		values(TICKET_SEQ.nextval, #{movie_id},#{cust_id}, #{movie_name}, #{theater_id}, #{movie_date}, #{start_time}, #{end_time}, #{theater_seat})
 	</insert>
 	

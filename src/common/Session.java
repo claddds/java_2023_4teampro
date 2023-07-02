@@ -15,8 +15,7 @@ public class Session {
 		pay_vo = new Pay_VO();
 		currentUserId = Pay_DAO.getMemberLogin(pay_vo);
 		pay_vo.setCust_id(currentUserId);  //로그인한 사용자 아이디. 나중엔 변수에 담아서 해야함.
-		System.out.println("현재 로그인한 회원은 " + currentUserId); //현재 로그인한 회원 아이디 콘솔에서 확인해보기.
+		System.out.println("현재 로그인한 회원은 " + currentUserId); //현재 로그인한 회원 아이디 콘솔에서 확인해보려고 넣었음.
 		return currentUserId;
 	}
-	
 }
