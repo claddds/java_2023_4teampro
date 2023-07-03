@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.mybatis.example.BlogMapper">
+	<!-- TICKET 테이블에 예매 정보 삽입 -->
+	<insert id="movieinsert" parameterType="Pay.Pay_VO">
+		INSERT INTO TICKET(ticket_num, movie_id, cust_id, movie_name, theater_id, movie_date, start_time, end_time, theater_seat)
+		values(TICKET_SEQ.nextval, #{movie_id},#{cust_id}, #{movie_name}, #{theater_id}, #{movie_date}, #{start_time}, #{end_time}, #{theater_seat})
+	</insert>
+	
+	<!-- 로그인 한 회원 ID 가져오기 -->
+	<select id="getMemberLogin" resultType="java.lang.String">
+		SELECT CUST_ID FROM LOGIN_INFO
+	</select>
+	
+	<!-- 해당 회원의 잔여포인트 가져오기 -->
+	<select id="getRemainingPoints" resultType="java.lang.Integer" parameterType="Pay.Pay_VO">
+		SELECT P.REMAINING_POINT
+		FROM LOGIN_INFO L, POINT P
+		WHERE L.CUST_ID = P.CUST_ID
+	</select>
+	
+	<!-- 포인트 충전 -->
+	<!-- CUSTOMER 테이블의 POINT 업데이트 -->
+	<update id="updateCustomerPoint"  parameterType="Pay.Pay_VO">
+		UPDATE CUSTOMER
+		SET POINT = POINT + #{point}
+		WHERE CUST_ID = #{cust_id}
+	</update>
+	
+	<!-- LOGIN_INFO 테이블의 POINT 업데이트 -->
+	<update id="updateLoginInfoPoint" parameterType="Pay.Pay_VO">
+		UPDATE LOGIN_INFO
+		SET POINT = POINT + #{point}
+		WHERE CUST_ID = #{cust_id}
+	</update>
+	
+	<!-- POINT 테이블의 REMAINING_POINT 업데이트 -->
+	<update id="updateRemainingPoint" parameterType="Pay.Pay_VO">
+		UPDATE POINT
+    	SET REMAINING_POINT = REMAINING_POINT + #{point}
+    	WHERE CUST_ID = #{cust_id}
+	</update>
+	
+	<!-- 로그인 한 회원의 티켓 리스트 -->
+	<select id="getTicketList" parameterType="String" resultType="Ticket.Ticket_VO">
+		SELECT ticket_num, movie_name, start_time, movie_date, theater_id, theater_seat
+        FROM TICKET
+        WHERE CUST_ID = #{cust_id}
+	</select>
+	
+	<!-- 예매 취소 -->
+	<update id="cancelTicket" parameterType="int">
+  		DELETE FROM TICKET
+  		WHERE ticket_num = #{ticket_num}
+	</update>
+	
+	
+</mapper>
