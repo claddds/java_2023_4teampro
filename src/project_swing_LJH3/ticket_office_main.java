@@ -44,7 +44,7 @@ public class ticket_office_main extends JFrame {
 
 	JCalendar cal = new JCalendar();
 
-	int res1, res2;
+	int res1, res2;   
 	String price_ad, price_ch;
 
 	public ticket_office_main() {
@@ -117,10 +117,6 @@ public class ticket_office_main extends JFrame {
 		pg6.add(show_peo1);
 		pg6.add(show_peo2);
 
-		//pg7.add(j4);
-		//pg7.add(show_price1);
-		//pg7.add(show_price2);
-
 		pg9.add(j5);
 		pg9.add(show_price3);
 
@@ -129,7 +125,7 @@ public class ticket_office_main extends JFrame {
 		pg8.add(pg4);
 		pg8.add(pg5);
 		pg8.add(pg6);
-		//pg8.add(pg7);
+
 		pg8.add(pg9);
 
 		// 선택한 영화패널인 info_movie에 포스터공간과 각 정보탭을 붙이기.
