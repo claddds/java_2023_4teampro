@@ -16,6 +16,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -26,10 +27,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 import javax.swing.table.DefaultTableModel;
 
 import com.toedter.calendar.JCalendar;
 
+import project.LJH.DB.DAO;
 import project.LJH.DB.VO;
 
 //매표소 만들기 
@@ -56,12 +60,12 @@ public class ticket_office_main extends JFrame implements Runnable{
 	//위는 성인아동 가격을 계산하기위한 변수선언
 	
 	JTable table1 , table2, table3;
-	
+	DefaultTableModel tableModel;
 	//커넥트를 위한 변수
 	Socket s;
 	ObjectOutputStream out;
 	ObjectInputStream in;
-	String msg;
+
 	VO vo ;
 	
 	public ticket_office_main() {
@@ -402,6 +406,35 @@ public class ticket_office_main extends JFrame implements Runnable{
 		});
 		
 		
+		jsp1.addAncestorListener(new AncestorListener() {
+			
+			@Override
+			public void ancestorRemoved(AncestorEvent event) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void ancestorMoved(AncestorEvent event) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void ancestorAdded(AncestorEvent event) {
+				try {
+					Protocol p = new Protocol();
+					p.setCmd(501);
+					out.writeObject(p);
+					out.flush();
+				} catch (Exception e) {
+					
+				}
+				
+			}
+		});
+		
+		
 		
 		
 		
@@ -436,7 +469,7 @@ public class ticket_office_main extends JFrame implements Runnable{
 		// 접속
 		public void connected() {
 			try {
-				s = new Socket("192.168.0.80", 7789);
+				s = new Socket("192.168.0.34", 7789);
 				//집에서 연습할떄 이건 포트번호를 바꾸자
 				out = new ObjectOutputStream(s.getOutputStream());
 				in = new ObjectInputStream(s.getInputStream());
@@ -470,17 +503,35 @@ public class ticket_office_main extends JFrame implements Runnable{
 						switch (p.getCmd()) {
 						case 500: break esc;
 						case 501 : 
-							
-							break;
+							DefaultTableModel model1 = (DefaultTableModel) table1.getModel();
+							List<VO> movieList = DAO.getMovieList(); // DB에서 영화 목록 가져오기
+							for (VO movie : movieList) {
+							    Object[] rowData = { movie.getMovie_name() }; // 영화 이름에 해당하는 데이터
+							    model1.addRow(rowData); // table1에 데이터 추가
+							};
 							
 						case 502 : 
-							
+							DefaultTableModel model2 = (DefaultTableModel) table2.getModel();
+							List<VO> theaterList = DAO.getTheaterList(); // DB에서 극장 목록 가져오기
+							for (VO theater : theaterList) {
+							    Object[] rowData = { theater.getTheater_id() }; // 극장 이름에 해당하는 데이터
+							    model2.addRow(rowData); // table2에 데이터 추가
+							}
 							break;
 							
 						case 503 : 
+							DefaultTableModel model3 = (DefaultTableModel) table3.getModel();
+							List<VO> timeList = DAO.getTimeList(); // DB에서 시간 목록 가져오기
+							for (VO time : timeList) {
+							    Object[] rowData = { time.getStart_time(),time.getEnd_time() }; // 시간 정보에 해당하는 데이터
+							    model3.addRow(rowData); // table3에 데이터 추가
+							}
+							break;
+						case 504:
 							
 							break;
 						}
+						
 					}
 				} catch (Exception e) {
 				
@@ -490,18 +541,16 @@ public class ticket_office_main extends JFrame implements Runnable{
 			
 		}
 		
-
+	
 	
 
 	
 
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			@Override
-			public void run() {
+		
 				new ticket_office_main();
 				
-			}
-	}); // 메인
-	}
+			
+	} // 메인
+	
 } // 클래스

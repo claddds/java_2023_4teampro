@@ -4,32 +4,50 @@ import java.io.Serializable;
 
 public class VO implements Serializable{
 
-	private String movie_name, movie_time, movie_theater;
-	private int point;
+	private String movie_name,start_time,end_time,theater_id;
+	
+	private int remaining_point;
+
 	public String getMovie_name() {
 		return movie_name;
 	}
+
 	public void setMovie_name(String movie_name) {
 		this.movie_name = movie_name;
 	}
-	public String getMovie_time() {
-		return movie_time;
+
+	public String getStart_time() {
+		return start_time;
 	}
-	public void setMovie_time(String movie_time) {
-		this.movie_time = movie_time;
+
+	public void setStart_time(String start_time) {
+		this.start_time = start_time;
 	}
-	public String getMovie_theater() {
-		return movie_theater;
+
+	public String getEnd_time() {
+		return end_time;
 	}
-	public void setMovie_theater(String movie_theater) {
-		this.movie_theater = movie_theater;
+
+	public void setEnd_time(String end_time) {
+		this.end_time = end_time;
 	}
-	public int getPoint() {
-		return point;
+
+	public String getTheater_id() {
+		return theater_id;
 	}
-	public void setPoint(int point) {
-		this.point = point;
+
+	public void setTheater_id(String theater_id) {
+		this.theater_id = theater_id;
 	}
+
+	public int getRemaining_point() {
+		return remaining_point;
+	}
+
+	public void setRemaining_point(int remaining_point) {
+		this.remaining_point = remaining_point;
+	}
+	
 	
 
 	}

@@ -36,15 +36,37 @@ public class CP_client extends Thread{
 				if(obj !=null) {
 					Protocol p = (Protocol)obj;
 					switch (p.getCmd()) {
-					//cmd : 500 : 종료, 501:영화목록 출력 502: 극장관 이름 출력, 503: 상영시간표 출력
-					case 501: 
-						List<VO> movieList = DAO.getMovieList();
-						p.setMovie(movieList.toArray(new String[0]));
+					//cmd : 500 : 종료, 501:영화목록 출력 502: 극장관 이름 출력
+					//503: 상영시간표 출력 504 : 잔여포인트
+					case 500: 
 						out.writeObject(p);
-                        out.flush();
+						out.flush();
                         break;
-						
-					}
+					case 504 :
+						VO vo = p.getVo();
+						int point = DAO.getPoint(p.getVo());
+						p.setResult(point);
+						out.writeObject(p);
+						out.flush();
+					case 501 :
+						List<VO> m_list = DAO.getMovieList();
+						p.setList(m_list);
+						out.writeObject(p);
+						out.flush();
+						break;
+					case 502 :
+						List<VO> th_list = DAO.getTheaterList();
+						p.setList(th_list);
+						out.writeObject(p);
+						out.flush();
+						break;
+					case 503 :
+						List<VO> t_list = DAO.getTimeList();
+						p.setList(t_list);
+						out.writeObject(p);
+						out.flush();
+						break;
+					} 
 				}
 			} catch (Exception e) {
 			

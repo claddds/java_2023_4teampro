@@ -36,6 +36,6 @@ public class DB_server implements Runnable{
 	}
 	
 	public static void main(String[] args) {
-		
+		new DB_server();
 	}
 }
