@@ -6,6 +6,9 @@ import java.awt.BorderLayout;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
@@ -13,7 +16,7 @@ public class Sign_in extends JFrame{
 	private JTextField signin_id_tf;
 	private JTextField signin_pw_tf;
 	public Sign_in() {
-		super("영화예매프로그램");
+		super("로그인");
 		
 		setSize(800, 800);
 		setLocationRelativeTo(null);
@@ -71,6 +74,24 @@ public class Sign_in extends JFrame{
 		JButton signin_cancel_bt = new JButton("취소");
 		signin_cancel_bt.setBounds(406, 23, 97, 23);
 		signin_login_bt_panel.add(signin_cancel_bt);
+		
+		JButton signin_signup_bt = new JButton("회원가입");
+		signin_signup_bt.setBounds(334, 55, 97, 23);
+		signin_login_bt_panel.add(signin_signup_bt);
+		
+		signin_cancel_bt.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new Main_logout();
+				setVisible(false);
+			}
+		});
+		
+		signin_signup_bt.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new Sign_up();
+				setVisible(false);	// 창 안보이게 하기
+			}
+		});
 	}
 	public static void main(String[] args) {
 		new Sign_in();

@@ -19,7 +19,7 @@ public class Main_login extends JFrame{
 	CardLayout card = new CardLayout();
 	
 	public Main_login() {
-		super("영화예매프로그램");
+		super("4딸라시네마");
 		getContentPane().setLayout(null);
 		
 		JPanel sign_panel = new JPanel();

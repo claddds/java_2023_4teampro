@@ -6,6 +6,9 @@ import java.awt.BorderLayout;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
@@ -16,7 +19,7 @@ public class Sign_up extends JFrame{
 	private JTextField signup_birth_tf;
 	private JTextField signup_phone_tf;
 	public Sign_up() {
-		super("영화예매프로그램");
+		super("회원가입");
 		
 		setSize(800, 800);
 		setLocationRelativeTo(null);
@@ -111,6 +114,13 @@ public class Sign_up extends JFrame{
 		JButton signup_cancel_bt = new JButton("취소");
 		signup_cancel_bt.setBounds(406, 23, 97, 23);
 		signup_bt_panel.add(signup_cancel_bt);
+		
+		signup_cancel_bt.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new Main_logout();
+				setVisible(false);
+			}
+		});
 	}
 	public static void main(String[] args) {
 		new Sign_up();

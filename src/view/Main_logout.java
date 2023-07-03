@@ -9,6 +9,7 @@ import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.CardLayout;
+import javax.swing.ImageIcon;
 
 public class Main_logout extends JFrame{
 	Movie_chart_view1 v1 = new Movie_chart_view1();
@@ -17,7 +18,7 @@ public class Main_logout extends JFrame{
 	CardLayout card = new CardLayout();
 	
 	public Main_logout() {
-		super("영화예매프로그램");
+		super("4딸라시네마");
 		getContentPane().setLayout(null);
 		
 		JPanel sign_panel = new JPanel();
@@ -47,7 +48,7 @@ public class Main_logout extends JFrame{
 		
 		JButton logo_bt = new JButton("로고 이미지");
 		logo_bt.setFont(new Font("맑은 고딕", Font.BOLD, 16));
-		logo_bt.setBounds(93, 10, 575, 131);
+		logo_bt.setBounds(156, 38, 488, 103);
 		logo_panel.add(logo_bt);
 		
 		
@@ -94,23 +95,45 @@ public class Main_logout extends JFrame{
 		
 		mobile_ticket_bt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				new Sign_in();
+				setVisible(false);	// 창 안보이게 하기
 			}
 		});
 		
 		sign_in_bt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				new Sign_in();
+				setVisible(false);	// 창 안보이게 하기
 			}
 		});
 		
 		sign_up_bt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Sign_up frame = new Sign_up();
+				new Sign_up();
+				setVisible(false);	// 창 안보이게 하기
 			}
 		});
 		
+		logo_bt.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new Main_logout();
+				setVisible(false);	// 창 안보이게 하기
+			}
+		});
 		
-
+		ticketing_bt.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new Sign_in();
+				setVisible(false);	// 창 안보이게 하기
+			}
+		});
+		
+		snack_bt.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new Sign_in();
+				setVisible(false);	// 창 안보이게 하기
+			}
+		});
 	}
 	
 	
