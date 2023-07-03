@@ -6,22 +6,22 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/util/ojdbc8.jar">
+	<classpathentry kind="lib" path="D:/rhj/javateamproject/2023_movie_ticket_book_mini/src/lib/ojdbc8.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/util/mybatis-3.5.13/mybatis-3.5.13.jar">
+	<classpathentry kind="lib" path="D:/rhj/javateamproject/2023_movie_ticket_book_mini/src/lib/mybatis-3.5.13.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/util/json-simple-1.1.1.jar">
+	<classpathentry kind="lib" path="D:/rhj/javateamproject/2023_movie_ticket_book_mini/src/lib/json-simple-1.1.1.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/javastudy/movie_project/jgoodies-forms-1.8.0.jar" sourcepath="jgoodies-forms-1.8.0-sources.jar"/>
-	<classpathentry kind="lib" path="C:/javastudy/movie_project/miglayout15-swing.jar" sourcepath="miglayout-src.zip"/>
+	<classpathentry kind="lib" path="D:/rhj/javateamproject/2023_movie_ticket_book_mini/src/lib/jgoodies-forms-1.8.0.jar" sourcepath="jgoodies-forms-1.8.0-sources.jar"/>
+	<classpathentry kind="lib" path="D:/rhj/javateamproject/2023_movie_ticket_book_mini/src/lib/miglayout15-swing.jar" sourcepath="miglayout-src.zip"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
