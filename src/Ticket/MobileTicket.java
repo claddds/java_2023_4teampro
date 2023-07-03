@@ -29,7 +29,7 @@ import javax.swing.border.Border;
 public class MobileTicket extends JFrame {
 	JPanel MainP, CenterWrapperPanel, ButtonPanel;
 	JLabel ticketNumLabel, NameLabel, DayLabel, TimeLabel, theaterIdLabel, SeatLabel;
-	JButton cancel, main;
+	JButton complete;
 	private Ticket_VO ticket;
     private TicketList ticketList;
     private Ticket_DAO ticket_DAO;
@@ -175,12 +175,10 @@ public class MobileTicket extends JFrame {
 		
 		// 버튼 패널
 		ButtonPanel = new JPanel();
-		cancel = new JButton("예매취소");
-		main = new JButton("처음으로");
+		complete = new JButton("완료");
 		ButtonPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
 		// ButtonPanel의 테두리에 빈 여백 추가      상, 좌, 하, 우
-		ButtonPanel.add(cancel);
-		ButtonPanel.add(main);
+		ButtonPanel.add(complete);
 
 		MainP.add(NorthPanel, BorderLayout.NORTH);
 		MainP.add(CenterWrapperPanel, BorderLayout.CENTER);
@@ -204,38 +202,16 @@ public class MobileTicket extends JFrame {
 		    }
 		});
 		
-		// 예매취소 버튼
-		cancel.addActionListener(new ActionListener() {
+		// 완료 버튼 -> 창 꺼지고 
+		complete.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int result = JOptionPane.showConfirmDialog(null, "예매를 취소하시겠습니까?", "예매 취소", JOptionPane.YES_NO_OPTION);
 				
-				if(result == JOptionPane.YES_OPTION) {
-					int success = ticket_DAO.cancelTicket(ticket.getTicket_num()); // 현재 모바일 티켓의 티켓 번호로 예매 취소
-					
-					// 성공할 경우
-	                if(success == 1) {
-	                	JOptionPane.showMessageDialog(null, "예매가 취소되었습니다.");
 	                	// 모바일 티켓 창 닫기
 	                	dispose();
 	                	// 티켓 목록 창 다시 표시
-	                	ticketList.refreshTicketList();
 	                	ticketList.setVisible(true);
-	                } else {
-	                    JOptionPane.showMessageDialog(null, "예매 취소에 실패했습니다.");
-	                }
-				}
-			}
-		});
-		
-		
-		// 처음으로 버튼 -> 메인화면으로
-		main.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// 메인화면으로 가는 코드 추가
 			}
 		});
 		

@@ -12,6 +12,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -22,8 +23,8 @@ import common.Session;
 
 public class TicketList extends JFrame {
 	JPanel Panel;
-    JTable ticketTable;
-	JButton ticketButton;
+	JTable ticketTable;
+	JButton ticketButton, cancelButton;
 
 	public TicketList() {
 		super("티켓 리스트");
@@ -57,7 +58,9 @@ public class TicketList extends JFrame {
 		// "티켓 확인" 버튼 생성
 		JPanel ButtonPanel = new JPanel();
 		ticketButton = new JButton("티켓 확인");
+		cancelButton = new JButton("예매 취소");
 		ButtonPanel.add(ticketButton);
+		ButtonPanel.add(cancelButton);
 		Panel.add(ButtonPanel, BorderLayout.SOUTH);
 
 		add(Panel);
@@ -68,7 +71,7 @@ public class TicketList extends JFrame {
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false); // 크기 조절 비활성화
-       
+
 		// "티켓 확인" 버튼
 		ticketButton.addActionListener(new ActionListener() {
 
@@ -76,12 +79,12 @@ public class TicketList extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				// 현재 선택된 행의 정보 가져오기
 				int selectedRow = ticketTable.getSelectedRow();
-				
+
 				// 선택 된 행의 정보 가져오기
 				if (selectedRow != -1) {
 					Ticket_DAO ticketDAO = new Ticket_DAO();
 					Ticket_VO ticket = ticketDAO.getTicketByRow(ticketTable, selectedRow);
-					
+
 					// 해당 모바일 티켓 화면에 띄우기
 					new MobileTicket(ticket, TicketList.this, ticketTable); // TicketList 객체 전달
 				}
@@ -90,6 +93,37 @@ public class TicketList extends JFrame {
 
 		// 화면 처음에 티켓 리스트 보여줌.
 		showTicketList();
+
+		// 예매 취소 버튼 -> 선택한 행의 티켓 삭제 후 리스트 업데이트
+		cancelButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int selectedRow = ticketTable.getSelectedRow();
+
+				if (selectedRow != -1) {
+					int result = JOptionPane.showConfirmDialog(null, "예매를 취소하시겠습니까?", "예매 취소",
+							JOptionPane.YES_NO_OPTION);
+
+					// "예" 선택 시
+					if (result == JOptionPane.YES_OPTION) {
+						// 선택된 행의 티켓 번호 가져오기.
+						int ticket_num = Integer.parseInt(ticketTable.getValueAt(selectedRow, 0).toString());
+						Ticket_DAO ticket_dao = new Ticket_DAO();
+						int success = ticket_dao.cancelTicket(ticket_num); // 선택된 티켓 번호로 예매 취소
+
+						// 예매 취소 성공 시
+						if (success == 1) {
+							JOptionPane.showMessageDialog(null, "예매가 취소되었습니다.");
+							// 리스트 업데이트
+							showTicketList();
+						} else {
+							JOptionPane.showMessageDialog(null, "예매 취소에 실패했습니다.");
+						}
+					}
+				}
+			}
+		});
 	}
 
 	// 티켓 리스트 보여주는 메서드
@@ -116,37 +150,38 @@ public class TicketList extends JFrame {
 			model.addRow(rowData);
 		}
 	}
-	
+
 	// 취소된 티켓을 제외한 티켓 목록을 가져오는 메서드
 	public List<Ticket_VO> getFilteredTickets() {
 		List<Ticket_VO> filteredTickets = new ArrayList<>();
-		
+
 		// DAO호출
 		Ticket_DAO ticketDAO = new Ticket_DAO();
 		String currentUserId = Session.getCurrentUserId();
 		ArrayList<Ticket_VO> ticketList = ticketDAO.getTicketList(currentUserId);
-		
+
 		// 취소된 티켓을 제외한 티켓 목록 필터링
-		// 반환 값이 0인 경우에 해당 티켓은 취소되지 않은 것 
+		// 반환 값이 0인 경우에 해당 티켓은 취소되지 않은 것
 		for (Ticket_VO ticket : ticketList) {
-			if(ticket.getTicket_canceled() == 0) {
+			if (ticket.getTicket_canceled() == 0) {
 				filteredTickets.add(ticket);
 			}
 		}
 		return filteredTickets;
 	}
-	
+
 	// 티켓 목록 업데이트 메서드
 	// 티켓 취소 후 다시 돌아왔을 때 취소된 티켓을 제외한 목록 보여주기 위해
 	public void refreshTicketList() {
 		List<Ticket_VO> filteredTickets = getFilteredTickets();
-		
+
 		DefaultTableModel tableModel = (DefaultTableModel) ticketTable.getModel();
 		tableModel.setRowCount(0); // 기존 데이터 삭제
-		
+
 		for (Ticket_VO ticket : filteredTickets) {
-			Object[] rowData = { ticket.getTicket_num(), ticket.getMovie_name(), ticket.getMovie_date(), ticket.getStart_time(), ticket.getTheater_id(), ticket.getTheater_seat() };
-            tableModel.addRow(rowData);
+			Object[] rowData = { ticket.getTicket_num(), ticket.getMovie_name(), ticket.getMovie_date(),
+					ticket.getStart_time(), ticket.getTheater_id(), ticket.getTheater_seat() };
+			tableModel.addRow(rowData);
 		}
 	}
 

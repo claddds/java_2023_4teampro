@@ -50,8 +50,7 @@
 	
 	<!-- 예매 취소 -->
 	<update id="cancelTicket" parameterType="int">
-  		UPDATE TICKET
-  		SET is_canceled = 1
+  		DELETE FROM TICKET
   		WHERE ticket_num = #{ticket_num}
 	</update>
 	

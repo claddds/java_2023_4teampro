@@ -52,8 +52,8 @@ public class Ticket_DAO {
 	}
 	
 	// 예매 취소하기
-	public static int cancelTicket(int ticket_num) {
-		int result = getsession().update("cancelTicket", ticket_num);
+	public int cancelTicket(int ticket_num) {
+		int result = getsession().delete("cancelTicket", ticket_num);
 	    return result;
 	}
 }
