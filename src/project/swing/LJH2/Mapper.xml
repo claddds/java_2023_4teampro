@@ -8,7 +8,7 @@
   <select id="selectMovie" parameterType="String" resultType="project.swing.LJH.VO">
   	select movie_name from movie  
   </select>
-  
+  <!--테스트임  -->
   
   
  
