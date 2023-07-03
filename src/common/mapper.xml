@@ -15,8 +15,9 @@
 	<!-- 해당 회원의 잔여포인트 가져오기 -->
 	<select id="getRemainingPoints" resultType="java.lang.Integer" parameterType="Pay.Pay_VO">
 		SELECT P.REMAINING_POINT
-		FROM LOGIN_INFO L, POINT P
-		WHERE L.CUST_ID = P.CUST_ID
+		FROM LOGIN_INFO L
+		JOIN POINT P ON L.CUST_ID = P.CUST_ID
+		WHERE L.CUST_ID = #{cust_id}
 	</select>
 	
 	<!-- 포인트 충전 -->

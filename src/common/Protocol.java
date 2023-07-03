@@ -6,7 +6,9 @@ import Pay.Pay_VO;
 
 public class Protocol implements Serializable{
 
-	// 1: TICKET DB에 영화 INSERT
+	// 0: 현재 로그인한 회원 찾기
+	// 1: 로그인한 회원 잔여포인트 가져오기
+	// 2: 결제 완료 후 티켓 INSERT
 	
 	int cmd;
 	String msg;
