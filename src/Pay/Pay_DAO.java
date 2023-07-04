@@ -30,13 +30,15 @@ public class Pay_DAO {
 	
 	// 로그인 한 회원 ID 가져오기
 	public static String getMemberLogin(Pay_VO pay_vo) {
+		System.out.println("[DAO] getMemberLogin");
 		String cust_id= getsession().selectOne("getMemberLogin", pay_vo);
 		return cust_id;
 	}
 	
 	// 해당 회원의 잔여포인트 가져오기
-	public static int getRemainingPoints(Pay_VO pay_vo) {
-		int chargepoint = getsession().selectOne("getRemainingPoints", pay_vo);
+	public static int getRemainingPoints(String custid) {
+		System.out.println("[DAO] getRemainingPoints" + custid);
+		int chargepoint = getsession().selectOne("getRemainingPoints", custid);
 		return chargepoint;
 	}
 	

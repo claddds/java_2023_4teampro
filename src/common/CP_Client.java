@@ -1,6 +1,5 @@
 package common;
 
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -18,6 +17,8 @@ public class CP_Client extends Thread {
     ObjectOutputStream out;
     String ip;
     int result;
+    
+    public static String currentUserId;
 
     // CP_Client 생성자
     // 입출력 스트림 생성
@@ -27,48 +28,62 @@ public class CP_Client extends Thread {
         try {
             in = new ObjectInputStream(s.getInputStream());
             out = new ObjectOutputStream(s.getOutputStream());
+            //ip = s.getInetAddress().getHostAddress();
         } catch (Exception e) {
         }
     }
 
     @Override
-    public void run() {
-        try {
-            while (true) {
-                Object obj = in.readObject();
-                if (obj != null) {
-                    Protocol p = (Protocol) obj;
-                    switch (p.getCmd()) {
-                        case 0: // 로그인한 회원 찾기
-                        	// Pay_DAO.getMemberLogin() 메서드를 사용하여 로그인한 회원의 아이디를 가져옴
-                        	String currentUserId = Pay_DAO.getMemberLogin(p.getPay_vo());
-                        	System.out.println("로그인한 회원: " + currentUserId);
-                        	int currentUserIdAsInt = Integer.parseInt(currentUserId);
-                        	p.setResult(currentUserIdAsInt); 
-                        	System.out.println("회원 찾았음" + currentUserId);
-                        	out.writeObject(p);
-                        	out.flush();
-                        	break;
-                        case 1: // 로그인한 회원의 잔여 포인트 가져오기
-                        	int chargepoint = Pay_DAO.getRemainingPoints(p.getPay_vo());
-                        	System.out.println(chargepoint + "원 DAO 실행");
-                        	p.setResult(chargepoint);
-                        	System.out.println(chargepoint + "원 클라이언트한테 보냄");
-                        	out.writeObject(p);
-                            out.flush();
-                            break;
-                        case 2: // 결제 완료 후 티켓 INSERT
-                        	Pay_VO pay_vo = p.getPay_vo();
-                        	result = Pay_DAO.getInsert(pay_vo);
-                        	p.setResult(result); // DB 삽입 작업의 결과를 설정
-                        	System.out.println(result + "예매 완료!");
-                        	out.writeObject(p);
-                        	out.flush();
-                        	break;
-                    }
-                }
-            }
-        } catch (Exception e) {
-        }
-    }
+	public void run() {
+    	while (true) {
+			try {
+				System.out.println("===CP_Client run() 실행===");
+				Object obj = in.readObject(); // 서버에서 Protocol 객체를 받아 읽는다.
+				if (obj != null) {
+					Protocol p = (Protocol) obj;
+					switch (p.getCmd()) {
+					case 100: // 현재 로그인한 회원 찾기
+						Pay_VO pay_vo = p.getPay_vo();
+						currentUserId = Pay_DAO.getMemberLogin(pay_vo);
+						
+						// 현재 로그인한 회원 정보를 Protocol 객체에 설정
+						p.setMsg(currentUserId);
+						
+						// 클라이언트에게 Protocol 객체 전송
+                    	out.writeObject(p);
+                        out.flush();
+                        break;
+						
+                    case 101: // 로그인한 회원의 잔여 포인트 가져오기
+                    	System.out.println("===CP_Client의 case 101===");
+                    	//currentUserId = Session.getCurrentUserId();
+                    	int chargepoint = Pay_DAO.getRemainingPoints(currentUserId);
+                    	p.setResult(chargepoint);
+                    	out.writeObject(p);
+                        out.flush();
+                        break;
+                    case 102: // 결제 완료 후 티켓 INSERT
+                    	System.out.println("===CP_Client의 case 2===");
+
+                    	pay_vo = p.getPay_vo();
+                    	result = Pay_DAO.getInsert(pay_vo);
+                    	p.setResult(result); // DB 삽입 작업의 결과를 설정
+                    	System.out.println(result + "예매 완료!");
+                    	out.writeObject(p);
+                    	out.flush();
+                    	break;
+					}
+				}
+
+			} catch (Exception e) {
+				System.out.println(e);
+			}// 무한 반복 끝
+			try {
+				out.close();
+				in.close();
+				s.close();
+			} catch (Exception e) {
+			}
+		}
+	}
 }

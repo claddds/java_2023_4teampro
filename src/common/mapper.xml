@@ -7,18 +7,25 @@
 		values(TICKET_SEQ.nextval, #{movie_id},#{cust_id}, #{movie_name}, #{theater_id}, #{movie_date}, #{start_time}, #{end_time}, #{theater_seat})
 	</insert>
 	
-	<!-- 로그인 한 회원 ID 가져오기 -->
+	<!-- 현재 로그인한 회원의 잔여포인트 가져오기 -->
 	<select id="getMemberLogin" resultType="java.lang.String">
-		SELECT CUST_ID FROM LOGIN_INFO
+		SELECT point 
+		FROM LOGIN_INFO 
+		WHERE cust_id = 'user_id';
 	</select>
+		
+	<!-- 로그인 한 회원 ID 가져오기 -->
+	<!-- <select id="getMemberLogin" resultType="java.lang.String">
+		SELECT CUST_ID FROM LOGIN_INFO
+	</select> -->
 	
 	<!-- 해당 회원의 잔여포인트 가져오기 -->
-	<select id="getRemainingPoints" resultType="java.lang.Integer" parameterType="Pay.Pay_VO">
+	<!-- <select id="getRemainingPoints" resultType="java.lang.Integer" parameterType="Pay.Pay_VO">
 		SELECT P.REMAINING_POINT
 		FROM LOGIN_INFO L
 		JOIN POINT P ON L.CUST_ID = P.CUST_ID
 		WHERE L.CUST_ID = #{cust_id}
-	</select>
+	</select> --> 
 	
 	<!-- 포인트 충전 -->
 	<!-- CUSTOMER 테이블의 POINT 업데이트 -->
@@ -54,6 +61,5 @@
   		DELETE FROM TICKET
   		WHERE ticket_num = #{ticket_num}
 	</update>
-	
-	
+
 </mapper>

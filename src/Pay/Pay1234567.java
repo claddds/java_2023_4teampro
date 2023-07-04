@@ -8,9 +8,6 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -30,28 +27,28 @@ import common.Protocol;
 public class Pay extends JFrame implements Runnable{
 	JPanel northPanel, centerPanel, remainingPanel, payPanel, ButtonPanel;
 	JButton pay, cancel;
-	JLabel jl2;
-	
-	int chargepoint;
-	
+	Pay_VO pay_vo;
 	// 이 부분은 나중에 다른곳에 해야함. 로그인 후 메인화면에 해야할 듯.
-	// 현재 로그인한 회원아이디 static 변수로 선언
-	public static String currentUserId; 
-	
-	private static Pay_VO pay_vo;
+	public static String currentUserId; // 현재 로그인한 회원아이디 static 변수로 선언
 
-	// 접속하기 위해 필요한 것들
-	private static ObjectInputStream in;
-	private static ObjectOutputStream out;
-	private static Socket s;
+	Socket s;
+	ObjectOutputStream out;
+	ObjectInputStream in;
 	
 	public Pay() {
 		super("결제");
 		
-		// 접속
-		connected();
-	
-				
+		// 이 부분은 나중에 다른곳에 해야함. 로그인 후 메인화면에 해야할 듯.
+		// Pay_VO 객체를 생성하고 로그인한 회원의 ID
+		pay_vo = new Pay_VO();
+		currentUserId = Pay_DAO.getMemberLogin(pay_vo);
+		pay_vo.setCust_id(currentUserId);  //로그인한 사용자 아이디. 나중엔 변수에 담아서 해야함.
+		System.out.println("현재 로그인한 회원은 " + currentUserId); //현재 로그인한 회원 아이디 콘솔에서 확인해보기.
+		
+		// DB에서 해당 회원의 잔여포인트(point) 가져와 Pay_VO 객체에 설정
+		int chargepoint = Pay_DAO.getRemainingPoints(pay_vo);
+		pay_vo.setPoint(chargepoint);
+
 		getContentPane().setBackground(Color.WHITE);
 
 		// 잔여포인트
@@ -67,11 +64,11 @@ public class Pay extends JFrame implements Runnable{
 		JLabel jl1 = new JLabel("   잔여 포인트 :"); // 라벨 생성
 		jl1.setFont(jl1.getFont().deriveFont(Font.BOLD, 15)); // 큰 글꼴 크기(16)로 설정
 		
-		jl2 = new JLabel(); //POINT DB의 REMAINING_POINT 
-		jl2.setText(" " + Integer.toString(chargepoint) + "원"); // Pay_VO 객체에서 point를 가져와 JLabel에 설정
+		JLabel jl2 = new JLabel(); //POINT DB의 REMAINING_POINT 
+		jl2.setText(" " + Integer.toString(pay_vo.getPoint())+ "원"); // Pay_VO 객체에서 point를 가져와 JLabel에 설정
 		jl2.setFont(jl1.getFont().deriveFont(Font.BOLD, 15));
 		jl2.setBorder(BorderFactory.createEmptyBorder()); // 테두리 설정
-		
+
 		remainingPanel_2.add(jl1);
 		remainingPanel_2.add(jl2);
 		remainingPanel_2.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // 검은색 테두리
@@ -127,23 +124,21 @@ public class Pay extends JFrame implements Runnable{
 		setVisible(true); // 닫힐 때 프로그램이 종료
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false); // 크기 조절 비활성화
-	
 		
+		// 접속
+		connected();
+
 		// 결제하기 버튼 -> TICKET DB에 INSERT (O)
 		pay.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					System.out.println("===결제하기 버튼 클릭!===");
-					System.out.println("currentUserId:" + currentUserId);
-					
-					Pay_VO pay_vo = new Pay_VO();
-					
-					// pay_vo.setTicket_num(); //시퀀스로 들어감.
+					//pay_vo.setTicket_num(); //시퀀스로 들어감.
 					pay_vo.setMovie_id("2");
 					pay_vo.setCust_id(currentUserId);
-					pay_vo.setMovie_name("나홀로집에");
+					System.out.println("현재 로그인한 회원은 " + currentUserId);
+					pay_vo.setMovie_name("해리포터");
 					pay_vo.setTheater_id("미나리");
 					String dateString = "2023-07-02"; // 날짜 문자열
 					LocalDate localDate = LocalDate.parse(dateString); // 문자열을 LocalDate로 파싱
@@ -168,110 +163,38 @@ public class Pay extends JFrame implements Runnable{
 				} catch (Exception e2) {
 				}
 				
-//				// 예매 완료창으로 전환
-//				Reservation_completed reservationCompleted = new Reservation_completed();
-//		        setVisible(false); // 현재 Pay 창 숨기기
-			}
-		});
-		
-		
-		// 결제하기창 닫기 버튼 누르면 종료
-		addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				if (s != null) {
-					try {
-						Protocol p = new Protocol();
-						p.setCmd(0);
-						out.writeObject(p);
-						out.flush();
-					} catch (Exception e2) {
-					}
-				} else {
-					closed();
-				}
+				// 예매 완료창으로 전환
+				Reservation_completed reservationCompleted = new Reservation_completed();
+		        setVisible(false); // 현재 Pay 창 숨기기
 			}
 		});
 	}
-	
-	// 접속 메서드
-	public void connected() {
-		try {
-			// 학원: 192.168.0.78
-			s = new Socket("192.168.0.78", 7789);
-			out = new ObjectOutputStream(s.getOutputStream());
-			in = new ObjectInputStream(s.getInputStream());
-			new Thread(this).start();
-			//loadRemainingPoint(); // 접속하면서 잔여포인트 가져옴
-		} catch (Exception e) {
-			System.out.println(e);
-		}
-	}
-
-	// 끝내기 메서드
-	public void closed() {
-		try {
-			out.close();
-			in.close();
-			//System.exit(0); //전체 애플리케이션을 종료
-		} catch (Exception e) {
-		}
-	}
-	
-	// 현재 로그인한 회원 찾는 메서드
-	public static String getCurrentUserId() {
 		
-		try {
-			Protocol p = new Protocol();
-			p.setCmd(100);
-			p.setPay_vo(pay_vo);
-			
-			out.writeObject(p);
-			out.flush(); // 출력 스트림을 비우는 역할
-			
-			// 서버에서 전달된 프로토콜 객체 받기
-			Protocol response = (Protocol)in.readObject();
-			String currentUserId = response.getMsg();
-			return currentUserId;
-			
-		} catch (Exception e) {
-	}
-	}
-	
-	
-		
-	@Override
-	public void run() {
-		while (true) {
+		// 접속 메서드
+		public void connected() {
 			try {
-				Object obj = in.readObject();
-				if (obj != null) {
-					Protocol p = (Protocol) obj;
-					switch (p.getCmd()) {
-					case 101:
-						System.out.println("===Pay.java의 case1===");
-					    chargepoint = p.getResult(); // 프로토콜에서 잔여 포인트 가져오기
-					    jl2.setText(" " + Integer.toString(chargepoint) + "원"); // JLabel에 잔여포인터 업데이트
-						break;
-					case 102:
-						// 예매 완료창으로 전환
-						Reservation_completed reservationCompleted = new Reservation_completed();
-				        setVisible(false); // 현재 Pay 창 숨기기
-						break;
-					}
-				}
+							// 집: 192.168.0.11
+				s = new Socket("192.168.0.78", 7789);
+				out = new ObjectOutputStream(s.getOutputStream());
+				in = new ObjectInputStream(s.getInputStream());
+				new Thread(this).start();
+				
 			} catch (Exception e) {
-				e.printStackTrace();
+				System.out.println(e);
 			}
-		}
 	}
+		
+		@Override
+		public void run() {
+			
+		}
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
             
 			@Override
 			public void run() {
-	            new Pay();
+				new Pay();
             }
         });
     }

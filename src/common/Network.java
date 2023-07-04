@@ -36,23 +36,23 @@ public class Network implements Runnable{
 	}
 	
 	// 현재 로그인한 회원을 불러오는 메서드
-	public static String getCurrentUserId() {
-		try {
-			Protocol p = new Protocol();
-			p.setCmd(0);
-			p.setPay_vo(pay_vo);
-			
-			out.writeObject(p); // objectOutputStream을 통해 Protocol 객체를 서버로 전송
-			out.flush(); // 출력 스트림을 비우는 역할
-			
-			// 서버에서 전달된 프로토콜 객체 받기
-			Protocol response = (Protocol)in.readObject();
-			int currentUserId = (int) response.getResult();
-	        String currentUserIdStr = String.valueOf(currentUserId);
-	        return currentUserIdStr;
-	    } catch (Exception e) {
-	        // 예외 처리
-	    }
-	    return null;
-	}
-}
+//	public static String getCurrentUserId() {
+//		try {
+//			Protocol p = new Protocol();
+//			p.setCmd(100);
+//			p.setPay_vo(pay_vo);
+//			
+//			out.writeObject(p); // objectOutputStream을 통해 Protocol 객체를 서버로 전송
+//			out.flush(); // 출력 스트림을 비우는 역할
+//			
+//			// 서버에서 전달된 프로토콜 객체 받기
+//			Protocol response = (Protocol)in.readObject();
+//			int currentUserId = (int) response.getResult();
+//	        String currentUserIdStr = String.valueOf(currentUserId);
+//	        return currentUserIdStr;
+//	    } catch (Exception e) {
+//	        // 예외 처리
+//	    }
+//	    return null;
+//	}
+//}

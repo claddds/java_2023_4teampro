@@ -16,6 +16,7 @@ public class DB_Server implements Runnable{
 			new Thread(this).start();
 			
 		} catch (IOException e) {
+        	System.out.println("DB_Server error" + e);
 			e.printStackTrace();
 		}
 		
