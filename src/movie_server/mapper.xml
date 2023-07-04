@@ -3,9 +3,10 @@
  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.mybatis.example.BlogMapper">
-	<!-- customer  -->
-	<select id="custList" resultType="view.VO">
-	    select * from customer order by custid
+
+	<!-- 로그인할때 customer테이블에서 정보를 가져온다  -->
+	<select id="login" resultType="movie_server.CustomerVO">
+	    select * FROM customer WHERE cust_id = #{cust_id} AND cust_password = #{cust_password}
 	</select>
 	
 	<select id="custOne" parameterType="String" resultType="mybatis.com.ict.edu.VO">

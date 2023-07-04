@@ -1,10 +1,11 @@
-package c_loginout;
+package movie_server;
 
-import java.io.Serializable;
-
-// customer 테이블의 컬럼명과 일치 시켜야한다.
-public class Loginout_VO implements Serializable{
-	private String cust_id, cust_password, cust_name, cust_birth, cust_phone, admin_yn, delete_yn;
+public class CustomerVO {
+	// 회원아이디, 비밀번호, 회원이름, 회원 생일, 회원 전화번호, 관리자 여부(0:회원, 1: 관리자), 탈퇴 여부(0: 탈퇴안함, 1: 탈퇴함)
+	private String cust_id, cust_password, cust_name, cust_birth, admin_yn, delete_yn, cust_phone;
+	
+	// 회원 전화번호, 회원 보유 포인트
+	private int point;
 
 	public String getCust_id() {
 		return cust_id;
@@ -38,14 +39,6 @@ public class Loginout_VO implements Serializable{
 		this.cust_birth = cust_birth;
 	}
 
-	public String getCust_phone() {
-		return cust_phone;
-	}
-
-	public void setCust_phone(String cust_phone) {
-		this.cust_phone = cust_phone;
-	}
-
 	public String getAdmin_yn() {
 		return admin_yn;
 	}
@@ -61,5 +54,22 @@ public class Loginout_VO implements Serializable{
 	public void setDelete_yn(String delete_yn) {
 		this.delete_yn = delete_yn;
 	}
+
+	public String getCust_phone() {
+		return cust_phone;
+	}
+
+	public void setCust_phone(String cust_phone) {
+		this.cust_phone = cust_phone;
+	}
+
+	public int getPoint() {
+		return point;
+	}
+
+	public void setPoint(int point) {
+		this.point = point;
+	}
+
 	
 }

@@ -3,18 +3,35 @@ package c_loginout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
+import java.awt.EventQueue;
+
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
+
+import movie_server.Protocol;
+
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
-public class Sign_in extends JFrame{
+public class Sign_in extends JFrame implements Runnable{
 	private JTextField signin_id_tf;
 	private JTextField signin_pw_tf;
+	
+	Socket s;
+	ObjectOutputStream out;
+	ObjectInputStream in;
+	
 	public Sign_in() {
 		super("로그인");
 		
@@ -79,6 +96,31 @@ public class Sign_in extends JFrame{
 		signin_signup_bt.setBounds(334, 55, 97, 23);
 		signin_login_bt_panel.add(signin_signup_bt);
 		
+		// 접속
+		connected();
+		
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				if (s != null) {
+					Protocol p = new Protocol();
+					p.setCmd(0);
+					try {
+						out.writeObject(p);
+						out.flush();
+					} catch (Exception e2) {
+					}
+				} else {
+					closed();
+				}
+			}
+		});
+		
+		signin_login_bt.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				login_go();
+			}
+		});
 		signin_cancel_bt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				new Main_logout();
@@ -93,7 +135,74 @@ public class Sign_in extends JFrame{
 			}
 		});
 	}
+	
+		// 서버 연결 메서드
+		private void connected() {
+			try {
+				s = new Socket("192.168.0.41", 7780);
+				out = new ObjectOutputStream(s.getOutputStream());
+				in = new ObjectInputStream(s.getInputStream());
+
+				new Thread(this).start();
+			} catch (Exception e) {
+			}
+		}
+		
+		// 서버 연결 해제 메서드
+		private void closed() {
+			try {
+				in.close();
+				out.close();
+				s.close();
+				System.out.println("프로그램 종료");
+				System.exit(0);
+			} catch (Exception e) {
+			}
+		}
+		
+		@Override
+		public void run() {
+			esc:while(true) {
+				try {
+					Object obj = in.readObject();
+					if(obj != null) {
+						Protocol p = (Protocol)obj;
+						switch (p.getCmd()) {
+							case 0 : break esc;	// 종료
+							case 1:	
+								
+						}
+					}
+				} catch (Exception e) {
+				}
+			}
+			 closed();
+		}
+		
+		public void login_go() {
+			if(signin_id_tf.getText().trim().length()>0&&signin_pw_tf.getText().trim().length()>0) {
+				Protocol p = new Protocol();
+				CustomerVO vo = new CustomerVO();
+				vo.setMember_id(signin_id_tf.getText().trim());
+				vo.setMember_pw(signin_pw_tf.getText().trim());
+				
+				p.setCmd(501);
+				p.setVo(vo);
+				
+				try {
+					out.writeObject(p);
+					out.flush();
+				} catch (IOException e1) {
+				}
+			}else JOptionPane.showMessageDialog(getParent(), "아이디 / 비밀번호를 입력해주세요.");
+		}
+		
 	public static void main(String[] args) {
-		new Sign_in();
+		EventQueue.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				new Sign_in();
+			}
+		});
 	}
 }

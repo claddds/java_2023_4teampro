@@ -15,6 +15,7 @@
     </environment>
   </environments>
   <mappers>
-    <mapper resource="view/mapper.xml"/>
+    <mapper resource="movie_server/mapper.xml"/>
   </mappers>
 </configuration>
+
