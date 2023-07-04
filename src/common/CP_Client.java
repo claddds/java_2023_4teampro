@@ -35,37 +35,30 @@ public class CP_Client extends Thread {
 
     @Override
 	public void run() {
-    	while (true) {
+		esc: while (true) {
 			try {
 				System.out.println("===CP_Client run() 실행===");
 				Object obj = in.readObject(); // 서버에서 Protocol 객체를 받아 읽는다.
 				if (obj != null) {
 					Protocol p = (Protocol) obj;
 					switch (p.getCmd()) {
-					case 100: // 현재 로그인한 회원 찾기
-						Pay_VO pay_vo = p.getPay_vo();
-						currentUserId = Pay_DAO.getMemberLogin(pay_vo);
-						
-						// 현재 로그인한 회원 정보를 Protocol 객체에 설정
-						p.setMsg(currentUserId);
-						
-						// 클라이언트에게 Protocol 객체 전송
-                    	out.writeObject(p);
-                        out.flush();
-                        break;
-						
-                    case 101: // 로그인한 회원의 잔여 포인트 가져오기
-                    	System.out.println("===CP_Client의 case 101===");
-                    	//currentUserId = Session.getCurrentUserId();
+					case 100:
+						out.writeObject(p);
+						out.flush();
+						break esc;
+                    case 102: // 로그인한 회원의 잔여 포인트 가져오기
+                    	System.out.println("===CP_Client의 case 1===");
+                    	
+                    	currentUserId = Session.getCurrentUserId();
                     	int chargepoint = Pay_DAO.getRemainingPoints(currentUserId);
                     	p.setResult(chargepoint);
                     	out.writeObject(p);
                         out.flush();
                         break;
-                    case 102: // 결제 완료 후 티켓 INSERT
+                    case 103: // 결제 완료 후 티켓 INSERT
                     	System.out.println("===CP_Client의 case 2===");
 
-                    	pay_vo = p.getPay_vo();
+                    	Pay_VO pay_vo = p.getPay_vo();
                     	result = Pay_DAO.getInsert(pay_vo);
                     	p.setResult(result); // DB 삽입 작업의 결과를 설정
                     	System.out.println(result + "예매 완료!");
@@ -77,13 +70,13 @@ public class CP_Client extends Thread {
 
 			} catch (Exception e) {
 				System.out.println(e);
-			}// 무한 반복 끝
-			try {
-				out.close();
-				in.close();
-				s.close();
-			} catch (Exception e) {
 			}
+		}
+		try {
+			out.close();
+			in.close();
+			s.close();
+		} catch (Exception e) {
 		}
 	}
 }

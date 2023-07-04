@@ -6,6 +6,9 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -20,11 +23,16 @@ import javax.swing.border.EmptyBorder;
 
 import common.Session;
 
-public class PointCharge extends JFrame{
+public class PointCharge extends JFrame implements Runnable{
 	JPanel jp1, jp2, jp3, jp4, centerPanel;
 	JRadioButton jrb1, jrb2, jrb3, jrb4, jrb5, jrb6;
 	JButton pay, cancel;
 	ButtonGroup ButtonGroup;
+	
+	// 접속하기 위해 필요한 것들
+	public ObjectInputStream in;
+	public ObjectOutputStream out;
+	public Socket s;
 	
 	public PointCharge() {
 		super("포인트 충전");
@@ -158,6 +166,35 @@ public class PointCharge extends JFrame{
 		return 0; //버튼 선택 안 했을 때
 		
 	}
+	
+	// 접속 메서드
+		public void connected() {
+			try {
+							// 집: 192.168.0.11
+				s = new Socket("192.168.0.11", 7789);
+				out = new ObjectOutputStream(s.getOutputStream());
+				in = new ObjectInputStream(s.getInputStream());
+				new Thread(this).start();
+			} catch (Exception e) {
+				System.out.println(e);
+			}
+		}
+
+		// 끝내기 메서드
+		public void closed() {
+			try {
+				out.close();
+				in.close();
+				System.exit(0);
+			} catch (Exception e) {
+			}
+		}
+		
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			
+		}
 
 	public static void main(String[] args) {
 		new PointCharge();

@@ -10,7 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -26,6 +25,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import common.Protocol;
+import common.Session;
 
 public class Pay extends JFrame implements Runnable{
 	JPanel northPanel, centerPanel, remainingPanel, payPanel, ButtonPanel;
@@ -33,24 +33,18 @@ public class Pay extends JFrame implements Runnable{
 	JLabel jl2;
 	
 	int chargepoint;
+	Pay_VO pay_vo;
 	
 	// 이 부분은 나중에 다른곳에 해야함. 로그인 후 메인화면에 해야할 듯.
-	// 현재 로그인한 회원아이디 static 변수로 선언
-	public static String currentUserId; 
-	
-	private static Pay_VO pay_vo;
+	public static String currentUserId; // 현재 로그인한 회원아이디 static 변수로 선언
 
 	// 접속하기 위해 필요한 것들
-	private static ObjectInputStream in;
-	private static ObjectOutputStream out;
-	private static Socket s;
+	public ObjectInputStream in;
+	public ObjectOutputStream out;
+	public Socket s;
 	
 	public Pay() {
 		super("결제");
-		
-		// 접속
-		connected();
-	
 				
 		getContentPane().setBackground(Color.WHITE);
 
@@ -143,7 +137,7 @@ public class Pay extends JFrame implements Runnable{
 					// pay_vo.setTicket_num(); //시퀀스로 들어감.
 					pay_vo.setMovie_id("2");
 					pay_vo.setCust_id(currentUserId);
-					pay_vo.setMovie_name("나홀로집에");
+					pay_vo.setMovie_name("케로로");
 					pay_vo.setTheater_id("미나리");
 					String dateString = "2023-07-02"; // 날짜 문자열
 					LocalDate localDate = LocalDate.parse(dateString); // 문자열을 LocalDate로 파싱
@@ -158,7 +152,7 @@ public class Pay extends JFrame implements Runnable{
 					
 					// 프로토콜 사용
 					Protocol p = new Protocol();
-					p.setCmd(102); 
+					p.setCmd(103); 
 					p.setPay_vo(pay_vo); // 프로토콜에 VO 객체를 설정
 					
 					out.writeObject(p); // objectOutputStream을 통해 Protocol 객체를 서버로 전송
@@ -174,6 +168,8 @@ public class Pay extends JFrame implements Runnable{
 			}
 		});
 		
+		// 접속
+		connected();
 		
 		// 결제하기창 닫기 버튼 누르면 종료
 		addWindowListener(new WindowAdapter() {
@@ -182,7 +178,7 @@ public class Pay extends JFrame implements Runnable{
 				if (s != null) {
 					try {
 						Protocol p = new Protocol();
-						p.setCmd(0);
+						p.setCmd(100);
 						out.writeObject(p);
 						out.flush();
 					} catch (Exception e2) {
@@ -197,12 +193,12 @@ public class Pay extends JFrame implements Runnable{
 	// 접속 메서드
 	public void connected() {
 		try {
-			// 학원: 192.168.0.78
-			s = new Socket("192.168.0.78", 7789);
+						// 집: 192.168.0.11
+			s = new Socket("192.168.0.11", 7789);
 			out = new ObjectOutputStream(s.getOutputStream());
 			in = new ObjectInputStream(s.getInputStream());
 			new Thread(this).start();
-			//loadRemainingPoint(); // 접속하면서 잔여포인트 가져옴
+			loadRemainingPoint(); // 접속하면서 잔여포인트 가져옴
 		} catch (Exception e) {
 			System.out.println(e);
 		}
@@ -213,47 +209,50 @@ public class Pay extends JFrame implements Runnable{
 		try {
 			out.close();
 			in.close();
-			//System.exit(0); //전체 애플리케이션을 종료
+			System.exit(0);
 		} catch (Exception e) {
 		}
 	}
 	
-	// 현재 로그인한 회원 찾는 메서드
-	public static String getCurrentUserId() {
-		
-		try {
-			Protocol p = new Protocol();
-			p.setCmd(100);
-			p.setPay_vo(pay_vo);
-			
-			out.writeObject(p);
-			out.flush(); // 출력 스트림을 비우는 역할
-			
-			// 서버에서 전달된 프로토콜 객체 받기
-			Protocol response = (Protocol)in.readObject();
-			String currentUserId = response.getMsg();
-			return currentUserId;
-			
-		} catch (Exception e) {
+	// 현재 로그인한 회원정보를 불러와서 잔여포인트를 불러오는 메서드
+	private void loadRemainingPoint() {
+	    try {
+	    	System.out.println("===loadRemainingPoint 실행===");
+	    	
+	    	// Session에서 currentUserId 호출
+	    	Pay_VO pay_vo = new Pay_VO();
+        	currentUserId = Session.getCurrentUserId();
+	    	pay_vo.setCust_id(currentUserId);
+	    	
+	    	//잔여 포인트 가져오기
+	        System.out.println("===잔여포인트 가져오기 실행===");
+	        
+	        Protocol p = new Protocol();
+	        p.setCmd(102);
+	        p.setPay_vo(pay_vo);
+	        out.writeObject(p);
+	        out.flush();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
 	}
-	}
-	
-	
 		
 	@Override
 	public void run() {
-		while (true) {
+		esc: while (true) {
 			try {
 				Object obj = in.readObject();
 				if (obj != null) {
 					Protocol p = (Protocol) obj;
 					switch (p.getCmd()) {
-					case 101:
+					case 100:
+						break esc;
+					case 102:
 						System.out.println("===Pay.java의 case1===");
 					    chargepoint = p.getResult(); // 프로토콜에서 잔여 포인트 가져오기
 					    jl2.setText(" " + Integer.toString(chargepoint) + "원"); // JLabel에 잔여포인터 업데이트
 						break;
-					case 102:
+					case 103:
 						// 예매 완료창으로 전환
 						Reservation_completed reservationCompleted = new Reservation_completed();
 				        setVisible(false); // 현재 Pay 창 숨기기
@@ -264,6 +263,7 @@ public class Pay extends JFrame implements Runnable{
 				e.printStackTrace();
 			}
 		}
+		closed();
 	}
 
 	public static void main(String[] args) {
