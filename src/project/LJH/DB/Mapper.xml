@@ -2,21 +2,16 @@
 <!DOCTYPE mapper
  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="project.LJH.DB.VO">
+<mapper namespace="org.mybatis.example.BlogMapper">
   	
 	<!-- 영화목록 불러오기 -->
- 	<select id="prn_movie" resultType="VO">
+ 	<select id="prn_movie" resultType="project.LJH.DB.VO">
   		select movie_name from movie;
 	</select>
-  
-  	<!-- 극장관 이름 불러오기 
-  	<select id="prn_theater" resultType="VO">
-  		select DISTINCT theater_id from movie_schedule;
-	</select> -->
 
 	<!-- 상영시간표 불러오기 -->
 	<!-- 모든 영화 똑같은 시간으로 지정시 -->
-	<select id="prn_time"	resultType="VO">
+	<select id="prn_time"	resultType="project.LJH.DB.VO">
   		select start_time,end_time from movie_schedule;
 	</select>
 	
@@ -24,7 +19,7 @@
 	<!-- 우선임의로 만든 yyy001 사람의 포인트를 가져와서 연결되는지 확인하는중 -->
 	<!-- 나중에 합칠때, 반드시 수정해야하는 부분!! ***로그인한사람의 포인트 라는 조건을 달아야함!!! ***  -->
 	<select id="prn_point"  parameterType="String" 
-	resultType="VO">
+	resultType="project.LJH.DB.VO">
   		SELECT P.REMAINING_POINT
 		FROM LOGIN_INFO L
 		JOIN POINT P ON L.CUST_ID = P.CUST_ID

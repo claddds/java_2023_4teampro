@@ -10,11 +10,9 @@ public class Protocol implements Serializable{
 	//303: 상영시간표 출력 304 : 잔여포인트
 	int cmd;
 	int result;
-	private String msg;
-	private List<VO> list;
-	private VO vo;
 	
-	
+	List<VO> list;
+	VO vo;
 	public int getCmd() {
 		return cmd;
 	}
@@ -26,12 +24,6 @@ public class Protocol implements Serializable{
 	}
 	public void setResult(int result) {
 		this.result = result;
-	}
-	public String getMsg() {
-		return msg;
-	}
-	public void setMsg(String msg) {
-		this.msg = msg;
 	}
 	public List<VO> getList() {
 		return list;
@@ -45,6 +37,7 @@ public class Protocol implements Serializable{
 	public void setVo(VO vo) {
 		this.vo = vo;
 	}
+	
 	
 	
 	

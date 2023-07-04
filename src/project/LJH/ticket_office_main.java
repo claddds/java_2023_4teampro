@@ -62,12 +62,15 @@ public class ticket_office_main extends JFrame implements Runnable {
 
 	JTable table1, table2, table3;
 	DefaultTableModel model1, model2, model3;
-	// 커넥트를 위한 변수
+	//위는 테이블의 모델화, 데이터를 집어넣기 위함.
+	
+	// 서버연결를 위한 변수
 	Socket s;
 	ObjectOutputStream out;
 	ObjectInputStream in;
-
-	VO vo;
+	DB_server server;
+	String ip;
+	
 
 	public ticket_office_main() {
 		super("매표소");
@@ -190,8 +193,9 @@ public class ticket_office_main extends JFrame implements Runnable {
 		
 		table2 = new JTable(model2);
 		jsp2 = new JScrollPane(table2);
+	
 		c_room.add(jsp2);
-		/* ***jsp2이 테이블내용에 넣어야하는 변수이다. */
+		
 
 		/* 상영시간표 패널 */
 		c_time = new JPanel();
@@ -297,7 +301,7 @@ public class ticket_office_main extends JFrame implements Runnable {
 
 		connected();
 
-		// 종료 : 500
+		
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -307,6 +311,7 @@ public class ticket_office_main extends JFrame implements Runnable {
 						p.setCmd(300);
 						out.writeObject(p);
 						out.flush();
+						System.out.println("window 창 종료시 성공 300");
 					} catch (Exception e2) {
 
 					}
@@ -316,8 +321,26 @@ public class ticket_office_main extends JFrame implements Runnable {
 			}
 		});
 
+		addWindowListener(new WindowAdapter() {
+			public void windowOpened(WindowEvent e) {
+				try {
+					
+					Protocol p = new Protocol();
+					p.setCmd(301);		
+					System.out.println("db갔니?");
+					out.writeObject(p);
+					out.flush();				
+					System.out.println("window 창 오픈이벤트 성공 301");
+					
+				} catch (Exception e2) {
+					 e2.printStackTrace();
+					 System.out.println("목록추가실패");
+				}
+			}
+			});
 		
-		
+			
+				
 		
 		
 		
@@ -427,7 +450,7 @@ public class ticket_office_main extends JFrame implements Runnable {
 	            rowData[i] = table2.getValueAt(select_theater, i);
 	        }
 	        show_room.setText(Arrays.toString(rowData));
-	        System.out.println("입력");
+	        System.out.println("ICT클릭 이벤트 성공");
 	        //입력이 잘되었는지 확인하기위한 콘솔출력
 		}
 		
@@ -462,7 +485,7 @@ public class ticket_office_main extends JFrame implements Runnable {
 	//영화목록을 table1에 추가
 
 	public void addMovieListToTable(List<VO> movieList) {
-		model1.setRowCount(0);
+		
 		for (VO movie : movieList) {
 			model1.addRow(new Object[] { movie.getMovie_name() });
 
@@ -481,7 +504,7 @@ public class ticket_office_main extends JFrame implements Runnable {
 	// 접속
 	public void connected() {
 		try {
-			s = new Socket("192.168.0.80", 7789);
+			s = new Socket("192.168.0.34", 7789);
 			//집에서 연습할떄 이건 포트번호를 바꾸자
 			out = new ObjectOutputStream(s.getOutputStream());
 			in = new ObjectInputStream(s.getInputStream());
@@ -491,6 +514,7 @@ public class ticket_office_main extends JFrame implements Runnable {
 		}
 	}
 
+	
 	// 끝내기
 	public void closed() {
 		try {
@@ -517,7 +541,7 @@ public class ticket_office_main extends JFrame implements Runnable {
 					case 300: break esc;
 					
 					case 301: 
-						list = p.getList();				
+						list = p.getList();
 						for (VO k : list) {
 							Object data[] = {k.getMovie_name()};
 							model1.addRow(data);
@@ -556,7 +580,7 @@ public static void main(String[] args) {
 	
 	
 	new ticket_office_main();
-	
+
 } // 메인
 
 

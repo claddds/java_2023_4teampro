@@ -24,14 +24,6 @@ private static SqlSession ss;
 		return movieList;
 	}
 	
-
-	/*
-	 * //mapper 로가서 prn_theater sql문 실행하고 값을 가져오자. public static List<VO>
-	 * getTheaterList() { List<VO> theaterList = null; theaterList =
-	 * getSession().selectList("prn_theater");
-	 * 
-	 * return theaterList; }
-	 */
 	
 	//mapper 로가서 prn_time sql문 실행하고 값을 가져오자.
 	public static List<VO> getTimeList() {
@@ -42,9 +34,9 @@ private static SqlSession ss;
 	
 	}
 	//mapper로 가서 인자값 cust_id 받아오면, 그 사람의 포인트를 가져올수있도록 sql
-	public static int getPoint (VO vo){
-		int point = getSession().selectOne("prn_point", vo);
-		return point;
+	public static VO getPoint (String cust_id){
+		VO vo =getSession().selectOne("prn_point", cust_id);
+		return vo;
 		
 	}
 	
