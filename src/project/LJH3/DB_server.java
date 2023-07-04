@@ -1,4 +1,4 @@
-package project.LJH;
+package project.LJH3;
 
 import java.net.ServerSocket;
 import java.net.Socket;

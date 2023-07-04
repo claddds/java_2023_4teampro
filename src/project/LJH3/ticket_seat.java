@@ -1,4 +1,4 @@
-package project.LJH;
+package project.LJH3;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -23,7 +23,7 @@ import javax.swing.border.EmptyBorder;
 public class ticket_seat extends JFrame {
 	JPanel bt_p, v_point, seat_p, con_seat, info_movie;
 	// 버튼 패널, 포인트자리페널, 좌석선택패널, 좌석확인패널, 영화정보패널
-	JLabel point, show_point, show_price3, show_peo, show_date, show_room,show_time,
+	JLabel point, show_point, show_price, show_peo, show_date, show_room,show_time,
 	show_peo1,show_peo2,show_theater, show_seatnum;
 	// 포인트 표사라벨, 가격라벨, 인원표시라벨, 날짜표시 라벨, 선택극장 표시레벨 ** 여기는 DB와 연결해서 동적으로 변해야함. **
 	JButton re_bt, pay_bt;
@@ -36,7 +36,7 @@ public class ticket_seat extends JFrame {
 	JPanel seat_p4;
 	ticket_seat_map test = new ticket_seat_map();
 	// 그리고, 배열로 뽑아낸 5*5 좌석표를 객체 생성함. **이 객체를 생성하기위해서 seat_test는 항상 같이있어야함. **
-	
+	ticket_office_main main = new ticket_office_main();
 
 	
 	public ticket_seat() {
@@ -130,7 +130,7 @@ public class ticket_seat extends JFrame {
 		show_room = new JLabel();
 		show_date = new JLabel();
 		show_peo = new JLabel();		
-		show_price3 = new JLabel();
+		show_price = new JLabel();
 		show_time = new JLabel();
 		show_theater = new JLabel();
 		
@@ -172,7 +172,7 @@ public class ticket_seat extends JFrame {
 
 		JPanel pg4 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		pg4.add(j4);
-		pg4.add(show_price3); // 인원수 * 가격으로 처리하여, 인원 눌렀을경우 가격이 뜨게하기
+		pg4.add(show_price); // 인원수 * 가격으로 처리하여, 인원 눌렀을경우 가격이 뜨게하기
 
 		JPanel pg7 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		pg7.add(j6);
@@ -266,7 +266,7 @@ public class ticket_seat extends JFrame {
 		
 		
 		
-				//show_room.setText();
+				
 		
 		
 		
@@ -274,16 +274,9 @@ public class ticket_seat extends JFrame {
 		
 	}  //마지막괄호
 	
-		
-	
-	
 	
 
-
 	
-
-
-
 	//room 콤보박스인 개나리, 빛나리, 미나리를 선택했을 경우 좌석도와 스크린위치가 변하게 하는
 	//액션리스너 추가함. 
 	private void updateSeatButtonPosition() {

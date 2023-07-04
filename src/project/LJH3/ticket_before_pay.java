@@ -1,4 +1,4 @@
-package project.LJH;
+package project.LJH3;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -176,14 +176,6 @@ public class ticket_before_pay extends JFrame{
 		
 	}
 	
-
-
-
-	public ticket_before_pay(JLabel show_peo1, JLabel show_peo2, JLabel show_price3, JLabel show_room2,
-			JLabel show_date2) {
-		// TODO Auto-generated constructor stub
-	}
-
 
 
 

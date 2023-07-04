@@ -1,4 +1,4 @@
-package project.LJH;
+package project.LJH3;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -304,7 +304,7 @@ public class ticket_office_main extends JFrame implements Runnable {
 				if (s != null) {
 					try {
 						Protocol p = new Protocol();
-						p.setCmd(300);
+						p.setCmd(500);
 						out.writeObject(p);
 						out.flush();
 					} catch (Exception e2) {
@@ -316,14 +316,6 @@ public class ticket_office_main extends JFrame implements Runnable {
 			}
 		});
 
-		
-		
-		
-		
-		
-		
-		
-		
 		// 예매하기 버튼을 눌렀을경우에 좌석 선택창으로 넘어가진다.
 		// 매표소는 숨겨지고, 좌석확인창을 객체 생성하여 보이게 한다.
 		ticket_bt.addActionListener(new ActionListener() {
@@ -548,7 +540,7 @@ public class ticket_office_main extends JFrame implements Runnable {
 	}
 	
 	
-	
+		
 
 
 public static void main(String[] args) {
