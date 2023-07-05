@@ -35,7 +35,6 @@ public class Pay extends JFrame implements Runnable{
 	// 이 부분은 나중에 다른곳에 해야함. 로그인 후 메인화면에 해야할 듯.
 	public static String currentUserId; // 현재 로그인한 회원아이디 static 변수로 선언
 
-	
 	public Pay() {
 		super("결제");
 		// 접속
@@ -134,7 +133,7 @@ public class Pay extends JFrame implements Runnable{
 					
 					pay_vo.setMovie_id("2");
 					pay_vo.setCust_id(currentUserId);
-					pay_vo.setMovie_name("안녕?!?!");
+					pay_vo.setMovie_name("제발!!!!!!!");
 					pay_vo.setTheater_id("미나리");
 					pay_vo.setMovie_date("2023-07-02");
 					pay_vo.setStart_time("13:30");

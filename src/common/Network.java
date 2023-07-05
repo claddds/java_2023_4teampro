@@ -62,6 +62,7 @@ public class Network implements Runnable {
     public void sendProtocol(Protocol p) {
         try {
             if (out != null) {
+            	System.out.println("sendProtocol 했다!");
                 out.writeObject(p);
                 out.flush();
             } else {

@@ -34,6 +34,7 @@ public class TicketList extends JFrame implements Runnable{
 		super("티켓 리스트");
 		
 		network = new Network();
+		network.connected();
 		new Thread(this).start();
 
 		Panel = new JPanel(new BorderLayout());
@@ -148,14 +149,15 @@ public class TicketList extends JFrame implements Runnable{
 		
 		// 빈 ArrayList를 생성하고 ticketList 변수에 할당
 		// 티켓 리스트를 담을 ArrayList를 생성
-		ArrayList<Ticket_VO> ticketList = new ArrayList<>();
 		Protocol p = new Protocol();
-		p.setCmd(104);
-		p.setList(ticketList); //Protocol 객체의 list 속성에 ticketList를 설정
+	    p.setCmd(104);
+	    p.setList(new ArrayList<>()); // 빈 ArrayList 설정 (실제 티켓 리스트는 서버에서 받아옴)
+	    System.out.println("여기까지는 되는거지?");
+	    p.getPay_vo().setCust_id(currentUserId); // Pay_VO 사용하지 않음
 		network.sendProtocol(p);
         
 		// 테이블에 데이터 추가
-		updateTable(ticketList);
+		//updateTable(ticketList);
 	}
 
 	// JTable에 데이터 추가하는 메서드
@@ -206,7 +208,6 @@ public class TicketList extends JFrame implements Runnable{
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
 		
 	}
 	
