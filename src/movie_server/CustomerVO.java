@@ -70,6 +70,7 @@ public class CustomerVO {
 	public void setPoint(int point) {
 		this.point = point;
 	}
-
+	
+	
 	
 }

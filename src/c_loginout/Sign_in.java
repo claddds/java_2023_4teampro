@@ -9,6 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 
+import movie_server.CustomerVO;
 import movie_server.Protocol;
 
 import java.awt.Font;
@@ -160,6 +161,13 @@ public class Sign_in extends JFrame implements Runnable{
 			}
 		}
 		
+		// 초기값 메서드
+		private void init() {
+			id_tf.setText("");
+			pw_tf.setText("");
+			id_tf.requestFocus();
+		}
+		
 		@Override
 		public void run() {
 			esc:while(true) {
@@ -169,7 +177,10 @@ public class Sign_in extends JFrame implements Runnable{
 						Protocol p = (Protocol)obj;
 						switch (p.getCmd()) {
 							case 0 : break esc;	// 종료
-							case 1:	
+							case 501:	// 로그인
+								CustomerVO vo = p.getVo();
+								LogIn(vo, p.getResult());
+								break;
 								
 						}
 					}
@@ -183,8 +194,8 @@ public class Sign_in extends JFrame implements Runnable{
 			if(signin_id_tf.getText().trim().length()>0&&signin_pw_tf.getText().trim().length()>0) {
 				Protocol p = new Protocol();
 				CustomerVO vo = new CustomerVO();
-				vo.setMember_id(signin_id_tf.getText().trim());
-				vo.setMember_pw(signin_pw_tf.getText().trim());
+				vo.setCust_id(signin_id_tf.getText().trim());
+				vo.setCust_password(signin_pw_tf.getText().trim());
 				
 				p.setCmd(501);
 				p.setVo(vo);
@@ -195,6 +206,18 @@ public class Sign_in extends JFrame implements Runnable{
 				} catch (IOException e1) {
 				}
 			}else JOptionPane.showMessageDialog(getParent(), "아이디 / 비밀번호를 입력해주세요.");
+		}
+		
+		public void LogIn(CustomerVO vo, int result) {
+			if(result==0) {
+				JOptionPane.showMessageDialog(getParent(), "로그인 성공");
+				CustomerVO = vo;
+				m_id = vo.getMember_id();
+				m_pw = vo.getMember_pw();
+				init();
+				
+			} else
+				JOptionPane.showMessageDialog(getParent(), "가입 정보 없음");
 		}
 		
 	public static void main(String[] args) {

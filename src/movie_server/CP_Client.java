@@ -1,7 +1,73 @@
 package movie_server;
 
-public class CP_Client {
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 
+public class CP_Client extends Thread{
+	Socket s;
+	Server_book server;
+
+	// 객체 직렬화(objectInputStream, objectOutputStream)
+	ObjectInputStream in;
+	ObjectOutputStream out;
+	String ip;
+	
+	public CP_Client(Socket s, Server_book server) {
+		this.s = s;
+		this.server = server;
+		try {
+			in = new ObjectInputStream(s.getInputStream());
+			out = new ObjectOutputStream(s.getOutputStream());
+		} catch (Exception e) {
+		}
+	}
+
+	@Override
+	public void run() {
+		esc:while(true) {
+			try {
+				Object obj = in.readObject();
+				if(obj!=null) {
+					Protocol p = (Protocol) obj;
+					switch(p.getCmd()) {
+					case 0:	// 종료
+						out.writeObject(p);
+						out.flush();
+						break esc; // 접속 해제
+						
+					case 1:	// 로그인
+						int resId = DAO.getIdChk(p.getVo().getCust_id());
+						if (resId > 0) {
+							CustomerVO vo1 = DAO.getLogin(p.getVo());
+							if (vo1 != null) {
+								Protocol p1 = new Protocol();
+								p1.setCmd(1);
+								p1.setResult(0);
+								p1.setVo(vo1);
+
+								out.writeObject(p1);
+								out.flush();
+							} else {
+								Protocol p1 = new Protocol();
+								p1.setCmd(1);
+								p1.setResult(1);
+								p1.setVo(vo1);
+
+								out.writeObject(p1);
+								out.flush();
+							}
+						}
+						break;
+						
+					case 
+					}
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
+	
 }
 
 /*

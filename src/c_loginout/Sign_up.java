@@ -3,21 +3,39 @@ package c_loginout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
+import java.awt.EventQueue;
+
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
+
+import movie_server.CustomerVO;
+import movie_server.Protocol;
+
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
-public class Sign_up extends JFrame{
+public class Sign_up extends JFrame implements Runnable{
 	private JTextField signup_id_tf;
 	private JTextField signup_pw_tf;
 	private JTextField signup_name_tf;
 	private JTextField signup_birth_tf;
 	private JTextField signup_phone_tf;
+	
+	Socket s;
+	ObjectOutputStream out;
+	ObjectInputStream in;
+	
 	public Sign_up() {
 		super("회원가입");
 		
@@ -115,13 +133,87 @@ public class Sign_up extends JFrame{
 		signup_cancel_bt.setBounds(406, 23, 97, 23);
 		signup_bt_panel.add(signup_cancel_bt);
 		
-		signup_cancel_bt.addActionListener(new ActionListener() {
+		// 생일 입력칸에 6자리로 입력할 수 있게 도와주는 텍스트칸(필드안에 회색 글씨)
+		signup_birth_tf.addFocusListener(new FocusListener() {
+			String txt = "6자리로 입력하세요([ex]981216)";
+			@Override
+			public void focusLost(FocusEvent e) {
+				if(!signup_birth_tf.getText().trim().equalsIgnoreCase(txt)&&signup_birth_tf.getText().trim().length()==0) {
+					signup_birth_tf.setText(txt);
+					signup_birth_tf.setForeground(Color.LIGHT_GRAY);
+				}
+			}
+			@Override
+			public void focusGained(FocusEvent e) {
+				if(signup_birth_tf.getText().trim().equalsIgnoreCase(txt)) {
+					signup_birth_tf.setText("");
+					signup_birth_tf.setForeground(Color.BLACK);
+				}
+			}	
+		});
+		
+		// 접속
+		connected();
+		
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				if (s != null) {
+					Protocol p = new Protocol();
+					p.setCmd(0);
+					try {
+						out.writeObject(p);
+						out.flush();
+					} catch (Exception e2) {
+					}
+				} else {
+					closed();
+				}
+			}
+		});
+		signup_idcheck_bt.addActionListener(new ActionListener() {	// 아이디 중복 확인 버튼
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		
+		signup_signup_bt.addActionListener(new ActionListener() {	// 회원가입 버튼 누르면 customer 테이블에 정보가 삽입하게 한다.
+			public void actionPerformed(ActionEvent e) {
+				int res = JOptionPane.showConfirmDialog(getParent(), "가입 하시겠습니까?", "가입", JOptionPane.YES_NO_OPTION);
+				if(res == 0) {
+					if(All()) {	// 모든 정보 입력 확인 후
+						// DB customer 테이블에 데이터 삽입
+						String id = signup_id_tf.getText().trim();
+						String pw = signup_pw_tf.getText().trim();
+						String name = signup_name_tf.getText().trim();
+						String birth = signup_birth_tf.getText().trim();
+					}
+				}
+			}
+		});
+		
+		signup_cancel_bt.addActionListener(new ActionListener() {	// 취소 버튼 => 누르면 로그인 전 메인화면으로 돌아간다.
 			public void actionPerformed(ActionEvent e) {
 				new Main_logout();
 				setVisible(false);
 			}
 		});
 	}
+	
+	
+	
+	private boolean All() {	// 모든 정보를 입력했는지 확인해야하기 위해
+		boolean result;
+		
+		if(signup_id_tf.getText().trim().length()>0 && signup_pw_tf.getText().trim().length()>0 && 
+				signup_name_tf.getText().trim().length()>0 && signup_birth_tf.getText().trim().length()>0 && 
+				signup_phone_tf.getText().trim().length()>0 && !signup_id_tf.isEditable()) {
+				result = true;
+		} else result = false;
+		
+		return result;
+	}
+	
 	public static void main(String[] args) {
 		new Sign_up();
 	}

@@ -3,12 +3,23 @@
  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.mybatis.example.BlogMapper">
-
+	
+	<!-- 회원가입할때 customer 테이블에서 정보를 삽입한다. -->
+	<insert id ="customerIns" parameterType="movie_server.CustomerVO">
+		insert into cutomer(cust_id, cust_password, cust_name, cust_birth, cust_phone,admin_yn, delete_yn, point) 
+    		values (#{cust_id}, #{cust_password}, #{cust_name}, #{cust_birth}, #{cust_phone}, #{member_local}, #{member_email}, '0', '0', 0)
+	</insert>
 	<!-- 로그인할때 customer테이블에서 정보를 가져온다  -->
-	<select id="login" resultType="movie_server.CustomerVO">
+	<select id="login" parameterType="movie_server.CustomerVO" resultType="movie_server.CustomerVO">
 	    select * FROM customer WHERE cust_id = #{cust_id} AND cust_password = #{cust_password}
 	</select>
 	
+	<!-- 아이디 중복 체크 (탈퇴한 회원의 아이디까지 사용할 수 없게) -->
+	<select id="idchk" resultType="int" parameterType="String">
+		SELECT COUNT(*) FROM customer WHERE cust_ID = #{cust_ID}
+	</select>
+	
+	<!-- 
 	<select id="custOne" parameterType="String" resultType="mybatis.com.ict.edu.VO">
 		select * from customer where custid = #{custid} 
 	</select>
@@ -26,5 +37,5 @@
 		update customer set name=#{name}, address=#{address}, phone=#{phone}
 		where custid = #{custid}
 	</update>
-	
+	 -->
 </mapper>
