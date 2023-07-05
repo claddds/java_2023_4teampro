@@ -30,7 +30,7 @@ public class Pay extends JFrame implements Runnable{
 	
 	int chargepoint;
 	Pay_VO pay_vo;
-	private Network network;
+	Network network;
 	
 	// 이 부분은 나중에 다른곳에 해야함. 로그인 후 메인화면에 해야할 듯.
 	public static String currentUserId; // 현재 로그인한 회원아이디 static 변수로 선언
@@ -39,7 +39,7 @@ public class Pay extends JFrame implements Runnable{
 		super("결제");
 		// 접속
 		// network 필드를 생성하고 초기화
-        network = new Network();
+		network = Network.getInstance();
         network.connected();
         new Thread(this).start();
         loadRemainingPoint();
@@ -133,7 +133,7 @@ public class Pay extends JFrame implements Runnable{
 					
 					pay_vo.setMovie_id("2");
 					pay_vo.setCust_id(currentUserId);
-					pay_vo.setMovie_name("제발!!!!!!!");
+					pay_vo.setMovie_name("제발!!!");
 					pay_vo.setTheater_id("미나리");
 					pay_vo.setMovie_date("2023-07-02");
 					pay_vo.setStart_time("13:30");
@@ -217,7 +217,8 @@ public class Pay extends JFrame implements Runnable{
 						break;
 					case 103:
 						// 예매 완료창으로 전환
-						Network network = new Network();
+						network = Network.getInstance();
+						network.connected();
 						Reservation_completed reservationCompleted = new Reservation_completed();
 				        setVisible(false); // 현재 Pay 창 숨기기
 						break;

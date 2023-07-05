@@ -28,14 +28,13 @@ public class TicketList extends JFrame implements Runnable{
 	JTable ticketTable;
 	JButton ticketButton, cancelButton;
 
-	private Network network;
+	Network network;
 	
 	public TicketList() {
 		super("티켓 리스트");
 		
-		network = new Network();
-		network.connected();
-		new Thread(this).start();
+		Network.getInstance().connected();
+        new Thread(this).start();
 
 		Panel = new JPanel(new BorderLayout());
 		JPanel headerPanel = new JPanel(new BorderLayout());
