@@ -37,6 +37,7 @@ public class CP_client extends Thread{
 		while(true) {
 			try {
 				Object obj = in.readObject();
+				List<VO> list = null;
 				if(obj !=null) {
 					Protocol p = (Protocol)obj;
 					switch (p.getCmd()) {
@@ -47,23 +48,18 @@ public class CP_client extends Thread{
 						out.flush();
                         break;
 	
-					case 301 :
-						List<VO> movieList = DAO.getMovieList();
-						p.setList(movieList);
-						model1.setRowCount(0);
-						for (VO movie : movieList) {
-                            model1.addRow(new Object[]{movie});
-                        }
-                            
+					case 301 :					
+						System.out.println("왔어?클라이언트로?");
+						list = DAO.getMovie_name();
+						System.out.println("담아졌니?");
+						p.setList(list);
+						
 						out.writeObject(p);
 						out.flush();
 						break;
 				
 					case 303 :
-						List<VO> timeList = p.getList();
-						p.setList(timeList);
-						out.writeObject(p);
-						out.flush();
+						
 						break;
 					} 
 				}

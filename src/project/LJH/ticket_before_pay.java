@@ -26,7 +26,6 @@ public class ticket_before_pay extends JFrame{
 	//포인트와 포인트표시 라벨, 각 영화이름, 날짜, 극장, 인원, 좌석, 금액등은 앞의 매표소에서 선택한 것들이 넘어올수있도록 출력하자.
 	JButton pay_bt, back_bt;
 	
-
 	
 	 
 	public ticket_before_pay() {
@@ -95,29 +94,32 @@ public class ticket_before_pay extends JFrame{
 		p7.add(ji7);
 		p7.add(show_time);
 
-		show_room= new JLabel("상영관:   ");
-		JLabel jl3 = new JLabel();//매표소에서 선택한 것들이 넘어오게 하기.		
-		p3.add(show_room);
+		JLabel jl3 = new JLabel("상영관:   ");//매표소에서 선택한 것들이 넘어오게 하기.		
+		show_room= new JLabel();
 		p3.add(jl3);
+		p3.add(show_room);
 		
 
-		show_peo= new JLabel("인  원:   ");
-		JLabel jl4 = new JLabel();//매표소에서 선택한 것들이 넘어오게 하기.		
-		p4.add(show_peo);
+		JLabel jl4 = new JLabel("인  원:   ");//매표소에서 선택한 것들이 넘어오게 하기.		
+		show_peo= new JLabel();
+		//JLabel show_peo2 = new JLabel("아동:  ");
 		p4.add(jl4);
+		p4.add(show_peo);
+		//p4.add(show_peo2);
+		
 		
 
-		show_seat= new JLabel("좌석번호:   ");
-		JLabel jl5 = new JLabel();//매표소에서 선택한 것들이 넘어오게 하기.		
-		p5.add(show_seat);
+		JLabel jl5 = new JLabel("좌석번호:   ");//매표소에서 선택한 것들이 넘어오게 하기.		
+		show_seat= new JLabel();
 		p5.add(jl5);
+		p5.add(show_seat);
 		
 		
 
-		show_price= new JLabel("결제금액:   ");
-		JLabel jl6 = new JLabel();//매표소에서 선택한 것들이 넘어오게 하기.		
-		p6.add(show_price);
+		JLabel jl6 = new JLabel("결제금액:   ");//매표소에서 선택한 것들이 넘어오게 하기.		
+		show_price= new JLabel();
 		p6.add(jl6);
+		p6.add(show_price);
 		
 		
 		center.setLayout(new GridLayout(7,1));
@@ -179,10 +181,7 @@ public class ticket_before_pay extends JFrame{
 
 
 
-	public ticket_before_pay(JLabel show_peo1, JLabel show_peo2, JLabel show_price3, JLabel show_room2,
-			JLabel show_date2) {
-		// TODO Auto-generated constructor stub
-	}
+	
 
 
 

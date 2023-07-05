@@ -2,6 +2,7 @@ package project.LJH;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -47,7 +48,8 @@ public class ticket_office_main extends JFrame implements Runnable {
 	// 예매하기버튼.
 	JComboBox<String> adult, child;
 	// 인원선택에 필요한 숫자 콤보벅스 선언,
-	JLabel point, show_point, show_room, show_peo1, show_peo2, show_price1, show_price2, show_price3, show_date, show_time;
+	JLabel point, show_point, show_room, show_peo1, show_peo2, show_price1, show_price2, show_price3, show_date,
+			show_time;
 	// 각 타이틀과 화면에 선택한 내용들이 선택한 영화 정보 밑에 출력 될수 있기위한 라벨을 선언함.
 	JTextArea show_movie;
 	// 영화 포스터를 위한 자리 **나중에 area 말고, 다른 것으로 하게되면 변경해야함**
@@ -62,22 +64,21 @@ public class ticket_office_main extends JFrame implements Runnable {
 
 	JTable table1, table2, table3;
 	DefaultTableModel model1, model2, model3;
-	//위는 테이블의 모델화, 데이터를 집어넣기 위함.
-	
+	// 위는 테이블의 모델화, 데이터를 집어넣기 위함.
+
 	// 서버연결를 위한 변수
 	Socket s;
 	ObjectOutputStream out;
 	ObjectInputStream in;
 	DB_server server;
 	String ip;
-	
 
 	public ticket_office_main() {
 		super("매표소");
 
 		/*
 		 * 제일 위의 잔여포인트 패널 잔여포인트는 라벨명이고, 포인트칸은 라벨로, 나중에 DB연동시 이 JLabel point에 붙여서 보일수 있도록
-		 * 하자.
+		 * 하자..
 		 */
 		v_point = new JPanel();
 		v_point.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -120,7 +121,7 @@ public class ticket_office_main extends JFrame implements Runnable {
 		JLabel j1 = new JLabel("극       장:    ");
 		JLabel j2 = new JLabel("날       짜:    ");
 		JLabel j3 = new JLabel("인       원:    ");
-	    JLabel j4 = new JLabel("시       간: ");
+		JLabel j4 = new JLabel("시       간: ");
 		JLabel j5 = new JLabel("총 금 액:    ");
 		// 탭 선언.
 
@@ -143,7 +144,7 @@ public class ticket_office_main extends JFrame implements Runnable {
 		pg6.add(j3);
 		pg6.add(show_peo1);
 		pg6.add(show_peo2);
-		
+
 		pg9.add(j5);
 		pg9.add(show_price3);
 
@@ -189,13 +190,12 @@ public class ticket_office_main extends JFrame implements Runnable {
 		/* *****나중에 여기에 db연동으로 집어넣기***** */
 
 		model2 = new DefaultTableModel(new Object[] { "극장 목록" }, 0);
-		model2.addRow(new Object[] {"한국 ICT관"});
-		
+		model2.addRow(new Object[] { "한국 ICT관" });
+
 		table2 = new JTable(model2);
 		jsp2 = new JScrollPane(table2);
-	
+
 		c_room.add(jsp2);
-		
 
 		/* 상영시간표 패널 */
 		c_time = new JPanel();
@@ -301,7 +301,6 @@ public class ticket_office_main extends JFrame implements Runnable {
 
 		connected();
 
-		
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -324,29 +323,22 @@ public class ticket_office_main extends JFrame implements Runnable {
 		addWindowListener(new WindowAdapter() {
 			public void windowOpened(WindowEvent e) {
 				try {
-					
+				
+
 					Protocol p = new Protocol();
-					p.setCmd(301);		
-					System.out.println("db갔니?");
+					p.setCmd(301);
 					out.writeObject(p);
-					out.flush();				
+					out.flush();
 					System.out.println("window 창 오픈이벤트 성공 301");
 					
+
 				} catch (Exception e2) {
-					 e2.printStackTrace();
-					 System.out.println("목록추가실패");
+					e2.printStackTrace();
+					
 				}
 			}
-			});
-		
-			
-				
-		
-		
-		
-		
-		
-		
+		});
+
 		// 예매하기 버튼을 눌렀을경우에 좌석 선택창으로 넘어가진다.
 		// 매표소는 숨겨지고, 좌석확인창을 객체 생성하여 보이게 한다.
 		ticket_bt.addActionListener(new ActionListener() {
@@ -361,40 +353,40 @@ public class ticket_office_main extends JFrame implements Runnable {
 
 		// 날짜를 선택했을때, 선택한 영화정보 탭의 날짜에 표시하게하는 이벤트
 		cal.addPropertyChangeListener("calendar", new PropertyChangeListener() {
-		    @Override
-		    public void propertyChange(PropertyChangeEvent evt) {
-		        if (evt.getPropertyName().equals("calendar")) {
-		            Calendar selectedDate = (Calendar) evt.getNewValue();
-		            
-		            // 현재 날짜 가져오기
-		            Calendar currentDate = Calendar.getInstance();
-		            currentDate.set(Calendar.HOUR_OF_DAY, 0);
-		            currentDate.set(Calendar.MINUTE, 0);
-		            currentDate.set(Calendar.SECOND, 0);
-		            currentDate.set(Calendar.MILLISECOND, 0);
-		            
-		            // 선택한 날짜와 현재 날짜 비교
-		            if (selectedDate.before(currentDate)) {
-		                // 선택한 날짜가 오늘 이전인 경우
-		                // 이전 날짜는 선택할 수 없도록 처리
-		                
-		                // 이전 날짜로 변경된 경우 현재 날짜로 다시 설정
-		                cal.setCalendar(currentDate);
-		                
-		                // "과거의 날짜는 선택할 수 없습니다"라는 알림 창 표시
-		                SwingUtilities.invokeLater(() -> {
-		                    JOptionPane.showMessageDialog(null, "과거의 날짜는 선택할 수 없습니다.", "경고", JOptionPane.WARNING_MESSAGE);
-		                });
-		            } else {
-		                // 선택한 날짜가 오늘 이후인 경우
-		                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		                String formattedDate = dateFormat.format(selectedDate.getTime());
-		                show_date.setText(formattedDate);
-		            }
-		        }
-		    }
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				if (evt.getPropertyName().equals("calendar")) {
+					Calendar selectedDate = (Calendar) evt.getNewValue();
+
+					// 현재 날짜 가져오기
+					Calendar currentDate = Calendar.getInstance();
+					currentDate.set(Calendar.HOUR_OF_DAY, 0);
+					currentDate.set(Calendar.MINUTE, 0);
+					currentDate.set(Calendar.SECOND, 0);
+					currentDate.set(Calendar.MILLISECOND, 0);
+
+					// 선택한 날짜와 현재 날짜 비교
+					if (selectedDate.before(currentDate)) {
+						// 선택한 날짜가 오늘 이전인 경우
+						// 이전 날짜는 선택할 수 없도록 처리
+
+						// 이전 날짜로 변경된 경우 현재 날짜로 다시 설정
+						cal.setCalendar(currentDate);
+
+						// "과거의 날짜는 선택할 수 없습니다"라는 알림 창 표시
+						SwingUtilities.invokeLater(() -> {
+							JOptionPane.showMessageDialog(null, "과거의 날짜는 선택할 수 없습니다.", "경고",
+									JOptionPane.WARNING_MESSAGE);
+						});
+					} else {
+						// 선택한 날짜가 오늘 이후인 경우
+						SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+						String formattedDate = dateFormat.format(selectedDate.getTime());
+						show_date.setText(formattedDate);
+					}
+				}
+			}
 		});
-		
 
 		// 성인과 아동 인원을 선택하였을 경우, 선택한 영화정보에 동적으로 바뀔수있도록 출력하기.
 		adult.addActionListener(new ActionListener() {
@@ -437,33 +429,28 @@ public class ticket_office_main extends JFrame implements Runnable {
 
 			}
 		});
-		
-		
-		//극장관은 1개만 있으므로, ICT관 을 테이블에 추가하고, 그것을 클릭하였을경우
-		//발생하는 이벤트 리스너 작성.
+
+		// 극장관은 1개만 있으므로, ICT관 을 테이블에 추가하고, 그것을 클릭하였을경우
+		// 발생하는 이벤트 리스너 작성.
 		table2.addMouseListener(new MouseAdapter() {
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			int select_theater = table2.getSelectedRow();
-			Object[] rowData = new Object[table2.getColumnCount()];
-	        for (int i = 0; i < table2.getColumnCount(); i++) {
-	            rowData[i] = table2.getValueAt(select_theater, i);
-	        }
-	        show_room.setText(Arrays.toString(rowData));
-	        System.out.println("ICT클릭 이벤트 성공");
-	        //입력이 잘되었는지 확인하기위한 콘솔출력
-		}
-		
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int select_theater = table2.getSelectedRow();
+				Object[] rowData = new Object[table2.getColumnCount()];
+				for (int i = 0; i < table2.getColumnCount(); i++) {
+					rowData[i] = table2.getValueAt(select_theater, i);
+				}
+				show_room.setText(Arrays.toString(rowData));
+				System.out.println("ICT클릭 이벤트 성공");
+				// 입력이 잘되었는지 확인하기위한 콘솔출력
+			}
+
 		});
-		
 
 	} // 액션리스너 및 화면단 마지막 괄호
 
-	
-	
-	
 	/* 메서드 칸 */
-	
+
 	// 성인과 아동을 각각 콤보박스를 클릭해서 각 가격이 나온것을 합쳐서 나올수있도록.
 	private void updateTotalPrice() {
 		String price_ad = show_price1.getText();
@@ -479,42 +466,39 @@ public class ticket_office_main extends JFrame implements Runnable {
 		int total = Integer.parseInt(price_ad) + Integer.parseInt(price_ch);
 		show_price3.setText(String.valueOf(total));
 	}
-	
-	
-	
-	//영화목록을 table1에 추가
+
+	// 영화목록을 table1에 추가
 
 	public void addMovieListToTable(List<VO> movieList) {
-		
+
 		for (VO movie : movieList) {
 			model1.addRow(new Object[] { movie.getMovie_name() });
 
 		}
 	}
 
-
 	// 상영 시간을 table3에 추가
 	public void addTimeListToTable(List<VO> timeList) {
-	        model3.setRowCount(0);
-	        for (VO time : timeList) {
-	            model3.addRow(new Object[]{time.getStart_time(), time.getEnd_time()});
-	        }
-	    }
+		model3.setRowCount(0);
+		for (VO time : timeList) {
+			model3.addRow(new Object[] { time.getStart_time(), time.getEnd_time() });
+		}
+	}
 
 	// 접속
 	public void connected() {
 		try {
-			s = new Socket("192.168.0.34", 7789);
-			//집에서 연습할떄 이건 포트번호를 바꾸자
+			s = new Socket("192.168.0.80", 7780);
+			// 집에서 연습할떄 이건 포트번호를 바꾸자
 			out = new ObjectOutputStream(s.getOutputStream());
 			in = new ObjectInputStream(s.getInputStream());
+
 			new Thread(this).start();
 		} catch (Exception e) {
-		
+
 		}
 	}
 
-	
 	// 끝내기
 	public void closed() {
 		try {
@@ -523,69 +507,70 @@ public class ticket_office_main extends JFrame implements Runnable {
 			s.close();
 			System.exit(0);
 		} catch (Exception e) {
-		
+
 		}
 	}
 
-	
-	@Override public void run() {
-		esc : while(true) {
+	@Override
+	public void run() {
+		esc: while (true) {
 			try {
 				Object obj = in.readObject();
 				List<VO> list = null;
-				Protocol p = (Protocol)obj;
-				
-				if(obj !=null) {
-					p = (Protocol)obj;
+				Protocol p = (Protocol) obj;
+
+				if (obj != null) {
+					p = (Protocol) obj;
 					switch (p.getCmd()) {
-					case 300: break esc;
-					
-					case 301: 
+					case 300:
+						break esc;
+
+					case 301:
+						
+						System.out.println("온거여? 메인 런");
 						list = p.getList();
 						for (VO k : list) {
-							Object data[] = {k.getMovie_name()};
-							model1.addRow(data);
-						}
-						break ;
-	
-					case 303 :
+							System.out.println("출력되니?");
+							model1.addRow(new Object[]{k});
+						}		
+						
+						System.out.println("갖고왔니?");
+						
+
+						break;
+
+					case 303:
 						list = p.getList();
 						for (VO k : list) {
-							Object data[] = {k.getStart_time(), k.getEnd_time()};
+							Object data[] = { k.getStart_time(), k.getEnd_time() };
 							model3.addRow(data);
 						}
 						break;
-					case 304 : 
-						///잔여포인트 구하기 .
+					case 304:
+						/// 잔여포인트 구하기 .
 						break;
 					}
 				}
-				
+
 			} catch (Exception e) {
-			
+
 			}
-		}//무한반복
+		} // 무한반복
 		closed();
 
-		
-		
 	}
-	
-	
-	
 
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				new ticket_office_main();
+				
+			}
+		});
+		
 
-public static void main(String[] args) {
-	
-	
-	
-	new ticket_office_main();
-
-} // 메인
-
-
-
-
-
+	} // 메인
 
 } // 클래스

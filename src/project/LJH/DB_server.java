@@ -9,7 +9,7 @@ public class DB_server implements Runnable{
 	
 	public DB_server() {
 		try {
-			ss= new ServerSocket(7789);
+			ss= new ServerSocket(7780);
 			System.out.println("서버 대기중....");
 			
 			new Thread(this).start();

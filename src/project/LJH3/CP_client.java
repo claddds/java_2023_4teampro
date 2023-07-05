@@ -45,8 +45,8 @@ public class CP_client extends Thread{
                         break;
 					case 304 :
 						VO vo = p.getVo();
-						int point = DAO.getPoint(p.getVo());
-						p.setResult(point);
+						// point = DAO.getPoint(p.getVo());
+						//p.setResult(point);
 						out.writeObject(p);
 						out.flush();
 					case 301 :
