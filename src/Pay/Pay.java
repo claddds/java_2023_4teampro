@@ -10,11 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
-import java.sql.Date;
-import java.time.LocalDate;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -24,6 +19,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import common.Network;
 import common.Protocol;
 import common.Session;
 
@@ -34,17 +30,20 @@ public class Pay extends JFrame implements Runnable{
 	
 	int chargepoint;
 	Pay_VO pay_vo;
+	private Network network;
 	
 	// 이 부분은 나중에 다른곳에 해야함. 로그인 후 메인화면에 해야할 듯.
 	public static String currentUserId; // 현재 로그인한 회원아이디 static 변수로 선언
 
-	// 접속하기 위해 필요한 것들
-	public ObjectInputStream in;
-	public ObjectOutputStream out;
-	public Socket s;
 	
 	public Pay() {
 		super("결제");
+		// 접속
+		// network 필드를 생성하고 초기화
+        network = new Network();
+        network.connected();
+        new Thread(this).start();
+        loadRemainingPoint();
 				
 		getContentPane().setBackground(Color.WHITE);
 
@@ -123,26 +122,21 @@ public class Pay extends JFrame implements Runnable{
 		setResizable(false); // 크기 조절 비활성화
 	
 		
-		// 결제하기 버튼 -> TICKET DB에 INSERT (O)
+		// 결제하기 버튼 -> TICKET DB에 INSERT
 		pay.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
 					System.out.println("===결제하기 버튼 클릭!===");
-					System.out.println("currentUserId:" + currentUserId);
 					
 					Pay_VO pay_vo = new Pay_VO();
 					
-					// pay_vo.setTicket_num(); //시퀀스로 들어감.
 					pay_vo.setMovie_id("2");
 					pay_vo.setCust_id(currentUserId);
-					pay_vo.setMovie_name("케로로");
+					pay_vo.setMovie_name("안녕?!?!");
 					pay_vo.setTheater_id("미나리");
-					String dateString = "2023-07-02"; // 날짜 문자열
-					LocalDate localDate = LocalDate.parse(dateString); // 문자열을 LocalDate로 파싱
-					Date sqlDate = Date.valueOf(localDate); // LocalDate를 java.sql.Date로 변환
-					pay_vo.setMovie_date(sqlDate); // java.sql.Date 객체를 설정
+					pay_vo.setMovie_date("2023-07-02");
 					pay_vo.setStart_time("13:30");
 					pay_vo.setEnd_time("15:50");
 					pay_vo.setTheater_seat("E열1");
@@ -152,66 +146,37 @@ public class Pay extends JFrame implements Runnable{
 					
 					// 프로토콜 사용
 					Protocol p = new Protocol();
-					p.setCmd(103); 
+					p.setCmd(103); // cmd에 1 담기
 					p.setPay_vo(pay_vo); // 프로토콜에 VO 객체를 설정
 					
-					out.writeObject(p); // objectOutputStream을 통해 Protocol 객체를 서버로 전송
-					out.flush(); // 출력 스트림을 비우는 역할
+					network.sendProtocol(p);
 					
 					System.out.println("영화 정보가 입력되었습니다.");
 				} catch (Exception e2) {
 				}
-				
-//				// 예매 완료창으로 전환
-//				Reservation_completed reservationCompleted = new Reservation_completed();
-//		        setVisible(false); // 현재 Pay 창 숨기기
+
 			}
 		});
-		
-		// 접속
-		connected();
-		
+
 		// 결제하기창 닫기 버튼 누르면 종료
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				if (s != null) {
+				if (network.getS() != null) {
+					System.out.println("결제하기창 닫기 클릭! p.setCmd(100)");
+					Protocol p = new Protocol();
+					p.setCmd(100);
 					try {
-						Protocol p = new Protocol();
-						p.setCmd(100);
-						out.writeObject(p);
-						out.flush();
+						network.sendProtocol(p);
 					} catch (Exception e2) {
+						
 					}
 				} else {
-					closed();
+					System.out.println("결제하기창 닫기 클릭! network.closed()");
+					network.closed();
 				}
 			}
 		});
-	}
-	
-	// 접속 메서드
-	public void connected() {
-		try {
-						// 집: 192.168.0.11
-			s = new Socket("192.168.0.11", 7789);
-			out = new ObjectOutputStream(s.getOutputStream());
-			in = new ObjectInputStream(s.getInputStream());
-			new Thread(this).start();
-			loadRemainingPoint(); // 접속하면서 잔여포인트 가져옴
-		} catch (Exception e) {
-			System.out.println(e);
-		}
-	}
-
-	// 끝내기 메서드
-	public void closed() {
-		try {
-			out.close();
-			in.close();
-			System.exit(0);
-		} catch (Exception e) {
-		}
 	}
 	
 	// 현재 로그인한 회원정보를 불러와서 잔여포인트를 불러오는 메서드
@@ -230,8 +195,7 @@ public class Pay extends JFrame implements Runnable{
 	        Protocol p = new Protocol();
 	        p.setCmd(102);
 	        p.setPay_vo(pay_vo);
-	        out.writeObject(p);
-	        out.flush();
+	        network.sendProtocol(p);
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
@@ -241,7 +205,7 @@ public class Pay extends JFrame implements Runnable{
 	public void run() {
 		esc: while (true) {
 			try {
-				Object obj = in.readObject();
+				Object obj = network.getIn().readObject();
 				if (obj != null) {
 					Protocol p = (Protocol) obj;
 					switch (p.getCmd()) {
@@ -254,8 +218,12 @@ public class Pay extends JFrame implements Runnable{
 						break;
 					case 103:
 						// 예매 완료창으로 전환
+						Network network = new Network();
 						Reservation_completed reservationCompleted = new Reservation_completed();
 				        setVisible(false); // 현재 Pay 창 숨기기
+						break;
+					case 3:
+						System.out.println("===Pay.java의 case3===");
 						break;
 					}
 				}
@@ -263,7 +231,7 @@ public class Pay extends JFrame implements Runnable{
 				e.printStackTrace();
 			}
 		}
-		closed();
+		network.closed();
 	}
 
 	public static void main(String[] args) {

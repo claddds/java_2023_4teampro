@@ -19,15 +19,22 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
+import common.Network;
+import common.Protocol;
 import common.Session;
 
-public class TicketList extends JFrame {
+public class TicketList extends JFrame implements Runnable{
 	JPanel Panel;
 	JTable ticketTable;
 	JButton ticketButton, cancelButton;
 
+	private Network network;
+	
 	public TicketList() {
 		super("티켓 리스트");
+		
+		network = new Network();
+		new Thread(this).start();
 
 		Panel = new JPanel(new BorderLayout());
 		JPanel headerPanel = new JPanel(new BorderLayout());
@@ -72,6 +79,9 @@ public class TicketList extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false); // 크기 조절 비활성화
 
+		// 화면 처음에 티켓 리스트 보여줌.
+		showTicketList();
+		
 		// "티켓 확인" 버튼
 		ticketButton.addActionListener(new ActionListener() {
 
@@ -91,8 +101,6 @@ public class TicketList extends JFrame {
 			}
 		});
 
-		// 화면 처음에 티켓 리스트 보여줌.
-		showTicketList();
 
 		// 예매 취소 버튼 -> 선택한 행의 티켓 삭제 후 리스트 업데이트
 		cancelButton.addActionListener(new ActionListener() {
@@ -128,13 +136,24 @@ public class TicketList extends JFrame {
 
 	// 티켓 리스트 보여주는 메서드
 	public void showTicketList() {
+		System.out.println("===showTicketList 실행===");
+		
 		// 현재 로그인 한 회원의 아이디 가져오기
 		String currentUserId = Session.getCurrentUserId();
+		System.out.println("===[티켓리스트]로그인 한 회원 누구인지 실행===");
 
-		// 티켓 확인을 위해 DAO 호출
-		Ticket_DAO ticketDAO = new Ticket_DAO();
-		ArrayList<Ticket_VO> ticketList = ticketDAO.getTicketList(currentUserId);
-
+		// 티켓 확인을 위해 DAO 호출 프로토콜 없이
+//		Ticket_DAO ticketDAO = new Ticket_DAO();
+//		ArrayList<Ticket_VO> ticketList = ticketDAO.getTicketList(currentUserId);
+		
+		// 빈 ArrayList를 생성하고 ticketList 변수에 할당
+		// 티켓 리스트를 담을 ArrayList를 생성
+		ArrayList<Ticket_VO> ticketList = new ArrayList<>();
+		Protocol p = new Protocol();
+		p.setCmd(104);
+		p.setList(ticketList); //Protocol 객체의 list 속성에 ticketList를 설정
+		network.sendProtocol(p);
+        
 		// 테이블에 데이터 추가
 		updateTable(ticketList);
 	}
@@ -185,6 +204,13 @@ public class TicketList extends JFrame {
 		}
 	}
 
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
 	public static void main(String[] args) {
 		new TicketList();
 	}

@@ -5,10 +5,8 @@ import java.sql.Date;
 
 public class Ticket_VO implements Serializable{
 	
-	private String movie_id, cust_id, movie_name, theater_id, start_time, end_time, theater_seat;
+	private String movie_id, cust_id, movie_name, theater_id, movie_date, start_time, end_time, theater_seat;
 	private int ticket_num, ticket_canceled;
-	// 취소표를 구분하기 위해 ticket_canceled 만듦 .
-	private Date movie_date;
 	
 	public String getMovie_id() {
 		return movie_id;
@@ -34,6 +32,12 @@ public class Ticket_VO implements Serializable{
 	public void setTheater_id(String theater_id) {
 		this.theater_id = theater_id;
 	}
+	public String getMovie_date() {
+		return movie_date;
+	}
+	public void setMovie_date(String movie_date) {
+		this.movie_date = movie_date;
+	}
 	public String getStart_time() {
 		return start_time;
 	}
@@ -58,17 +62,10 @@ public class Ticket_VO implements Serializable{
 	public void setTicket_num(int ticket_num) {
 		this.ticket_num = ticket_num;
 	}
-	public Date getMovie_date() {
-		return movie_date;
-	}
-	public void setMovie_date(Date movie_date) {
-		this.movie_date = movie_date;
-	}
 	public int getTicket_canceled() {
 		return ticket_canceled;
 	}
 	public void setTicket_canceled(int ticket_canceled) {
 		this.ticket_canceled = ticket_canceled;
-	}
-	
+	}	
 }

@@ -43,7 +43,7 @@ public class Ticket_DAO {
         Ticket_VO ticket = new Ticket_VO();
         ticket.setTicket_num(Integer.parseInt(ticketNum));
         ticket.setMovie_name(movieName);
-        ticket.setMovie_date(Date.valueOf(movieDate));
+        ticket.setMovie_date(movieDate);
         ticket.setStart_time(startTime);
         ticket.setTheater_id(theaterId);
         ticket.setTheater_seat(theaterSeat);

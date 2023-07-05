@@ -66,6 +66,8 @@ public class Reservation_completed extends JFrame {
 				setVisible(false); // 현재 예매 완료창 숨기기				
 			}
 		});
+		
+		// 메인 화면으로 전환 (추후 액션 리스너 추가)	
 
 	}
 
