@@ -36,31 +36,41 @@ public class CP_Client extends Thread{
 						out.flush();
 						break esc; // 접속 해제
 						
-					case 1:	// 로그인
+					case 501:	// 로그인
 						int resId = DAO.getIdChk(p.getVo().getCust_id());
 						if (resId > 0) {
-							CustomerVO vo1 = DAO.getLogin(p.getVo());
-							if (vo1 != null) {
-								Protocol p1 = new Protocol();
-								p1.setCmd(1);
-								p1.setResult(0);
-								p1.setVo(vo1);
+							CustomerVO vo501 = DAO.getLogin(p.getVo());
+							if (vo501 != null) {
+								Protocol p501 = new Protocol();
+								p501.setCmd(501);
+								p501.setResult(0);
+								p501.setVo(vo501);
 
-								out.writeObject(p1);
+								out.writeObject(p501);
 								out.flush();
 							} else {
-								Protocol p1 = new Protocol();
-								p1.setCmd(1);
-								p1.setResult(1);
-								p1.setVo(vo1);
+								Protocol p501 = new Protocol();
+								p501.setCmd(501);
+								p501.setResult(1);
+								p501.setVo(vo501);
 
-								out.writeObject(p1);
+								out.writeObject(p501);
 								out.flush();
 							}
 						}
 						break;
-						
-					case 
+					
+					case 502:	// 회원가입
+					case 503:	// 아이디 중복 확인
+						int result503 = DAO.getIdChk(p.getVo().getCust_id());
+
+						Protocol p503 = new Protocol();
+						p503.setCmd(503);
+						p503.setResult(result503);
+						out.writeObject(p503);
+						out.flush();
+						break;
+						 
 					}
 				}
 			} catch (Exception e) {

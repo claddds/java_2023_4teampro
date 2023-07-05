@@ -3,6 +3,7 @@ package c_loginout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.EventQueue;
 
 import javax.swing.JLabel;
@@ -15,6 +16,8 @@ import movie_server.Protocol;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
@@ -25,16 +28,14 @@ import java.net.Socket;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
-public class Sign_up extends JFrame implements Runnable{
+public class Sign_up extends JFrame{
 	private JTextField signup_id_tf;
 	private JTextField signup_pw_tf;
 	private JTextField signup_name_tf;
 	private JTextField signup_birth_tf;
 	private JTextField signup_phone_tf;
 	
-	Socket s;
-	ObjectOutputStream out;
-	ObjectInputStream in;
+	Sign_in c_loginout;
 	
 	public Sign_up() {
 		super("회원가입");
@@ -152,27 +153,18 @@ public class Sign_up extends JFrame implements Runnable{
 			}	
 		});
 		
-		// 접속
-		connected();
 		
-		addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				if (s != null) {
-					Protocol p = new Protocol();
-					p.setCmd(0);
-					try {
-						out.writeObject(p);
-						out.flush();
-					} catch (Exception e2) {
-					}
-				} else {
-					closed();
-				}
-			}
-		});
 		signup_idcheck_bt.addActionListener(new ActionListener() {	// 아이디 중복 확인 버튼
 			public void actionPerformed(ActionEvent e) {
+				Protocol p = new Protocol();
+				String idDup = signup_id_tf.getText().trim();
+				CustomerVO vo = new CustomerVO();
+				vo.setCust_id(idDup);
+				
+				p.setCmd(503);
+				p.setVo(vo);
+				
+				
 				
 			}
 		});
@@ -194,10 +186,12 @@ public class Sign_up extends JFrame implements Runnable{
 		
 		signup_cancel_bt.addActionListener(new ActionListener() {	// 취소 버튼 => 누르면 로그인 전 메인화면으로 돌아간다.
 			public void actionPerformed(ActionEvent e) {
+				init();
 				new Main_logout();
 				setVisible(false);
 			}
 		});
+		
 	}
 	
 	
@@ -212,6 +206,31 @@ public class Sign_up extends JFrame implements Runnable{
 		} else result = false;
 		
 		return result;
+	}
+	
+	// 텍스트 필드 초기화
+	private void init() {
+		signup_id_tf.setText("");
+		signup_id_tf.setEditable(true);
+		signup_pw_tf.setText("");
+		signup_name_tf.setText("");
+		signup_birth_tf.setText("6자리로 입력하세요([ex]981216)");
+		signup_birth_tf.setForeground(Color.LIGHT_GRAY);
+		signup_phone_tf.setText("");
+		signup_phone_tf.setText("");
+	}
+	
+	public void dupchk() {
+		if(login.idDup != 3) {
+			if(login.idDup == 0) {
+				int r = JOptionPane.showConfirmDialog(getParent(), "사용하실 수 있는 아이디입니다.\n사용하시겠습니까?", "중복확인", JOptionPane.YES_NO_OPTION);
+				if(r ==0) {
+					id_tf.setEditable(false);
+				}
+			} else {
+				JOptionPane.showMessageDialog(getParent(), "이미 사용중인 아이디입니다.");
+			}
+		}
 	}
 	
 	public static void main(String[] args) {

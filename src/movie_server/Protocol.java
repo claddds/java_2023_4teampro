@@ -5,10 +5,11 @@ import java.util.List;
 
 public class Protocol implements Serializable{
 	/*
-		cmd 0 -> 종료(접속해제)
+		cmd 0 -> 종료(접속해제, 로그아웃..?)
 		
 		cmd 501 -> 로그인
 		cmd 502 -> 회원가입
+		cmd 503 -> 아이디중복(result, 0 = 없음 / 1이상 = 있음)
 		
 	*/
 	int cmd;
