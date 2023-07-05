@@ -6,8 +6,7 @@ import java.util.List;
 import project.LJH.DB.VO;
 
 public class Protocol implements Serializable{
-	//cmd : 300 : 종료, 301:영화목록 출력 302: 극장관 이름 출력
-	//303: 상영시간표 출력 304 : 잔여포인트
+	//cmd : 0 : 종료, 301:영화목록 출력 302: 상영시간표 출력 303 : 잔여포인트
 	int cmd;
 	int result;
 	

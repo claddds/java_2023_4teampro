@@ -22,7 +22,7 @@ import javax.swing.border.EmptyBorder;
 public class ticket_before_pay extends JFrame{
 	JPanel north,center,south,v_point,con_pay,bt_p ;
 	//각 위치별로 구분하기위해 패널들을 선언함.  그리고 포인트패널과 메인인 결제확인내용패널, 버튼이붙을 패널과 
-	JLabel point,show_point,pay,show_time,show_name,show_date,show_room,show_peo,show_seat,show_price;
+	JLabel point,show_point,pay,show_name,show_date,show_room,show_peo,show_seat,show_price;
 	//포인트와 포인트표시 라벨, 각 영화이름, 날짜, 극장, 인원, 좌석, 금액등은 앞의 매표소에서 선택한 것들이 넘어올수있도록 출력하자.
 	JButton pay_bt, back_bt;
 	
@@ -77,23 +77,18 @@ public class ticket_before_pay extends JFrame{
 		JPanel p4 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		JPanel p5 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		JPanel p6 = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		JPanel p7 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		//각 정보를 담을 패널들을 생성함. 그리드 레이아웃으로 넣기위해 각 패널별로 생성.
 		
-		JLabel jl1 = new JLabel("영화제목:   "); 
-		show_name = new JLabel();//매표소에서 선택한 것들이 넘어오게 하기.		 
-		p1.add(jl1);
+		show_name = new JLabel("영화제목:   ");
+		JLabel jl1 = new JLabel(); //매표소에서 선택한 것들이 넘어오게 하기.		
 		p1.add(show_name);
+		p1.add(jl1);
 		
-		JLabel jl2 = new JLabel("날 짜:   "); //매표소에서 선택한 것들이 넘어오게 하기.		
-		show_date= new JLabel();
-		p2.add(jl2);
+		show_date= new JLabel("날 짜:   ");
+		JLabel jl2 = new JLabel(); //매표소에서 선택한 것들이 넘어오게 하기.		
 		p2.add(show_date);
+		p2.add(jl2);
 		
-		JLabel ji7 = new JLabel("시 간:   ");
-		show_time = new JLabel();
-		p7.add(ji7);
-		p7.add(show_time);
 
 		show_room= new JLabel("상영관:   ");
 		JLabel jl3 = new JLabel();//매표소에서 선택한 것들이 넘어오게 하기.		
@@ -120,13 +115,12 @@ public class ticket_before_pay extends JFrame{
 		p6.add(jl6);
 		
 		
-		center.setLayout(new GridLayout(7,1));
+		center.setLayout(new GridLayout(6,1));
 		//중간자리할 큰 패널을 그리드레이아웃으로 설정.
 		
 		center.setBorder(new EmptyBorder(40,20,20,20));
 		center.add(p1);
 		center.add(p2);
-		center.add(p7);
 		center.add(p3);
 		center.add(p4);
 		center.add(p5);

@@ -6,25 +6,19 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -36,9 +30,10 @@ import javax.swing.table.DefaultTableModel;
 import com.toedter.calendar.JCalendar;
 
 import project.LJH.DB.VO;
+import project.LJH.DB3.DAO;
 
 //매표소 만들기 
-public class ticket_office_main extends JFrame implements Runnable {
+public class ticket_office_main extends JFrame {
 	// 필요한 것들 선언하자
 
 	JPanel v_point, c_movie, c_room, c_date, c_time, c_people, info_movie;
@@ -47,7 +42,7 @@ public class ticket_office_main extends JFrame implements Runnable {
 	// 예매하기버튼.
 	JComboBox<String> adult, child;
 	// 인원선택에 필요한 숫자 콤보벅스 선언,
-	JLabel point, show_point, show_room, show_peo1, show_peo2, show_price1, show_price2, show_price3, show_date, show_time;
+	JLabel point, show_point, show_room, show_peo1, show_peo2, show_price1, show_price2, show_price3, show_date;
 	// 각 타이틀과 화면에 선택한 내용들이 선택한 영화 정보 밑에 출력 될수 있기위한 라벨을 선언함.
 	JTextArea show_movie;
 	// 영화 포스터를 위한 자리 **나중에 area 말고, 다른 것으로 하게되면 변경해야함**
@@ -55,20 +50,20 @@ public class ticket_office_main extends JFrame implements Runnable {
 	// **날짜 선택칸에 Jcalendar를 이용하여 만들었기에 객체를 생성하여 선언함.
 	// 내용은 Jcalendar 클래스로 넘어가서 확인하자. - 윈도우빌더로 만든 클래스.
 	JCalendar cal = new JCalendar();
-	// 위는 날짜캘린더를 위한 객체생성
-	int res1, res2;
+	//위는 날짜캘린더를 위한 객체생성
+	int res1, res2;   
 	String price_ad, price_ch;
-	// 위는 성인아동 가격을 계산하기위한 변수선언
-
-	JTable table1, table2, table3;
-	DefaultTableModel model1, model2, model3;
-	// 커넥트를 위한 변수
+	//위는 성인아동 가격을 계산하기위한 변수선언
+	
+	JTable table1 , table2, table3;
+	
+	//커넥트를 위한 변수
 	Socket s;
 	ObjectOutputStream out;
 	ObjectInputStream in;
-
-	VO vo;
-
+	String msg;
+	VO vo ;
+	
 	public ticket_office_main() {
 		super("매표소");
 
@@ -85,7 +80,8 @@ public class ticket_office_main extends JFrame implements Runnable {
 
 		v_point.add(point);
 		v_point.add(show_point);
-
+	
+		
 		/*
 		 * 선택한 영화정보가 보이는 패널 JList안에 있는 리스트들은 DB연동이 되어 보이는 것들로, 마우스로 선택한것들이 이 곳에는 동적으로 변할
 		 * 수 있도록 나중에 DB연결하면 보일 수 있도록 하자.
@@ -102,7 +98,6 @@ public class ticket_office_main extends JFrame implements Runnable {
 
 		show_room = new JLabel();
 		show_date = new JLabel();
-		show_time = new JLabel();
 		show_peo1 = new JLabel();
 		show_peo2 = new JLabel();
 		show_peo1.setText("성인 :   " + " 명"); // default 로 보여줄 문구
@@ -110,6 +105,7 @@ public class ticket_office_main extends JFrame implements Runnable {
 		show_price1 = new JLabel();
 		show_price2 = new JLabel();
 		show_price3 = new JLabel("0");
+		
 
 		// 각 라벨을 선언함. 이 위의 것들은 매표소에서 마우스로 클릭하여 선택한것들이
 		// 보여지는 라벨이다. 동적으로 변하게 액션리스너 사용하자.
@@ -117,8 +113,8 @@ public class ticket_office_main extends JFrame implements Runnable {
 		JLabel j1 = new JLabel("극       장:    ");
 		JLabel j2 = new JLabel("날       짜:    ");
 		JLabel j3 = new JLabel("인       원:    ");
-	    JLabel j4 = new JLabel("시       간: ");
-		JLabel j5 = new JLabel("총 금 액:    ");
+		//JLabel j4 = new JLabel("금       액:    ");
+		JLabel j5 = new JLabel("총 금 액:    " ) ;
 		// 탭 선언.
 
 		// 각탭들을 그리드레이아웃하기 위해 각각 패널로 선언하여 집어넣음.
@@ -126,7 +122,7 @@ public class ticket_office_main extends JFrame implements Runnable {
 		pg4.setLayout(new FlowLayout(FlowLayout.LEFT));
 		JPanel pg5 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		JPanel pg6 = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		JPanel pg7 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		//JPanel pg7 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		JPanel pg9 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
 		pg4.add(j1);
@@ -134,13 +130,11 @@ public class ticket_office_main extends JFrame implements Runnable {
 
 		pg5.add(j2);
 		pg5.add(show_date);
-		pg7.add(j4);
-		pg7.add(show_time);
 
 		pg6.add(j3);
 		pg6.add(show_peo1);
 		pg6.add(show_peo2);
-		
+
 		pg9.add(j5);
 		pg9.add(show_price3);
 
@@ -148,8 +142,8 @@ public class ticket_office_main extends JFrame implements Runnable {
 		JPanel pg8 = new JPanel(new GridLayout(5, 1));
 		pg8.add(pg4);
 		pg8.add(pg5);
-		pg8.add(pg7);
 		pg8.add(pg6);
+
 		pg8.add(pg9);
 
 		// 선택한 영화패널인 info_movie에 포스터공간과 각 정보탭을 붙이기.
@@ -165,17 +159,36 @@ public class ticket_office_main extends JFrame implements Runnable {
 
 		c_movie.setPreferredSize(new Dimension(40, 60)); /* 각 패널의 크기 제한 */
 		c_movie.add(new JLabel(" [영화 선택] "), BorderLayout.NORTH);
-
+		
 		/* *****나중에 여기에 db연동으로 집어넣기***** */
 		String[] columnNames = { "영화제목" };
-
-		model1 = new DefaultTableModel(new Object[] { "영화 목록" }, 0);
-		table1 = new JTable(model1);
-		jsp1 = new JScrollPane(table1);
-		c_movie.add(jsp1);
+		
+		//DefaultTableModel model = new DefaultTableModel(new Object[0][columnNames.length], columnNames);
+	
+		//jsp1 = new JScrollPane(table1);
+		//c_movie.add(jsp1);
 
 		/* ***jsp1이 테이블내용에 넣어야하는 변수이다. */
+		
+		
+		
+		DAO dao = new DAO();
+		ArrayList<project.LJH.DB3.VO> movieList = dao.getSelectMovie();
+		Object[][] data = new Object[movieList.size()][1];
+        for (int i = 0; i < movieList.size(); i++) {
+            data[i][0] = movieList.get(i).getMovie_name();
+            System.out.println(data[i][0]);
+        }
 
+        DefaultTableModel tableModel = new DefaultTableModel();
+    	table1 = new JTable();
+        // 테이블에 모델 설정
+        
+ 
+	
+	
+		
+		
 		/* 극장 선택할 수 있는 패널 */
 		c_room = new JPanel();
 		c_room.setLayout(new BorderLayout());
@@ -183,32 +196,45 @@ public class ticket_office_main extends JFrame implements Runnable {
 		c_room.setPreferredSize(new Dimension(40, 60)); /* 각 패널의 크기 제한 */
 		c_room.add(new JLabel(" [극장 선택] "), BorderLayout.NORTH);
 
-		/* *****나중에 여기에 db연동으로 집어넣기***** */
-
-		model2 = new DefaultTableModel(new Object[] { "극장 목록" }, 0);
-		model2.addRow(new Object[] {"한국 ICT관"});
 		
-		table2 = new JTable(model2);
+		/* *****나중에 여기에 db연동으로 집어넣기***** */
+		
+		String[] columnNames1 = {"극장관" };
+		
+		DefaultTableModel model1 = new DefaultTableModel(new Object[0][columnNames1.length], columnNames1);
+		table2 = new JTable(model1);
+		jsp2 = new JScrollPane();
 		jsp2 = new JScrollPane(table2);
 		c_room.add(jsp2);
 		/* ***jsp2이 테이블내용에 넣어야하는 변수이다. */
 
+		
+		
+		
+		
 		/* 상영시간표 패널 */
 		c_time = new JPanel();
 		c_time.setLayout(new BorderLayout());
 		c_time.setPreferredSize(new Dimension(40, 60)); /* 각 패널의 크기 제한 */
 		c_time.add(new JLabel(" [상영 시간표] "), BorderLayout.NORTH);
 
-		model3 = new DefaultTableModel(new Object[] { "시작시간", "종료시간" }, 0);
-		table3 = new JTable(model3);
-		JScrollPane scrollPane3 = new JScrollPane(table3);
-
+		String[] columnNames2 = { "상영시간" };
+		
+		DefaultTableModel model2 = new DefaultTableModel(new Object[0][columnNames2.length], columnNames2);
+		table3 = new JTable(model2);
+		jsp3 = new JScrollPane();
 		jsp3 = new JScrollPane(table3);
 		/* *****나중에 여기에 db연동으로 집어넣기***** */
 		c_time.add(jsp3);
-
+		
 		/* ***jsp3이 테이블내용에 넣어야하는 변수이다. */
 
+		
+		
+		
+		
+		
+		
 		/* 날짜 선택 하는 패널 */
 
 		c_date = new JPanel();
@@ -216,6 +242,10 @@ public class ticket_office_main extends JFrame implements Runnable {
 		c_date.setPreferredSize(new Dimension(250, 300));
 		c_date.add(new JLabel(" [날짜 선택] "), BorderLayout.NORTH);
 
+		
+		
+		
+		
 		/* *******날짜 API 갖고오기******* */
 
 		c_date.add(cal, BorderLayout.CENTER);
@@ -294,28 +324,10 @@ public class ticket_office_main extends JFrame implements Runnable {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setResizable(false);
-
-		connected();
-
-		// 종료 : 500
-		addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				if (s != null) {
-					try {
-						Protocol p = new Protocol();
-						p.setCmd(500);
-						out.writeObject(p);
-						out.flush();
-					} catch (Exception e2) {
-
-					}
-				} else {
-					closed();
-				}
-			}
-		});
-
+		
+	
+	
+		
 		// 예매하기 버튼을 눌렀을경우에 좌석 선택창으로 넘어가진다.
 		// 매표소는 숨겨지고, 좌석확인창을 객체 생성하여 보이게 한다.
 		ticket_bt.addActionListener(new ActionListener() {
@@ -329,41 +341,18 @@ public class ticket_office_main extends JFrame implements Runnable {
 		});
 
 		// 날짜를 선택했을때, 선택한 영화정보 탭의 날짜에 표시하게하는 이벤트
+
 		cal.addPropertyChangeListener("calendar", new PropertyChangeListener() {
-		    @Override
-		    public void propertyChange(PropertyChangeEvent evt) {
-		        if (evt.getPropertyName().equals("calendar")) {
-		            Calendar selectedDate = (Calendar) evt.getNewValue();
-		            
-		            // 현재 날짜 가져오기
-		            Calendar currentDate = Calendar.getInstance();
-		            currentDate.set(Calendar.HOUR_OF_DAY, 0);
-		            currentDate.set(Calendar.MINUTE, 0);
-		            currentDate.set(Calendar.SECOND, 0);
-		            currentDate.set(Calendar.MILLISECOND, 0);
-		            
-		            // 선택한 날짜와 현재 날짜 비교
-		            if (selectedDate.before(currentDate)) {
-		                // 선택한 날짜가 오늘 이전인 경우
-		                // 이전 날짜는 선택할 수 없도록 처리
-		                
-		                // 이전 날짜로 변경된 경우 현재 날짜로 다시 설정
-		                cal.setCalendar(currentDate);
-		                
-		                // "과거의 날짜는 선택할 수 없습니다"라는 알림 창 표시
-		                SwingUtilities.invokeLater(() -> {
-		                    JOptionPane.showMessageDialog(null, "과거의 날짜는 선택할 수 없습니다.", "경고", JOptionPane.WARNING_MESSAGE);
-		                });
-		            } else {
-		                // 선택한 날짜가 오늘 이후인 경우
-		                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		                String formattedDate = dateFormat.format(selectedDate.getTime());
-		                show_date.setText(formattedDate);
-		            }
-		        }
-		    }
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				if (evt.getPropertyName().equals("calendar")) {
+					Calendar selectedDate = (Calendar) evt.getNewValue();
+					SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+					String formattedDate = dateFormat.format(selectedDate.getTime());
+					show_date.setText(formattedDate);
+				}
+			}
 		});
-		
 
 		// 성인과 아동 인원을 선택하였을 경우, 선택한 영화정보에 동적으로 바뀔수있도록 출력하기.
 		adult.addActionListener(new ActionListener() {
@@ -408,152 +397,43 @@ public class ticket_office_main extends JFrame implements Runnable {
 		});
 		
 		
-		//극장관은 1개만 있으므로, ICT관 을 테이블에 추가하고, 그것을 클릭하였을경우
-		//발생하는 이벤트 리스너 작성.
-		table2.addMouseListener(new MouseAdapter() {
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			int select_theater = table2.getSelectedRow();
-			Object[] rowData = new Object[table2.getColumnCount()];
-	        for (int i = 0; i < table2.getColumnCount(); i++) {
-	            rowData[i] = table2.getValueAt(select_theater, i);
-	        }
-	        show_room.setText(Arrays.toString(rowData));
-	        System.out.println("입력");
-	        //입력이 잘되었는지 확인하기위한 콘솔출력
+		
+		
+		
+	}  //마지막 괄호
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		/* 메서드 칸 */
+		//성인과 아동을 각각 콤보박스를 클릭해서 각 가격이 나온것을 합쳐서 나올수있도록.
+		private void updateTotalPrice() {
+		    String price_ad = show_price1.getText();
+		    String price_ch = show_price2.getText();
+
+		    if (price_ad.isEmpty()) {
+		        price_ad = "0";
+		    }
+
+		    if (price_ch.isEmpty()) {
+		        price_ch = "0";
+		    }
+		    int total = Integer.parseInt(price_ad) + Integer.parseInt(price_ch);
+		    show_price3.setText(String.valueOf(total));
 		}
 		
-		});
-		
-
-	} // 액션리스너 및 화면단 마지막 괄호
-
+	    
 	
-	
-	
-	/* 메서드 칸 */
-	
-	// 성인과 아동을 각각 콤보박스를 클릭해서 각 가격이 나온것을 합쳐서 나올수있도록.
-	private void updateTotalPrice() {
-		String price_ad = show_price1.getText();
-		String price_ch = show_price2.getText();
 
-		if (price_ad.isEmpty()) {
-			price_ad = "0";
-		}
-
-		if (price_ch.isEmpty()) {
-			price_ch = "0";
-		}
-		int total = Integer.parseInt(price_ad) + Integer.parseInt(price_ch);
-		show_price3.setText(String.valueOf(total));
-	}
-	
-	
-	
-	//영화목록을 table1에 추가
-
-	public void addMovieListToTable(List<VO> movieList) {
-		model1.setRowCount(0);
-		for (VO movie : movieList) {
-			model1.addRow(new Object[] { movie.getMovie_name() });
-
-		}
-	}
-
-
-	// 상영 시간을 table3에 추가
-	public void addTimeListToTable(List<VO> timeList) {
-	        model3.setRowCount(0);
-	        for (VO time : timeList) {
-	            model3.addRow(new Object[]{time.getStart_time(), time.getEnd_time()});
-	        }
+	public static void main(String[] args) {
+		 SwingUtilities.invokeLater(() -> {
+	            ticket_office_main frame = new ticket_office_main();
+	            frame.setVisible(true);
+	        });
 	    }
-
-	// 접속
-	public void connected() {
-		try {
-			s = new Socket("192.168.0.80", 7789);
-			//집에서 연습할떄 이건 포트번호를 바꾸자
-			out = new ObjectOutputStream(s.getOutputStream());
-			in = new ObjectInputStream(s.getInputStream());
-			new Thread(this).start();
-		} catch (Exception e) {
-		
-		}
 	}
-
-	// 끝내기
-	public void closed() {
-		try {
-			out.close();
-			in.close();
-			s.close();
-			System.exit(0);
-		} catch (Exception e) {
-		
-		}
-	}
-
-	
-	@Override public void run() {
-		esc : while(true) {
-			try {
-				Object obj = in.readObject();
-				List<VO> list = null;
-				Protocol p = (Protocol)obj;
-				
-				if(obj !=null) {
-					p = (Protocol)obj;
-					switch (p.getCmd()) {
-					case 300: break esc;
-					
-					case 301: 
-						list = p.getList();				
-						for (VO k : list) {
-							Object data[] = {k.getMovie_name()};
-							model1.addRow(data);
-						}
-						break ;
-	
-					case 303 :
-						list = p.getList();
-						for (VO k : list) {
-							Object data[] = {k.getStart_time(), k.getEnd_time()};
-							model3.addRow(data);
-						}
-						break;
-					case 304 : 
-						///잔여포인트 구하기 .
-						break;
-					}
-				}
-				
-			} catch (Exception e) {
-			
-			}
-		}//무한반복
-		closed();
-
-		
-		
-	}
-	
-	
-		
-
-
-public static void main(String[] args) {
-	
-	
-	
-	new ticket_office_main();
-	
-} // 메인
-
-
-
-
-
-
-} // 클래스

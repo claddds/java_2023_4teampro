@@ -38,7 +38,7 @@ public class CP_client extends Thread{
 					switch (p.getCmd()) {
 					//cmd : 500 : 종료, 501:영화목록 출력 502: 극장관 이름 출력, 503: 상영시간표 출력
 					case 501: 
-						List<VO> movieList = DAO.getMovieList();
+						List<VO> movieList = DAO.getMovie_name();
 						p.setMovie(movieList.toArray(new String[0]));
 						out.writeObject(p);
                         out.flush();

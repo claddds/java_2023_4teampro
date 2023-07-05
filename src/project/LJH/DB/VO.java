@@ -11,6 +11,8 @@ public class VO implements Serializable{
 	
 	private List<VO> movie_name,start_time,end_time;
 
+	
+	//개나리,빛나리,미나리
 	public String getTheater_id() {
 		return theater_id;
 	}

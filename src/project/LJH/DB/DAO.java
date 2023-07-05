@@ -1,6 +1,7 @@
 package project.LJH.DB;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
@@ -17,8 +18,7 @@ public class DAO {
 	
 	//mapper 로가서 prn_movie sql문 실행하고 값을 가져오자.
 	public static List<VO> getMovie_name() {
-		System.out.println("DAO");	
-		
+		System.out.println("DAO");			
 		List<VO> movieList = null;
 		movieList = getSession().selectList("movieList");
 		System.out.println("mapper다녀왓니");

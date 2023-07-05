@@ -17,6 +17,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
@@ -187,14 +188,15 @@ public class ticket_office_main extends JFrame implements Runnable {
 		c_room.setPreferredSize(new Dimension(40, 60)); /* 각 패널의 크기 제한 */
 		c_room.add(new JLabel(" [극장 선택] "), BorderLayout.NORTH);
 
-		/* *****나중에 여기에 db연동으로 집어넣기***** */
+		
 
 		model2 = new DefaultTableModel(new Object[] { "극장 목록" }, 0);
 		model2.addRow(new Object[] { "한국 ICT관" });
 
 		table2 = new JTable(model2);
 		jsp2 = new JScrollPane(table2);
-
+		
+		
 		c_room.add(jsp2);
 
 		/* 상영시간표 패널 */
@@ -488,14 +490,16 @@ public class ticket_office_main extends JFrame implements Runnable {
 	// 접속
 	public void connected() {
 		try {
-			s = new Socket("192.168.0.80", 7780);
+			s = new Socket("192.168.0.34", 7780);
 			// 집에서 연습할떄 이건 포트번호를 바꾸자
+			//집 192.168.0.34
+			//학원 192.168.0.80
 			out = new ObjectOutputStream(s.getOutputStream());
 			in = new ObjectInputStream(s.getInputStream());
 
 			new Thread(this).start();
 		} catch (Exception e) {
-
+			System.err.println("연결실패" + e);
 		}
 	}
 
@@ -506,6 +510,7 @@ public class ticket_office_main extends JFrame implements Runnable {
 			in.close();
 			s.close();
 			System.exit(0);
+			System.out.println("종료성공");
 		} catch (Exception e) {
 
 		}
@@ -522,31 +527,25 @@ public class ticket_office_main extends JFrame implements Runnable {
 				if (obj != null) {
 					p = (Protocol) obj;
 					switch (p.getCmd()) {
-					case 300:
+					case 0:
 						break esc;
 
 					case 301:
 						
 						System.out.println("온거여? 메인 런");
-						list = p.getList();
-						for (VO k : list) {
-							System.out.println("출력되니?");
-							model1.addRow(new Object[]{k});
-						}		
-						
-						System.out.println("갖고왔니?");
-						
-
+						List<VO> movieList = p.getList();
+						 DefaultTableModel model = new DefaultTableModel();
+						 for (VO vo : movieList) {
+							   Object[]  row = { vo.getMovie_name() };
+					            model.addRow(row);
+					        }
+						 table1.setModel(model);
 						break;
 
+					case 302:
+						
+						break;
 					case 303:
-						list = p.getList();
-						for (VO k : list) {
-							Object data[] = { k.getStart_time(), k.getEnd_time() };
-							model3.addRow(data);
-						}
-						break;
-					case 304:
 						/// 잔여포인트 구하기 .
 						break;
 					}
