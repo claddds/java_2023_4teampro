@@ -17,11 +17,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -37,7 +37,12 @@ import javax.swing.table.DefaultTableModel;
 
 import com.toedter.calendar.JCalendar;
 
+import project.LJH.DB.DAO;
 import project.LJH.DB.VO;
+
+
+
+
 
 //매표소 만들기 
 public class ticket_office_main extends JFrame implements Runnable {
@@ -101,9 +106,10 @@ public class ticket_office_main extends JFrame implements Runnable {
 		info_movie.setPreferredSize(new Dimension(200, 350));
 		info_movie.add(new JLabel(" [선택한 영화]"), BorderLayout.NORTH);
 
-		show_movie = new JTextArea(200, 210);
+		//show_movie = new JTextArea(200, 210);
+		JLabel show_poster = new JLabel();  
 		/* 선택된대로 영화 이미지 가 보일 공간 */
-		// 영화 포스터를 위한 자리 **나중에 area 말고, 다른 것으로 하게되면 변경해야함**
+		// 영화 포스터를 위한 자리 **나중에 area 말고, 다른 것으로 하게되면 변경해야함  > 라벨로 생성해서 아이콘으로 붙임**
 
 		show_room = new JLabel();
 		show_date = new JLabel();
@@ -158,7 +164,7 @@ public class ticket_office_main extends JFrame implements Runnable {
 		pg8.add(pg9);
 
 		// 선택한 영화패널인 info_movie에 포스터공간과 각 정보탭을 붙이기.
-		info_movie.add(show_movie, BorderLayout.CENTER);
+		info_movie.add(show_poster, BorderLayout.CENTER);
 		info_movie.add(pg8, BorderLayout.SOUTH);
 
 		/*
@@ -188,15 +194,12 @@ public class ticket_office_main extends JFrame implements Runnable {
 		c_room.setPreferredSize(new Dimension(40, 60)); /* 각 패널의 크기 제한 */
 		c_room.add(new JLabel(" [극장 선택] "), BorderLayout.NORTH);
 
-		
-
 		model2 = new DefaultTableModel(new Object[] { "극장 목록" }, 0);
 		model2.addRow(new Object[] { "한국 ICT관" });
 
 		table2 = new JTable(model2);
 		jsp2 = new JScrollPane(table2);
-		
-		
+
 		c_room.add(jsp2);
 
 		/* 상영시간표 패널 */
@@ -205,14 +208,12 @@ public class ticket_office_main extends JFrame implements Runnable {
 		c_time.setPreferredSize(new Dimension(40, 60)); /* 각 패널의 크기 제한 */
 		c_time.add(new JLabel(" [상영 시간표] "), BorderLayout.NORTH);
 
-		model3 = new DefaultTableModel(new Object[] { "시작시간", "종료시간" }, 0);
+		model3 = new DefaultTableModel(new Object[] { "상영시간" }, 0);
 		table3 = new JTable(model3);
 		JScrollPane scrollPane3 = new JScrollPane(table3);
-
 		jsp3 = new JScrollPane(table3);
 		/* *****나중에 여기에 db연동으로 집어넣기***** */
 		c_time.add(jsp3);
-
 		/* ***jsp3이 테이블내용에 넣어야하는 변수이다. */
 
 		/* 날짜 선택 하는 패널 */
@@ -312,7 +313,6 @@ public class ticket_office_main extends JFrame implements Runnable {
 						p.setCmd(300);
 						out.writeObject(p);
 						out.flush();
-						System.out.println("window 창 종료시 성공 300");
 					} catch (Exception e2) {
 
 					}
@@ -325,18 +325,49 @@ public class ticket_office_main extends JFrame implements Runnable {
 		addWindowListener(new WindowAdapter() {
 			public void windowOpened(WindowEvent e) {
 				try {
-				
-
+					//영화목록은 성공, 건들지말자.
 					Protocol p = new Protocol();
 					p.setCmd(301);
 					out.writeObject(p);
-					out.flush();
-					System.out.println("window 창 오픈이벤트 성공 301");
-					
+					out.flush();					
 
 				} catch (Exception e2) {
 					e2.printStackTrace();
-					
+
+				}
+			}
+		});
+
+		addWindowListener(new WindowAdapter() {
+			public void windowOpened(WindowEvent e) {
+				try {
+
+					Protocol p = new Protocol();
+					p.setCmd(302);
+					out.writeObject(p);
+					out.flush();
+					System.out.println("window 창 오픈이벤트 성공 302 시작시간");
+
+				} catch (Exception e2) {
+					e2.printStackTrace();
+
+				}
+			}
+		});
+		
+		addWindowListener(new WindowAdapter() {
+			public void windowOpened(WindowEvent e) {
+				try {
+
+					Protocol p = new Protocol();
+					p.setCmd(303);
+					out.writeObject(p);
+					out.flush();
+					System.out.println("window 창 오픈이벤트 성공 303 종료시간");
+
+				} catch (Exception e2) {
+					e2.printStackTrace();
+
 				}
 			}
 		});
@@ -448,6 +479,62 @@ public class ticket_office_main extends JFrame implements Runnable {
 			}
 
 		});
+		
+		table3.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int select_theater = table3.getSelectedRow();
+				Object[] rowData = new Object[table3.getColumnCount()];
+				for (int i = 0; i < table3.getColumnCount(); i++) {
+					rowData[i] = table3.getValueAt(select_theater, i);
+				}
+				show_time.setText(Arrays.toString(rowData));
+				System.out.println("시간클릭시 삽입성공");
+				// 입력이 잘되었는지 확인하기위한 콘솔출력
+			}
+
+		});
+		
+		
+		//테이블1인 영화목록을 클릭했을때, 이미지 들어갈수있도록 삽입하는 메서드**
+		table1.addMouseListener(new MouseAdapter() {
+		    @Override
+		    public void mouseClicked(MouseEvent e) {
+		        // 선택된 행의 인덱스 가져오기
+		        int selectedRow = table1.getSelectedRow();
+		        
+		        // 선택된 행에서 영화 제목 가져오기
+		        String movieTitle = (String) table1.getValueAt(selectedRow, 0);
+ 
+		        String imagePath = getMovieImagePath(movieTitle); // 해당 영화 제목에 해당하는 이미지 경로를 가져옴
+		        ImageIcon imageIcon = new ImageIcon(imagePath); // 이미지를 로드하여 ImageIcon 객체 생성
+		       
+		        
+		        show_poster.setIcon(imageIcon);
+		      
+		    }
+		});
+		
+			
+		
+		//해당 영화를 눌렀을때, 해당 영화가 가진 시간만을 상영시간표에 출력할수있도록, run과 같은 cmd 설정하여 cp_client에 보내기
+		table1.addMouseListener(new MouseAdapter() {
+		    @Override
+		    public void mouseClicked(MouseEvent e) {
+		    	
+		    	try {
+		    		Protocol p = new Protocol();
+		    		p.setCmd(302);
+		    		out.writeObject(p);
+		    		out.flush();
+				} catch (Exception e2) {
+
+				}
+		   
+		        }
+		        
+		    
+		});
 
 	} // 액션리스너 및 화면단 마지막 괄호
 
@@ -469,7 +556,7 @@ public class ticket_office_main extends JFrame implements Runnable {
 		show_price3.setText(String.valueOf(total));
 	}
 
-	// 영화목록을 table1에 추가
+	// 영화목록을 table1에 추가***
 
 	public void addMovieListToTable(List<VO> movieList) {
 
@@ -479,21 +566,32 @@ public class ticket_office_main extends JFrame implements Runnable {
 		}
 	}
 
-	// 상영 시간을 table3에 추가
-	public void addTimeListToTable(List<VO> timeList) {
-		model3.setRowCount(0);
-		for (VO time : timeList) {
-			model3.addRow(new Object[] { time.getStart_time(), time.getEnd_time() });
-		}
-	}
+	// 상영 시간을 table3에 추가하기위한 메서드 **
+	 public void addTimeListToTable(List<VO> timeList) { 
+	
+	 int selectedRow = table1.getSelectedRow();
+     if (selectedRow != -1) {
+         
+         String movieTitle = (String) table1.getValueAt(selectedRow, 0);
+
+          //해당 영화에 대한 시작 시간과 종료 시간 가져오기
+         List<VO> movieTimes = DAO.getMovieTimes(movieTitle); // DAO와 mapper를 사용하여 DB에서 가져옴
+         model3.setRowCount(0);
+        // 시작 시간과 종료 시간을 한 행으로 만들어 table3에 추가
+         for (VO movieTime : movieTimes) {
+            
+             model3.addRow(new Object[] { movieTime.getStart_time() + " - " + movieTime.getEnd_time()});
+         }
+      }
+	 }
 
 	// 접속
 	public void connected() {
 		try {
-			s = new Socket("192.168.0.34", 7780);
+			s = new Socket("192.168.0.80", 7780);
 			// 집에서 연습할떄 이건 포트번호를 바꾸자
-			//집 192.168.0.34
-			//학원 192.168.0.80
+			// 집 192.168.0.34
+			// 학원 192.168.0.80
 			out = new ObjectOutputStream(s.getOutputStream());
 			in = new ObjectInputStream(s.getInputStream());
 
@@ -501,6 +599,26 @@ public class ticket_office_main extends JFrame implements Runnable {
 		} catch (Exception e) {
 			System.err.println("연결실패" + e);
 		}
+	}
+	
+	
+	
+	private String getMovieImagePath(String movieTitle) {
+	    String imagesFolder = "src/Ex02_images/"; // 이미지 폴더 경로
+	    
+	    // 영화 제목에 따라 이미지 파일 경로 반환
+	    if (movieTitle.equals("뽀로로")) {
+	        return imagesFolder + "뽀로로.PNG";
+	    } else if (movieTitle.equals("반지의제왕")) {
+	        return imagesFolder + "반지의제왕.PNG";
+	    } else if (movieTitle.equals("해리포터와비밀의방")) {
+	        return imagesFolder + "해리포터.PNG";
+	    } 
+	    //이미지 사용할때, 이미지도 같이 보내기, 위치경로 확인하기!!! *********************
+	    
+	    // 만약 해당하는 영화 제목에 이미지 파일이 없을 경우 null을 반환하거나 기본 이미지 경로를 반환할 수 있습니다.
+	    // 예시로 null 반환
+	    return null;
 	}
 
 	// 끝내기
@@ -516,12 +634,19 @@ public class ticket_office_main extends JFrame implements Runnable {
 		}
 	}
 
+	
+	
+	
 	@Override
 	public void run() {
 		esc: while (true) {
+			// cmd : 0 : 종료, 301:영화목록 출력
+			// 302: 상영시간표 시작 시간 출력 303 :잔여포인트
+	
+			
 			try {
 				Object obj = in.readObject();
-				List<VO> list = null;
+
 				Protocol p = (Protocol) obj;
 
 				if (obj != null) {
@@ -531,22 +656,19 @@ public class ticket_office_main extends JFrame implements Runnable {
 						break esc;
 
 					case 301:
-						
-						System.out.println("온거여? 메인 런");
 						List<VO> movieList = p.getList();
-						 DefaultTableModel model = new DefaultTableModel();
-						 for (VO vo : movieList) {
-							   Object[]  row = { vo.getMovie_name() };
-					            model.addRow(row);
-					        }
-						 table1.setModel(model);
+						System.out.println(movieList);
+						addMovieListToTable(movieList);
+						//영화목록은 성공, 건들지말자.					
 						break;
-
 					case 302:
-						
+						List<VO> movieTimes= p.getList();
+						addTimeListToTable(movieTimes);
+						//상영시간표는 성공, 건들지말자.
 						break;
 					case 303:
-						/// 잔여포인트 구하기 .
+						
+						
 						break;
 					}
 				}
@@ -558,17 +680,16 @@ public class ticket_office_main extends JFrame implements Runnable {
 		closed();
 
 	}
-
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
-			
+
 			@Override
 			public void run() {
 				new ticket_office_main();
-				
+
 			}
 		});
-		
+
 
 	} // 메인
 

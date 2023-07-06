@@ -157,7 +157,7 @@ public class ticket_before_pay extends JFrame{
 		
 		setSize(350, 600);
 		setVisible(true);
-		//setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setResizable(false);
 		

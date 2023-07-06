@@ -17,10 +17,7 @@ public class DB_server implements Runnable{
 		}
 	}
 	
-	
-	
-	
-	
+
 	@Override
 	public void run() {
 		while(true) {
