@@ -26,7 +26,9 @@ public class Network implements Runnable {
 
     public void connected() {
         try {
-            s = new Socket("192.168.0.11", 7789);
+        	// 학원: 192.168.0.78
+        	// 집:192.168.0.11
+            s = new Socket("192.168.0.78", 7789);
             out = new ObjectOutputStream(s.getOutputStream());
             in = new ObjectInputStream(s.getInputStream());
         } catch (Exception e) {
