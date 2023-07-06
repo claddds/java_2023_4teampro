@@ -15,6 +15,6 @@
 		</environment>
 	</environments>
 	<mappers>
-		<mapper resource="project/LJH/DB/Mapper.xml" />  <!--  이걸로 합치기-  -->
+		<mapper resource="project/LJH/DB/Mapper.xml" />  <!--  @이걸로 합치기-  -->
 	</mappers>
 </configuration>

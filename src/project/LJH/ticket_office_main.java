@@ -43,7 +43,7 @@ import project.LJH.DB.VO;
 
 
 
-//이걸로 합치기
+//이걸로 합치기!
 //매표소 만들기 
 public class ticket_office_main extends JFrame implements Runnable {
 	// 필요한 것들 선언하자

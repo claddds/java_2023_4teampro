@@ -6,7 +6,7 @@ import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-//이걸로 합치기
+//이걸로 합치기!
 public class DBService {
 	private static SqlSessionFactory factory;
 	static String resource = "project/LJH/DB/config.xml";

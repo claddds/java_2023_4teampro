@@ -2,7 +2,7 @@ package project.LJH;
 
 import java.net.ServerSocket;
 import java.net.Socket;
-//이걸로 합치기
+//이걸로 합치기!
 public class DB_server implements Runnable{
 	ServerSocket ss = null;
 	Socket s = null;
