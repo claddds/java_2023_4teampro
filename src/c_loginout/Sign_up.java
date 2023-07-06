@@ -205,8 +205,9 @@ public class Sign_up extends JFrame{
 		
 	}
 	
-	
-	
+
+
+
 	private boolean All() {	// 모든 정보를 입력했는지 확인해야하기 위해
 		boolean result;
 		

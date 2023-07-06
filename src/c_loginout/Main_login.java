@@ -13,8 +13,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 public class Main_login extends JFrame{
-	Movie_chart_view1 v1 = new Movie_chart_view1();
-	Movie_chart_view2 v2 = new Movie_chart_view2();
+	//Movie_chart_view1 v1 = new Movie_chart_view1();	//두개 안씀
+	//Movie_chart_view2 v2 = new Movie_chart_view2();
 	
 	CardLayout card = new CardLayout();
 	
@@ -78,6 +78,7 @@ public class Main_login extends JFrame{
 		chart_char_panel.add(lblNewLabel);
 		lblNewLabel.setFont(new Font("맑은 고딕", Font.BOLD, 30));
 		
+		/*
 		JPanel movie_chart_panel = new JPanel();
 		
 		movie_chart_panel.setLayout(card);
@@ -86,7 +87,7 @@ public class Main_login extends JFrame{
 	    card.show(movie_chart_panel, "view1");  //실행하자 마자 보이는
 		movie_chart_panel.setBounds(0, 306, 786, 383);
 		getContentPane().add(movie_chart_panel);
-		
+		*/
 		
 		JPanel ticketing_panel = new JPanel();
 		ticketing_panel.setBounds(0, 689, 786, 74);

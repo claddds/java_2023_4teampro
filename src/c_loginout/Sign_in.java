@@ -16,10 +16,22 @@ import javax.swing.SwingConstants;
 
 import movie_server.CustomerVO;
 import movie_server.Protocol;
+import pay.Pay;
+import pay.PointCharge;
+import pay.Reservation_completed;
+import snackbar.Menu;
+import ticket.MobileTicket;
+import ticket.TicketList;
+import ticketbox.Ticket_before_pay;
+import ticketbox.Ticket_office_main;
+import ticketbox.Ticket_seat;
+import ticketbox.Ticket_seat_map;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
@@ -41,15 +53,28 @@ public class Sign_in extends JFrame implements Runnable{
 	private JButton signin_login_bt, signin_signup_bt;
 	private JLabel signin_logo_label, signin_id_label, signin_pw_label;
 	
-	Socket s;
-	ObjectOutputStream out;
-	ObjectInputStream in;
-	
-	public CustomerVO cvo;
 	public String c_id, c_pw;
 	
+	public Socket s;
+	public ObjectOutputStream out;
+	public ObjectInputStream in;
+	
+	public Sign_up sign_up;
+	public Main_login main_login;
+	public CustomerVO cvo;
+	public Pay pay;
+	public PointCharge pointcharge;
+	public Reservation_completed r_completed;
+	public Menu menu;
+	public MobileTicket m_ticket;
+	public TicketList t_list;
+	public Ticket_before_pay tb_pay;
+	public Ticket_office_main to_main;
+	public Ticket_seat_map ts_map;
+	public Ticket_seat t_seat;
+	
 	public Sign_in() {
-		super("로그인");
+		super("4딸라-필름 로그인창");
 		
 		pg = new JPanel();
 		pg.setLayout(card = new CardLayout());	
@@ -107,12 +132,19 @@ public class Sign_in extends JFrame implements Runnable{
 		// 접속
 		connected();
 		
+		sign_up = new Sign_up();
+		
+		pg.add(contentPane, "sign_in");
+		
+		setContentPane(pg);
+		card.show(pg, "sign_in");
+		
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				if (s != null) {
 					Protocol p = new Protocol();
-					p.setCmd(0);
+					p.setCmd(0);	// 종료
 					try {
 						out.writeObject(p);
 						out.flush();
@@ -127,21 +159,34 @@ public class Sign_in extends JFrame implements Runnable{
 		signin_login_bt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				login_go();
+				card.show(pg, "main_login");
 			}
 		});
 		
 		signin_signup_bt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new Sign_up();
-				setVisible(false);	// 창 안보이게 하기
+				card.show(pg, "sign_up");
+				init();
 			}
 		});
+		
+		signin_pw_tf.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()==KeyEvent.VK_ENTER) {
+					login_go();
+				}
+			}
+		});
+		
 	}
 	
 		// 서버 연결 메서드
 		private void connected() {
 			try {
-				s = new Socket("192.168.0.41", 7780);
+				// 혜지-집: 183.96.151.249
+				// 혜지-학원: 192.168.0.41
+				s = new Socket("183.96.151.249", 7780);
 				out = new ObjectOutputStream(s.getOutputStream());
 				in = new ObjectInputStream(s.getInputStream());
 
@@ -166,6 +211,7 @@ public class Sign_in extends JFrame implements Runnable{
 		private void init() {
 			signin_id_tf.setText("");
 			signin_pw_tf.setText("");
+			signin_id_tf.requestFocus();
 		}
 		
 		@Override
@@ -176,18 +222,37 @@ public class Sign_in extends JFrame implements Runnable{
 					if(obj != null) {
 						Protocol p = (Protocol)obj;
 						switch (p.getCmd()) {
-							case 0 : break esc;	// 종료
+							case 0 : 	// 종료
+								break esc;
+								
 							case 501:	// 로그인
 								CustomerVO vo = p.getVo();
 								LogIn(vo, p.getResult());
 								break;
 								
+							case 502:	// 회원가입
+								
+							case 503:	// 아이디 중복체크
 						}
 					}
 				} catch (Exception e) {
 				}
 			}
 			 closed();
+		}
+		
+		public void LogIn(CustomerVO vo, int result) {
+			if(result==0) {
+				JOptionPane.showMessageDialog(getParent(), "로그인 성공");
+				cvo = vo;
+				c_id = vo.getCust_id();
+				c_pw = vo.getCust_password();
+				
+				init();
+				
+				
+			} else
+				JOptionPane.showMessageDialog(getParent(), "가입 정보 없음");
 		}
 		
 		public void login_go() {
@@ -208,23 +273,18 @@ public class Sign_in extends JFrame implements Runnable{
 			}else JOptionPane.showMessageDialog(getParent(), "아이디 / 비밀번호를 입력해주세요.");
 		}
 		
-		public void LogIn(CustomerVO vo, int result) {
-			if(result==0) {
-				JOptionPane.showMessageDialog(getParent(), "로그인 성공");
-				cvo = vo;
-				c_id = vo.getCust_id();
-				c_pw = vo.getCust_password();
-				init();
-				
-			} else
-				JOptionPane.showMessageDialog(getParent(), "가입 정보 없음");
-		}
 		
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				new Sign_in();
+				try {
+					Sign_in frame = new Sign_in();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
 			}
 		});
 	}
