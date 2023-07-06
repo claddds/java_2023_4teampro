@@ -15,7 +15,10 @@ public class Protocol implements Serializable{
 	int cmd;
 	List<CustomerVO> c_list;
 	
+	CustomerVO vo; // 직렬화를 미리 해두어야 함
+	
 	int result;
+	
 	public List<CustomerVO> getC_list() {
 		return c_list;
 	}
@@ -32,7 +35,6 @@ public class Protocol implements Serializable{
 		this.result = result;
 	}
 
-	CustomerVO vo; // 직렬화를 미리 해두어야 함
 
 	public CustomerVO getVo() {
 		return vo;

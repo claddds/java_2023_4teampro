@@ -61,6 +61,17 @@ public class CP_Client extends Thread{
 						break;
 					
 					case 502:	// 회원가입
+						int result502 = 0;
+						result502 = DAO.getIns(p.getVo());
+
+						if (result502 > 0) {
+							Protocol p502 = new Protocol();
+							p502.setCmd(502);
+							p502.setResult(result502);
+							out.writeObject(p502);
+							out.flush();
+						}
+						break;
 					case 503:	// 아이디 중복 확인
 						int result503 = DAO.getIdChk(p.getVo().getCust_id());
 

@@ -2,7 +2,12 @@ package c_loginout;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.EventQueue;
 
 import javax.swing.JLabel;
@@ -26,76 +31,78 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 
 public class Sign_in extends JFrame implements Runnable{
+	
+	JPanel contentPane;
+	public JPanel pg; // 다른 패널들을 담을 패널
+	public CardLayout card; // 형식
+	
 	private JTextField signin_id_tf;
 	private JTextField signin_pw_tf;
+	private JButton signin_login_bt, signin_signup_bt;
+	private JLabel signin_logo_label, signin_id_label, signin_pw_label;
 	
 	Socket s;
 	ObjectOutputStream out;
 	ObjectInputStream in;
 	
+	public CustomerVO cvo;
+	public String c_id, c_pw;
+	
 	public Sign_in() {
 		super("로그인");
 		
-		setSize(800, 800);
-		setLocationRelativeTo(null);
-		setVisible(true);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		getContentPane().setLayout(null);
+		pg = new JPanel();
+		pg.setLayout(card = new CardLayout());	
 		
-		JPanel signin_login_panel = new JPanel();
-		signin_login_panel.setBounds(0, 0, 784, 112);
-		getContentPane().add(signin_login_panel);
-		signin_login_panel.setLayout(null);
+		setResizable(false);
+		setBounds(100, 100, 800, 800);
 		
-		JLabel signin_login_label = new JLabel("로그인");
-		signin_login_label.setFont(new Font("맑은 고딕", Font.BOLD, 20));
-		signin_login_label.setHorizontalAlignment(SwingConstants.CENTER);
-		signin_login_label.setBounds(298, 38, 165, 44);
-		signin_login_panel.add(signin_login_label);
+		contentPane = new JPanel();
+		contentPane.setBackground(Color.WHITE);
+		contentPane.setLayout(null);
 		
-		JPanel signin_id_pw_panel = new JPanel();
-		signin_id_pw_panel.setBounds(0, 111, 784, 112);
-		getContentPane().add(signin_id_pw_panel);
-		signin_id_pw_panel.setLayout(null);
-		
-		JLabel signin_id_label = new JLabel("아이디");
-		signin_id_label.setHorizontalAlignment(SwingConstants.CENTER);
-		signin_id_label.setFont(new Font("맑은 고딕", Font.BOLD, 16));
-		signin_id_label.setBounds(200, 21, 90, 30);
-		signin_id_pw_panel.add(signin_id_label);
-		
-		JLabel signin_pw_label = new JLabel("비밀번호");
-		signin_pw_label.setFont(new Font("맑은 고딕", Font.BOLD, 16));
-		signin_pw_label.setHorizontalAlignment(SwingConstants.CENTER);
-		signin_pw_label.setBounds(200, 60, 90, 30);
-		signin_id_pw_panel.add(signin_pw_label);
+		signin_logo_label = new JLabel("4딸라-필름");
+		signin_logo_label.setFont(new Font("맑은 고딕", Font.BOLD, 78));
+		signin_logo_label.setBounds(217, 79, 400, 203);
+		contentPane.add(signin_logo_label);
 		
 		signin_id_tf = new JTextField();
-		signin_id_tf.setBounds(283, 27, 220, 21);
-		signin_id_pw_panel.add(signin_id_tf);
-		signin_id_tf.setColumns(10);
+		signin_id_tf.setBounds(395, 277, 222, 28);
+		signin_id_tf.setFont(new Font("맑은 고딕", Font.PLAIN, 15));
+		contentPane.add(signin_id_tf);
 		
-		signin_pw_tf = new JTextField();
-		signin_pw_tf.setBounds(286, 65, 220, 21);
-		signin_id_pw_panel.add(signin_pw_tf);
-		signin_pw_tf.setColumns(10);
+		signin_pw_tf = new JPasswordField();
+		signin_pw_tf.setBounds(395, 315, 222, 28);
+		signin_pw_tf.setFont(new Font("맑은 고딕", Font.PLAIN, 15));
+		contentPane.add(signin_pw_tf);
 		
-		JPanel signin_login_bt_panel = new JPanel();
-		signin_login_bt_panel.setBounds(0, 221, 784, 82);
-		getContentPane().add(signin_login_bt_panel);
-		signin_login_bt_panel.setLayout(null);
+		signin_id_label = new JLabel("ID");
+		signin_id_label.setFont(new Font("맑은 고딕", Font.PLAIN, 30));
+		signin_id_label.setBounds(199, 277, 107, 25);
+		contentPane.add(signin_id_label);
+
+		signin_pw_label = new JLabel("PASSWORD");
+		signin_pw_label.setFont(new Font("맑은 고딕", Font.PLAIN, 30));
+		signin_pw_label.setBounds(199, 323, 171, 25);
+		contentPane.add(signin_pw_label);
 		
-		JButton signin_login_bt = new JButton("로그인");
-		signin_login_bt.setBounds(252, 22, 97, 23);
-		signin_login_bt_panel.add(signin_login_bt);
+		signin_signup_bt = new JButton("회원가입");
+		signin_signup_bt.setBounds(425, 385, 134, 37);
+		signin_signup_bt.setBorderPainted(false);
+		signin_signup_bt.setFocusPainted(false);
+		signin_signup_bt.setContentAreaFilled(false);
+		signin_signup_bt.setFont(new Font("맑은고딕", Font.BOLD, 20));
+		signin_signup_bt.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		contentPane.add(signin_signup_bt);
 		
-		JButton signin_cancel_bt = new JButton("취소");
-		signin_cancel_bt.setBounds(406, 23, 97, 23);
-		signin_login_bt_panel.add(signin_cancel_bt);
-		
-		JButton signin_signup_bt = new JButton("회원가입");
-		signin_signup_bt.setBounds(334, 55, 97, 23);
-		signin_login_bt_panel.add(signin_signup_bt);
+		signin_login_bt = new JButton("로그인");
+		signin_login_bt.setBounds(269, 378, 144, 50);
+		signin_login_bt.setBorderPainted(false);
+		signin_login_bt.setFocusPainted(false);
+		signin_login_bt.setContentAreaFilled(false);
+		signin_login_bt.setFont(new Font("Dialog", Font.BOLD, 20));
+		signin_login_bt.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		contentPane.add(signin_login_bt);
 		
 		// 접속
 		connected();
@@ -120,12 +127,6 @@ public class Sign_in extends JFrame implements Runnable{
 		signin_login_bt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				login_go();
-			}
-		});
-		signin_cancel_bt.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				new Main_logout();
-				setVisible(false);
 			}
 		});
 		
@@ -163,9 +164,8 @@ public class Sign_in extends JFrame implements Runnable{
 		
 		// 초기값 메서드
 		private void init() {
-			id_tf.setText("");
-			pw_tf.setText("");
-			id_tf.requestFocus();
+			signin_id_tf.setText("");
+			signin_pw_tf.setText("");
 		}
 		
 		@Override
@@ -211,9 +211,9 @@ public class Sign_in extends JFrame implements Runnable{
 		public void LogIn(CustomerVO vo, int result) {
 			if(result==0) {
 				JOptionPane.showMessageDialog(getParent(), "로그인 성공");
-				CustomerVO = vo;
-				m_id = vo.getMember_id();
-				m_pw = vo.getMember_pw();
+				cvo = vo;
+				c_id = vo.getCust_id();
+				c_pw = vo.getCust_password();
 				init();
 				
 			} else

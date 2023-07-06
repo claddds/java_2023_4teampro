@@ -36,13 +36,19 @@ public class DAO {
 			CustomerVO vo = getSession().selectOne("custOne", cust_id);
 			return vo;
 		}
+		
 		// insert, delete, update 결과 int, 파라미터있음
 		// 반드시  commit를 해야 된다.
-		public static int getInsert(CustomerVO vo) {
-			int result = getSession().insert("custins", vo);
-			ss.commit();
-			return result;
+		public static int getIns(CustomerVO vo) {
+			int result = 0;
+			if(!(vo.getCust_id().isEmpty())) {
+				result = getSession().insert("custins", vo);
+				ss.commit();
+				return result;
+			}else
+			return 0;
 		}
+		
 		public static int getDelete(CustomerVO vo) {
 			int result = getSession().delete("custdel", vo);
 			ss.commit();

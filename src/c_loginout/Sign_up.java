@@ -156,14 +156,6 @@ public class Sign_up extends JFrame{
 		
 		signup_idcheck_bt.addActionListener(new ActionListener() {	// 아이디 중복 확인 버튼
 			public void actionPerformed(ActionEvent e) {
-				Protocol p = new Protocol();
-				String idDup = signup_id_tf.getText().trim();
-				CustomerVO vo = new CustomerVO();
-				vo.setCust_id(idDup);
-				
-				p.setCmd(503);
-				p.setVo(vo);
-				
 				
 				
 			}
@@ -179,6 +171,25 @@ public class Sign_up extends JFrame{
 						String pw = signup_pw_tf.getText().trim();
 						String name = signup_name_tf.getText().trim();
 						String birth = signup_birth_tf.getText().trim();
+						
+						CustomerVO vo = new CustomerVO();
+						vo.setCust_id(id);
+						vo.setCust_password(pw);
+						vo.setCust_name(name);
+						vo.setCust_birth(birth);
+						
+						Protocol p = new Protocol();
+						p.setCmd(3);
+						p.setVo(vo);
+						
+						try {
+							c_loginout.out.writeObject(p);
+							c_loginout.out.flush();
+						} catch (Exception e2) {
+						}
+						init();
+					}else {
+						JOptionPane.showMessageDialog(getParent(), "필수 정보를 입력해주세요.");
 					}
 				}
 			}
@@ -221,8 +232,9 @@ public class Sign_up extends JFrame{
 	}
 	
 	public void dupchk() {
-		if(login.idDup != 3) {
-			if(login.idDup == 0) {
+		/*
+		if(c_loginout.idDup != 3) {
+			if(c_loginout.idDup == 0) {
 				int r = JOptionPane.showConfirmDialog(getParent(), "사용하실 수 있는 아이디입니다.\n사용하시겠습니까?", "중복확인", JOptionPane.YES_NO_OPTION);
 				if(r ==0) {
 					id_tf.setEditable(false);
@@ -231,6 +243,8 @@ public class Sign_up extends JFrame{
 				JOptionPane.showMessageDialog(getParent(), "이미 사용중인 아이디입니다.");
 			}
 		}
+		*/
+		
 	}
 	
 	public static void main(String[] args) {
