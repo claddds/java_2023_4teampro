@@ -12,6 +12,11 @@ import org.apache.ibatis.session.SqlSession;
 		return ss;
 		
 		
+		//좌석불러오기
+		
+		
+		
+		
 		
 		
 		

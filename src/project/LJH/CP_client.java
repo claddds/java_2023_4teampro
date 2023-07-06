@@ -62,8 +62,7 @@ public class CP_client extends Thread{
 					case 302 :
 						//영화 시간 갖고오는 cmd 
 						System.out.println("cmd302 왔음");
-						//int selectedRow = main.table1.getSelectedRow();
-						//String movieTitle = (String) main.table1.getValueAt(selectedRow, 0);
+						
 						List<VO> movieTimes = DAO.getMovieTimes(getName());
 						System.out.println("담아서 메인인으로 보내자");
 						p.setList(movieTimes);

@@ -580,7 +580,7 @@ public class ticket_office_main extends JFrame implements Runnable {
         // 시작 시간과 종료 시간을 한 행으로 만들어 table3에 추가
          for (VO movieTime : movieTimes) {
             
-             model3.addRow(new Object[] { movieTime.getStart_time() + " - " + movieTime.getEnd_time()});
+             model3.addRow(new Object[] {movieTime.getStart_time() + " - " + movieTime.getEnd_time()});
          }
       }
 	 }
@@ -588,7 +588,7 @@ public class ticket_office_main extends JFrame implements Runnable {
 	// 접속
 	public void connected() {
 		try {
-			s = new Socket("192.168.0.80", 7780);
+			s = new Socket("192.168.0.34", 7780);
 			// 집에서 연습할떄 이건 포트번호를 바꾸자
 			// 집 192.168.0.34
 			// 학원 192.168.0.80

@@ -8,7 +8,7 @@ import project.LJH.DB.VO;
 //이걸로 합치기
 public class Protocol implements Serializable{
 	// cmd : 0 : 종료, 301:영화목록 출력
-	// 302: 상영시간표 시작 시간 출력 303 :잔여포인트
+	// 302: 상영시간표 출력 303 :잔여포인트
 	int cmd;
 	int result;
 	
