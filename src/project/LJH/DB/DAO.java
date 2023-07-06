@@ -3,7 +3,7 @@ package project.LJH.DB;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
-
+//이걸로 합치기
 public class DAO {
 	private static SqlSession ss;
 

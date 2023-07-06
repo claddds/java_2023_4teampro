@@ -20,7 +20,7 @@ public class CP_client extends Thread{
 	ticket_office_main main;
 	DefaultTableModel model1,model2,model3;
 		
-	
+	//이걸로 합치기
 	public CP_client(Socket s, DB_server server) {
 		this.s = s;
 		this.server= server;

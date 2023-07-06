@@ -10,7 +10,7 @@ import java.util.List;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
+//이걸로 합치기
 //좌석선택창에 필요한 좌석 배치도 배열을위해 하나의 Jpanel 클래스를 만듦.
 //ticket_seat에 가서 객체생성후 화면에불러오자.
 public class ticket_seat_map extends JPanel {

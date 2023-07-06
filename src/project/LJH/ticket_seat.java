@@ -21,7 +21,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
+//이걸로 합치기
 public class ticket_seat extends JFrame {
 	JPanel bt_p, v_point, seat_p, con_seat, info_movie;
 	// 버튼 패널, 포인트자리페널, 좌석선택패널, 좌석확인패널, 영화정보패널

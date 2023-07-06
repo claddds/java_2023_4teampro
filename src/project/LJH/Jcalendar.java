@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.FlowLayout;
 import com.toedter.calendar.JDateChooser;
-
+//이걸로 합치기
 //날짜 캘린더 메서드, 객체생성해서 보기.
 //윈도우빌더 이용하여 작성한 코드임.
 //메인에 객체 생성후 붙이자.

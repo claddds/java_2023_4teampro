@@ -1,7 +1,7 @@
 package project.LJH.DB;
 
 import org.apache.ibatis.session.SqlSession;
-
+//이걸로 합치기
 	public class Seat_DAO {
 	private static SqlSession ss;
 

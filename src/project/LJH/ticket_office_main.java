@@ -43,7 +43,7 @@ import project.LJH.DB.VO;
 
 
 
-
+//이걸로 합치기
 //매표소 만들기 
 public class ticket_office_main extends JFrame implements Runnable {
 	// 필요한 것들 선언하자
@@ -604,7 +604,7 @@ public class ticket_office_main extends JFrame implements Runnable {
 	
 	
 	private String getMovieImagePath(String movieTitle) {
-	    String imagesFolder = "src/Ex02_images/"; // 이미지 폴더 경로
+	    String imagesFolder = "src/images/"; // 이미지 폴더 경로
 	    
 	    // 영화 제목에 따라 이미지 파일 경로 반환
 	    if (movieTitle.equals("뽀로로")) {

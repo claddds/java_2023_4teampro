@@ -2,7 +2,7 @@ package project.LJH.DB;
 
 import java.io.Serializable;
 import java.util.List;
-
+//이걸로 합치기
 public class VO implements Serializable{
 
 	private String movie_name,start_time,end_time ,All_time;

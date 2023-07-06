@@ -1,5 +1,5 @@
 package project.LJH.DB;
-
+//이걸로 합치기
 public class Seat_VO {
 	private String theater_id, theater_seat;
 

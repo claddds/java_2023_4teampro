@@ -17,7 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
-
+//이걸로 합치기
 //결제정보창, 결제확인창
 public class ticket_before_pay extends JFrame{
 	JPanel north,center,south,v_point,con_pay,bt_p ;
