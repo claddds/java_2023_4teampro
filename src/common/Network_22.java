@@ -9,7 +9,7 @@
 //    // 접속하기 위해 필요한 것들
 //    private ObjectInputStream in;
 //    private ObjectOutputStream out;
-//    private Socket s;
+//    private Socket s;.
 //
 //    // 서버 연결 메서드
 //    public void connected() {

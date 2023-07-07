@@ -1,7 +1,7 @@
 package common;
 
-import Pay.Pay_DAO;
-import Pay.Pay_VO;
+import pay.Pay_DAO;
+import pay.Pay_VO;
 
 // 현재 로그인 사용자의 ID를 전역적으로 관리하기 위해 만듦
 public class Session {

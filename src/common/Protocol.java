@@ -3,8 +3,8 @@ package common;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import Pay.Pay_VO;
-import Ticket.Ticket_VO;
+import pay.Pay_VO;
+import ticket.Ticket_VO;
 
 public class Protocol implements Serializable{
 

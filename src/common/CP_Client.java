@@ -7,10 +7,10 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
 
-import Pay.Pay_DAO;
-import Pay.Pay_VO;
-import Ticket.Ticket_DAO;
-import Ticket.Ticket_VO;
+import pay.Pay_DAO;
+import pay.Pay_VO;
+import ticket.Ticket_DAO;
+import ticket.Ticket_VO;
 
 public class CP_Client extends Thread {
     // 클라이언트와의 소켓 연결과 DB_Server 객체에 대한 참조를 저장하는 변수
