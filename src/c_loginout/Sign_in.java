@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -24,13 +25,14 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import Pay.Pay;
-import Pay.PointCharge;
-import Pay.Reservation_completed;
-import Ticket.MobileTicket;
-import Ticket.TicketList;
 import movie_server.CustomerVO;
 import movie_server.Protocol;
+import movie_server.TicketBox_VO;
+import pay.Pay;
+import pay.PointCharge;
+import pay.Reservation_completed;
+import ticket.MobileTicket;
+import ticket.TicketList;
 import ticketbox.Ticket_before_pay;
 import ticketbox.Ticket_office_main;
 import ticketbox.Ticket_seat;
@@ -159,7 +161,7 @@ public class Sign_in extends JFrame implements Runnable{
 		//pg.add(contentPane, "sign_in");
 		
 		setContentPane(pg);
-		card.show(pg, "t_list");  // 수정된 위치
+		card.show(pg, "sign_in");  // 수정된 위치
 		
 		//setContentPane(pg);
 		//card.show(pg, "sign_in");
@@ -251,8 +253,23 @@ public class Sign_in extends JFrame implements Runnable{
 							case 0 : 	// 종료
 								break esc;
 								
+							case 301:
+				                  List<TicketBox_VO> movieList = p.getT_list();
+				                  System.out.println(movieList);
+				                  //addMovieListToTable(movieList);
+				                  //영화목록은 성공, 건들지말자.               
+				                  break;
+				               case 302:
+				                  List<TicketBox_VO> movieTimes= p.getT_list();
+				                  //addTimeListToTable(movieTimes);
+				                  //상영시간표는 성공, 건들지말자.
+				                  break;
+				               case 303:
+				                  				                  
+				                  break;
+
 							case 501:	// 로그인
-								CustomerVO vo = p.getVo();
+								CustomerVO vo = p.getC_vo();
 								LogIn(vo, p.getResult());
 								break;
 								
@@ -291,7 +308,7 @@ public class Sign_in extends JFrame implements Runnable{
 				vo.setCust_password(signin_pw_tf.getText().trim());
 				
 				p.setCmd(501);
-				p.setVo(vo);
+				p.setC_vo(vo);
 				
 				try {
 					out.writeObject(p);

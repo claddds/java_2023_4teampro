@@ -1,4 +1,4 @@
-package Pay;
+package pay;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -13,8 +13,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import Ticket.TicketList;
 import c_loginout.Sign_in;
+import ticket.TicketList;
 
 public class Reservation_completed extends JPanel {
 	Sign_in sign_in;

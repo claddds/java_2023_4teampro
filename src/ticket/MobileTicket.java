@@ -1,4 +1,4 @@
-package Ticket;
+package ticket;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -8,18 +8,12 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
@@ -27,6 +21,8 @@ import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
 import c_loginout.Sign_in;
+import movie_server.DAO;
+import movie_server.MobileTicket_VO;
 
 public class MobileTicket extends JPanel {
 	Sign_in sign_in;
@@ -34,9 +30,9 @@ public class MobileTicket extends JPanel {
 	JPanel MainP, CenterWrapperPanel, ButtonPanel;
 	JLabel ticketNumLabel, NameLabel, DayLabel, TimeLabel, theaterIdLabel, SeatLabel;
 	JButton complete;
-	private Ticket_VO ticket;
+	private MobileTicket_VO ticket;
     private TicketList ticketList;
-    private Ticket_DAO ticket_DAO;
+    private DAO DAO;
     private JTable ticketTable; // JTable 객체를 멤버 변수로 추가
 
 	public MobileTicket(Sign_in signin) {

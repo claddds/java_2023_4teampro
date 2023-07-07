@@ -40,7 +40,7 @@ import com.toedter.calendar.JCalendar;
 import c_loginout.Sign_in;
 import movie_server.Protocol;
 import movie_server.Server_book;
-import movie_server.TicketBox_DAO;
+import movie_server.DAO;
 import movie_server.TicketBox_VO;
 
 

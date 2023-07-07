@@ -1,6 +1,6 @@
 package ticketbox;
 
-public class JCalendar {
+public class Jcalendar {
 	/*
 	 * private JFrame frame;
 	 * 
