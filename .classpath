@@ -36,7 +36,7 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/ICT01-15/Desktop/java_2023_4teampro-master/src/lib/miglayout-src.zip">
+	<classpathentry kind="lib" path="C:/Users/ICT01-15/Desktop/java_2023_4teampro-master/src/lib/miglayout15-swing.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>

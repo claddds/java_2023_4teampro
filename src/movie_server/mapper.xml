@@ -38,4 +38,50 @@
 		where custid = #{custid}
 	</update>
 	 -->
+	 
+	 
+	 	<select id="movieList" resultType="project.LJH.DB.VO">
+
+		select movie_name from movie
+
+	</select>
+
+	<!-- 상영시간표 불러오기1 -->
+	<select id="stimeList" resultType="project.LJH.DB.VO">
+		select start_time from
+		movie_schedule
+	</select>
+	<select id="etimeList" resultType="project.LJH.DB.VO">
+		select end_time from
+		movie_schedule
+	</select>
+
+
+
+	<select id="getMovieTimes" parameterType="java.lang.String"
+		resultType="project.LJH.DB.VO">
+		SELECT start_time, end_time
+		FROM movie_schedule
+		WHERE movie_name = #{movieTitle}
+	</select>
+
+
+	<!-- 포인트불러오기 -->
+
+	<select id="point" parameterType="project.LJH.DB.VO"
+		resultType="project.LJH.DB.VO">
+		SELECT P.REMAINING_POINT
+		FROM LOGIN_INFO L
+		JOIN POINT P ON
+		L.CUST_ID =
+		P.CUST_ID
+		WHERE L.CUST_ID = #{cust_id}
+	</select>
+	 
+	 
+	 
+	 
+	 
+	 
+	 
 </mapper>

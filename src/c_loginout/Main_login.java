@@ -12,19 +12,20 @@ import java.awt.CardLayout;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-public class Main_login extends JFrame{
+public class Main_login extends JPanel{
+	Sign_in sign_in;
 	//Movie_chart_view1 v1 = new Movie_chart_view1();	//두개 안씀
 	//Movie_chart_view2 v2 = new Movie_chart_view2();
 	
-	CardLayout card = new CardLayout();
+	//CardLayout card = new CardLayout();
 	
-	public Main_login() {
-		super("4딸라시네마");
-		getContentPane().setLayout(null);
+	public Main_login(Sign_in signin) {
+		this.sign_in = signin;
+		//getContentPane().setLayout(null);
 		
 		JPanel sign_panel = new JPanel();
 		sign_panel.setBounds(0, 0, 786, 89);
-		getContentPane().add(sign_panel);
+		//getContentPane().add(sign_panel);
 		sign_panel.setLayout(null);
 		
 		JButton mobile_ticket_bt = new JButton("모바일 티켓");
@@ -59,7 +60,7 @@ public class Main_login extends JFrame{
 		
 		JPanel logo_panel = new JPanel();
 		logo_panel.setBounds(0, 85, 786, 151);
-		getContentPane().add(logo_panel);
+		//getContentPane().add(logo_panel);
 		logo_panel.setLayout(null);
 		
 		JButton logo_bt = new JButton("로고 이미지");
@@ -70,7 +71,7 @@ public class Main_login extends JFrame{
 		
 		JPanel chart_char_panel = new JPanel();
 		chart_char_panel.setBounds(0, 238, 786, 67);
-		getContentPane().add(chart_char_panel);
+		//getContentPane().add(chart_char_panel);
 		chart_char_panel.setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("절찬 상영중");
@@ -91,7 +92,7 @@ public class Main_login extends JFrame{
 		
 		JPanel ticketing_panel = new JPanel();
 		ticketing_panel.setBounds(0, 689, 786, 74);
-		getContentPane().add(ticketing_panel);
+		//getContentPane().add(ticketing_panel);
 		ticketing_panel.setLayout(null);
 		
 		JButton ticketing_bt = new JButton("빠른 예매");
@@ -106,9 +107,9 @@ public class Main_login extends JFrame{
 		
 
 		setSize(800, 800);
-		setLocationRelativeTo(null);
+		//setLocationRelativeTo(null);
 		setVisible(true);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		//setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 		sign_out_bt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -118,10 +119,5 @@ public class Main_login extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-	}
-	
-	
-	public static void main(String[] args) {
-		new Main_login();
 	}
 }

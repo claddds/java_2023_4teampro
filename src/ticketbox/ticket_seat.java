@@ -13,6 +13,7 @@ import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -38,13 +39,14 @@ public class Ticket_seat extends JPanel {
 	// 좌석표에 스크린 표시를 하기위한 스크린 버튼 ** 버튼이 눌리지않도록 Enabled 해야함. **
 	JPanel seat_p3;
 	JPanel seat_p4;
-	ticket_seat_map test = new ticket_seat_map();
+	Ticket_seat_map test = new Ticket_seat_map(sign_in);
 	// 그리고, 배열로 뽑아낸 5*5 좌석표를 객체 생성함. **이 객체를 생성하기위해서 seat_test는 항상 같이있어야함. **
 	ArrayList<String> show_seatnum = new ArrayList<>();
 	JLabel seatLabel;
 
 	public Ticket_seat(Sign_in signin) {
 		this.sign_in = signin;
+	
 
 		/* 잔여 "포인트자리" 패널 */
 		v_point = new JPanel();
@@ -224,145 +226,142 @@ public class Ticket_seat extends JPanel {
 		// 결제하기 버튼을 눌렀을 경우, 결제확인창으로 넘어가도록 액션리스너 만듦.
 		// 결제하기 버튼을누름과 동시에 매표소 화면은 숨겨진다.
 		// 그리고, 결제확인 창이 객체 생성되면서 화면에 보여진다.
-		pay_bt.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				ticket_before_pay con_pay = new ticket_before_pay();
-				setVisible(false);
-			}
-		});
-
-		// 각 극장관에서 좌석선택후 극장을 바꾸고자할때, 선택된 체크박스의 체크가 초기화되게.
-		// resetSeatSelection()은 seat_test 안에 메서드로 구현하였음.
-		room.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// 콤보박스가 변경되었을 때 체크박스 초기화
-				test.resetSeatSelection(); // seat_test 클래스에 resetSeatSelection() 메서드
-
-				updateSeatButtonPosition();
-			}
-		});
-
-		// 콤보박스 상영관을 누르면, 상영관 라벨에 동적으로 입력
-		room.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JComboBox<String> combo = (JComboBox<String>) e.getSource();
-				String selectedOption = (String) combo.getSelectedItem();
-				show_theater.setText(selectedOption);
-			}
-		});
-
-		
-		
-				
-	} // 마지막괄호
-
-	// room 콤보박스인 개나리, 빛나리, 미나리를 선택했을 경우 좌석도와 스크린위치가 변하게 하는
-	// method 추가함.
-	private void updateSeatButtonPosition() {
-		String selectedRoom = (String) room.getSelectedItem();
-		if (selectedRoom.equals("개나리")) {
-			seat_p3.remove(seat_bt); // 버튼을 패널에서 제거
-			seat_p3.remove(test);
-			seat_p3.add(seat_bt, BorderLayout.EAST); // 버튼을 오른쪽 위치에 추가합
-			seat_bt.setSize(200, 200);
-			seat_p3.add(test, BorderLayout.CENTER);
-			test.setSize(200, 200);
-			if (selectedRoom.equals("개나리")) {
-				seat_bt.setText("SCREEN");
-				seat_bt.setVerticalTextPosition(SwingConstants.CENTER);
-				seat_bt.setHorizontalTextPosition(SwingConstants.CENTER);
-				seat_bt.setEnabled(false);
-				seat_bt.setPreferredSize(new Dimension(100, 100));
-			} else {
-				seat_bt.setText("SCREEN");
-				seat_bt.setEnabled(false);
-			}
-		} else if (selectedRoom.equals("빛나리")) {
-			seat_p3.remove(seat_bt);
-			seat_p3.add(test, BorderLayout.CENTER);
-			seat_p3.add(seat_bt, BorderLayout.SOUTH); // 버튼을 남쪽 위치에 추가
-			if (selectedRoom.equals("빛나리")) {
-				seat_bt.setText("SCREEN");
-				seat_bt.setVerticalTextPosition(SwingConstants.CENTER);
-				seat_bt.setHorizontalTextPosition(SwingConstants.CENTER);
-				seat_bt.setEnabled(false);
-				seat_bt.setPreferredSize(new Dimension(100, 100));
-			} else {
-				seat_bt.setText("SCREEN");
-				seat_bt.setEnabled(false);
-			}
-		} else if (selectedRoom.equals("미나리")) {
-			seat_p3.remove(seat_bt);
-			seat_p3.add(test, BorderLayout.CENTER);
-			seat_p3.add(seat_bt, BorderLayout.NORTH); // 버튼을 북쪽 위치에 추가
-			if (selectedRoom.equals("미나리")) {
-				seat_bt.setText("SCREEN");
-				seat_bt.setVerticalTextPosition(SwingConstants.CENTER);
-				seat_bt.setHorizontalTextPosition(SwingConstants.CENTER);
-				seat_bt.setEnabled(false);
-				seat_bt.setPreferredSize(new Dimension(100, 100));
-			} else {
-				seat_bt.setText("SCREEN");
-				seat_bt.setEnabled(false);
-			}
-		}
-		seat_p3.revalidate(); // 패널을 다시 유효화하여 변경 사항을 적용.
-		seat_p3.repaint(); // 패널을 다시 그려서 레이아웃을 업데이트
-	}
-
-	
-	//체크박스 선택시 메서드
-	private class SeatCheckBoxListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			JCheckBox sourceCheckBox = (JCheckBox) e.getSource();
-			String seatName = sourceCheckBox.getText();
-			boolean isChecked = sourceCheckBox.isSelected();
-			// seatName 이 선택된 좌석 이름이니, 호출하거나 set 사용할 때 이 이름으로 사용하자.
-			/*
-			 * // 선택된 좌석 목록을 show_seatnum 라벨에 붙이기 ArrayList<String> selectedSeats =
-			 * test.getShowSeatnum(); String labelText = "선택된 좌석: "; for (String seat :
-			 * selectedSeats) { labelText += seat + ", "; } // 마지막에 쉼표와 공백 제거 labelText =
-			 * labelText.substring(0, labelText.length() - 2);
-			 * 
-			 * // show_seatnum 라벨에 선택된 좌석 목록 설정 // show_seatnum.setText(labelText);
-			 */		}
-	}
-
-	private class SeatChangeListener implements ChangeListener {
-		@Override
-		public void stateChanged(ChangeEvent e) {
-			JCheckBox sourceCheckBox = (JCheckBox) e.getSource();
-			String seatName = sourceCheckBox.getText();
-			boolean isChecked = sourceCheckBox.isSelected();
-
-			if (isChecked) {
-				show_seatnum.add(seatName);
-			} else {
-				show_seatnum.remove(seatName);
-			}
-
-			updateSeatLabel();
-		}
-	}
-
-	private void updateSeatLabel() {
-		StringBuilder sb = new StringBuilder();
-		for (String seat : show_seatnum) {
-			sb.append(seat).append(", ");
-		}
-		String labelText = sb.toString();
-		if (labelText.endsWith(", ")) {
-			labelText = labelText.substring(0, labelText.length() - 2);
-		}
-		seatLabel.setText(labelText);
-	}
-
-	public static void main(String[] args) {
-
+//		pay_bt.addActionListener(new ActionListener() {
+//
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				Ticket_before_pay con_pay = new Ticket_before_pay(signin);
+//				setVisible(false);
+//			}
+//		});
+//
+//		// 각 극장관에서 좌석선택후 극장을 바꾸고자할때, 선택된 체크박스의 체크가 초기화되게.
+//		// resetSeatSelection()은 seat_test 안에 메서드로 구현하였음.
+//		room.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				// 콤보박스가 변경되었을 때 체크박스 초기화
+//				test.resetSeatSelection(); // seat_test 클래스에 resetSeatSelection() 메서드
+//
+//				updateSeatButtonPosition();
+//			}
+//		});
+//
+//		// 콤보박스 상영관을 누르면, 상영관 라벨에 동적으로 입력
+//		room.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				JComboBox<String> combo = (JComboBox<String>) e.getSource();
+//				String selectedOption = (String) combo.getSelectedItem();
+//				show_theater.setText(selectedOption);
+//			}
+//		});
+//
+//		
+//		
+//				
+//	} // 마지막괄호
+//
+//	// room 콤보박스인 개나리, 빛나리, 미나리를 선택했을 경우 좌석도와 스크린위치가 변하게 하는
+//	// method 추가함.
+//	private void updateSeatButtonPosition() {
+//		String selectedRoom = (String) room.getSelectedItem();
+//		if (selectedRoom.equals("개나리")) {
+//			seat_p3.remove(seat_bt); // 버튼을 패널에서 제거
+//			seat_p3.remove(test);
+//			seat_p3.add(seat_bt, BorderLayout.EAST); // 버튼을 오른쪽 위치에 추가합
+//			seat_bt.setSize(200, 200);
+//			seat_p3.add(test, BorderLayout.CENTER);
+//			test.setSize(200, 200);
+//			if (selectedRoom.equals("개나리")) {
+//				seat_bt.setText("SCREEN");
+//				seat_bt.setVerticalTextPosition(SwingConstants.CENTER);
+//				seat_bt.setHorizontalTextPosition(SwingConstants.CENTER);
+//				seat_bt.setEnabled(false);
+//				seat_bt.setPreferredSize(new Dimension(100, 100));
+//			} else {
+//				seat_bt.setText("SCREEN");
+//				seat_bt.setEnabled(false);
+//			}
+//		} else if (selectedRoom.equals("빛나리")) {
+//			seat_p3.remove(seat_bt);
+//			seat_p3.add(test, BorderLayout.CENTER);
+//			seat_p3.add(seat_bt, BorderLayout.SOUTH); // 버튼을 남쪽 위치에 추가
+//			if (selectedRoom.equals("빛나리")) {
+//				seat_bt.setText("SCREEN");
+//				seat_bt.setVerticalTextPosition(SwingConstants.CENTER);
+//				seat_bt.setHorizontalTextPosition(SwingConstants.CENTER);
+//				seat_bt.setEnabled(false);
+//				seat_bt.setPreferredSize(new Dimension(100, 100));
+//			} else {
+//				seat_bt.setText("SCREEN");
+//				seat_bt.setEnabled(false);
+//			}
+//		} else if (selectedRoom.equals("미나리")) {
+//			seat_p3.remove(seat_bt);
+//			seat_p3.add(test, BorderLayout.CENTER);
+//			seat_p3.add(seat_bt, BorderLayout.NORTH); // 버튼을 북쪽 위치에 추가
+//			if (selectedRoom.equals("미나리")) {
+//				seat_bt.setText("SCREEN");
+//				seat_bt.setVerticalTextPosition(SwingConstants.CENTER);
+//				seat_bt.setHorizontalTextPosition(SwingConstants.CENTER);
+//				seat_bt.setEnabled(false);
+//				seat_bt.setPreferredSize(new Dimension(100, 100));
+//			} else {
+//				seat_bt.setText("SCREEN");
+//				seat_bt.setEnabled(false);
+//			}
+//		}
+//		seat_p3.revalidate(); // 패널을 다시 유효화하여 변경 사항을 적용.
+//		seat_p3.repaint(); // 패널을 다시 그려서 레이아웃을 업데이트
+//	}
+//
+//	
+//	//체크박스 선택시 메서드
+//	private class SeatCheckBoxListener implements ActionListener {
+//		@Override
+//		public void actionPerformed(ActionEvent e) {
+//			JCheckBox sourceCheckBox = (JCheckBox) e.getSource();
+//			String seatName = sourceCheckBox.getText();
+//			boolean isChecked = sourceCheckBox.isSelected();
+//			// seatName 이 선택된 좌석 이름이니, 호출하거나 set 사용할 때 이 이름으로 사용하자.
+//			/*
+//			 * // 선택된 좌석 목록을 show_seatnum 라벨에 붙이기 ArrayList<String> selectedSeats =
+//			 * test.getShowSeatnum(); String labelText = "선택된 좌석: "; for (String seat :
+//			 * selectedSeats) { labelText += seat + ", "; } // 마지막에 쉼표와 공백 제거 labelText =
+//			 * labelText.substring(0, labelText.length() - 2);
+//			 * 
+//			 * // show_seatnum 라벨에 선택된 좌석 목록 설정 // show_seatnum.setText(labelText);
+//			 */		}
+//	}
+//
+//	private class SeatChangeListener implements ChangeListener {
+//		@Override
+//		public void stateChanged(ChangeEvent e) {
+//			JCheckBox sourceCheckBox = (JCheckBox) e.getSource();
+//			String seatName = sourceCheckBox.getText();
+//			boolean isChecked = sourceCheckBox.isSelected();
+//
+//			if (isChecked) {
+//				show_seatnum.add(seatName);
+//			} else {
+//				show_seatnum.remove(seatName);
+//			}
+//
+//			updateSeatLabel();
+//		}
+//	}
+//
+//	private void updateSeatLabel() {
+//		StringBuilder sb = new StringBuilder();
+//		for (String seat : show_seatnum) {
+//			sb.append(seat).append(", ");
+//		}
+//		String labelText = sb.toString();
+//		if (labelText.endsWith(", ")) {
+//			labelText = labelText.substring(0, labelText.length() - 2);
+//		}
+//		seatLabel.setText(labelText);
+//	}
 	}
 }

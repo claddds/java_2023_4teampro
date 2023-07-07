@@ -1,4 +1,4 @@
-package ticket;
+package Ticket;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -41,12 +41,6 @@ public class MobileTicket extends JPanel {
 
 	public MobileTicket(Sign_in signin) {
 		this.sign_in = signin;
-		super("모바일티켓");
-		
-		this.ticket = ticket;
-        this.ticketList = ticketList; // 인스턴스 전달 받음
-        this.ticket_DAO = new Ticket_DAO(); 
-        this.ticketTable = ticketTable; // JTable 객체를 멤버 변수에 할당
 
 		MainP = new JPanel();
 		MainP.setLayout(new BoxLayout(MainP, BoxLayout.Y_AXIS));
@@ -71,7 +65,7 @@ public class MobileTicket extends JPanel {
 		JPanel p1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		p1.setBackground(Color.WHITE);
 		ticketNumLabel = new JLabel();
-        ticketNumLabel.setText("예매번호 : " + String.valueOf(ticket.getTicket_num()));
+        //ticketNumLabel.setText("예매번호 : " + String.valueOf(ticket.getTicket_num()));
 		ticketNumLabel.setFont(new Font("굴림", Font.BOLD, 18));
 		p1.add(ticketNumLabel);
 		
@@ -79,7 +73,7 @@ public class MobileTicket extends JPanel {
 		JPanel p2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		p2.setBackground(Color.WHITE);
 		NameLabel = new JLabel();
-        NameLabel.setText(ticket.getMovie_name());
+        //NameLabel.setText(ticket.getMovie_name());
 		NameLabel.setFont(new Font("굴림", Font.BOLD, 25));
 		p2.add(NameLabel);
 
@@ -87,7 +81,7 @@ public class MobileTicket extends JPanel {
 		JPanel p3 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		p3.setBackground(Color.WHITE);
 		DayLabel = new JLabel();
-        DayLabel.setText(ticket.getMovie_date().toString());
+        //DayLabel.setText(ticket.getMovie_date().toString());
 		DayLabel.setFont(new Font("굴림", Font.BOLD, 18));
 		p3.add(DayLabel);
 
@@ -95,7 +89,7 @@ public class MobileTicket extends JPanel {
 		JPanel p4 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		p4.setBackground(Color.WHITE);
 		TimeLabel = new JLabel();
-        TimeLabel.setText(ticket.getStart_time() + " 시작");
+        //TimeLabel.setText(ticket.getStart_time() + " 시작");
 		TimeLabel.setFont(new Font("굴림", Font.BOLD, 18));
 		p4.add(TimeLabel);
 
@@ -103,7 +97,7 @@ public class MobileTicket extends JPanel {
 		JPanel p5 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		p5.setBackground(Color.WHITE);
 		theaterIdLabel = new JLabel();
-        theaterIdLabel.setText(ticket.getTheater_id()+"관");
+        //theaterIdLabel.setText(ticket.getTheater_id()+"관");
 		theaterIdLabel.setFont(new Font("굴림", Font.BOLD, 18));
 		p5.add(theaterIdLabel);
 
@@ -111,7 +105,7 @@ public class MobileTicket extends JPanel {
 		JPanel p6 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		p6.setBackground(Color.WHITE);
 		SeatLabel = new JLabel();
-        SeatLabel.setText(ticket.getTheater_seat());
+        //SeatLabel.setText(ticket.getTheater_seat());
 		SeatLabel.setFont(new Font("굴림", Font.BOLD, 18));
 		p6.add(SeatLabel);
 
@@ -190,38 +184,34 @@ public class MobileTicket extends JPanel {
 		MainP.add(ButtonPanel, BorderLayout.SOUTH);
 
 		setSize(350, 600);
-		setLocationRelativeTo(null);
+		//setLocationRelativeTo(null);
 		setVisible(true);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setResizable(false);
+		//setDefaultCloseOperation(EXIT_ON_CLOSE);
+		//setResizable(false);
 		
 		// 모바일 티켓 x버튼 눌렀을 때 티켓 리스트 창 보이게 하기
-		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		addWindowListener(new WindowAdapter() {
-		    @Override
-		    public void windowClosing(WindowEvent e) {
-		        // 모바일 티켓 창 닫기
-		        dispose();
-		        // 티켓 리스트 창 다시 보이기
-		        ticketList.setVisible(true);
-		    }
-		});
+//		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+//		addWindowListener(new WindowAdapter() {
+//		    @Override
+//		    public void windowClosing(WindowEvent e) {
+//		        // 모바일 티켓 창 닫기
+//		        dispose();
+//		        // 티켓 리스트 창 다시 보이기
+//		        ticketList.setVisible(true);
+//		    }
+//		});
 		
-		// 완료 버튼 -> 창 꺼지고 
-		complete.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-	                	// 모바일 티켓 창 닫기
-	                	dispose();
-	                	// 티켓 목록 창 다시 표시
-	                	ticketList.setVisible(true);
-			}
-		});
-		
+//		// 완료 버튼 -> 창 꺼지고 
+//		complete.addActionListener(new ActionListener() {
+//			
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				
+//	                	// 모바일 티켓 창 닫기
+//	                	//dispose();
+//	                	// 티켓 목록 창 다시 표시
+//	                	ticketList.setVisible(true);
+//			}
+//		});
+	}	
 	}
-
-	public static void main(String[] args) {
-	}
-}

@@ -28,27 +28,28 @@ import java.net.Socket;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
-public class Sign_up extends JFrame{
+public class Sign_up extends JPanel{
 	private JTextField signup_id_tf;
 	private JTextField signup_pw_tf;
 	private JTextField signup_name_tf;
 	private JTextField signup_birth_tf;
 	private JTextField signup_phone_tf;
 	
-	Sign_in c_loginout;
+	Sign_in sign_in;
 	
-	public Sign_up() {
-		super("회원가입");
+	public Sign_up(Sign_in signin) {
+		
+		this.sign_in = signin;
 		
 		setSize(800, 800);
-		setLocationRelativeTo(null);
+		//setLocationRelativeTo(null);
 		setVisible(true);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		getContentPane().setLayout(null);
+		//setDefaultCloseOperation(EXIT_ON_CLOSE);
+		//getContentPane().setLayout(null);
 		
 		JPanel signup_signup_panel = new JPanel();
 		signup_signup_panel.setBounds(0, 0, 784, 112);
-		getContentPane().add(signup_signup_panel);
+		//getContentPane().add(signup_signup_panel);
 		signup_signup_panel.setLayout(null);
 		
 		JLabel signup_label = new JLabel("회원가입");
@@ -59,7 +60,7 @@ public class Sign_up extends JFrame{
 		
 		JPanel signup_signup_w_panel = new JPanel();
 		signup_signup_w_panel.setBounds(0, 111, 784, 253);
-		getContentPane().add(signup_signup_w_panel);
+		//getContentPane().add(signup_signup_w_panel);
 		signup_signup_w_panel.setLayout(null);
 		
 		JLabel signup_id_label = new JLabel("아이디");
@@ -123,7 +124,7 @@ public class Sign_up extends JFrame{
 		
 		JPanel signup_bt_panel = new JPanel();
 		signup_bt_panel.setBounds(0, 364, 784, 82);
-		getContentPane().add(signup_bt_panel);
+		//getContentPane().add(signup_bt_panel);
 		signup_bt_panel.setLayout(null);
 		
 		JButton signup_signup_bt = new JButton("회원가입");
@@ -161,94 +162,90 @@ public class Sign_up extends JFrame{
 			}
 		});
 		
-		signup_signup_bt.addActionListener(new ActionListener() {	// 회원가입 버튼 누르면 customer 테이블에 정보가 삽입하게 한다.
-			public void actionPerformed(ActionEvent e) {
-				int res = JOptionPane.showConfirmDialog(getParent(), "가입 하시겠습니까?", "가입", JOptionPane.YES_NO_OPTION);
-				if(res == 0) {
-					if(All()) {	// 모든 정보 입력 확인 후
-						// DB customer 테이블에 데이터 삽입
-						String id = signup_id_tf.getText().trim();
-						String pw = signup_pw_tf.getText().trim();
-						String name = signup_name_tf.getText().trim();
-						String birth = signup_birth_tf.getText().trim();
-						
-						CustomerVO vo = new CustomerVO();
-						vo.setCust_id(id);
-						vo.setCust_password(pw);
-						vo.setCust_name(name);
-						vo.setCust_birth(birth);
-						
-						Protocol p = new Protocol();
-						p.setCmd(3);
-						p.setVo(vo);
-						
-						try {
-							c_loginout.out.writeObject(p);
-							c_loginout.out.flush();
-						} catch (Exception e2) {
-						}
-						init();
-					}else {
-						JOptionPane.showMessageDialog(getParent(), "필수 정보를 입력해주세요.");
-					}
-				}
-			}
-		});
+//		signup_signup_bt.addActionListener(new ActionListener() {	// 회원가입 버튼 누르면 customer 테이블에 정보가 삽입하게 한다.
+//			public void actionPerformed(ActionEvent e) {
+//				int res = JOptionPane.showConfirmDialog(getParent(), "가입 하시겠습니까?", "가입", JOptionPane.YES_NO_OPTION);
+//				if(res == 0) {
+//					if(All()) {	// 모든 정보 입력 확인 후
+//						// DB customer 테이블에 데이터 삽입
+//						String id = signup_id_tf.getText().trim();
+//						String pw = signup_pw_tf.getText().trim();
+//						String name = signup_name_tf.getText().trim();
+//						String birth = signup_birth_tf.getText().trim();
+//						
+//						CustomerVO vo = new CustomerVO();
+//						vo.setCust_id(id);
+//						vo.setCust_password(pw);
+//						vo.setCust_name(name);
+//						vo.setCust_birth(birth);
+//						
+//						Protocol p = new Protocol();
+//						p.setCmd(3);
+//						p.setVo(vo);
+//						
+//						try {
+//							//c_loginout.out.writeObject(p);
+//							//c_loginout.out.flush();
+//						} catch (Exception e2) {
+//						}
+//						init();
+//					}else {
+//						JOptionPane.showMessageDialog(getParent(), "필수 정보를 입력해주세요.");
+//					}
+//				}
+//			}
+//		});
+//		
+//		signup_cancel_bt.addActionListener(new ActionListener() {	// 취소 버튼 => 누르면 로그인 전 메인화면으로 돌아간다.
+//			public void actionPerformed(ActionEvent e) {
+//				init();
+//				//new Main_login();
+//				setVisible(false);
+//			}
+//		});
+//		
+//	}
+//	
+//
+//
+//
+//	private boolean All() {	// 모든 정보를 입력했는지 확인해야하기 위해
+//		boolean result;
+//		
+//		if(signup_id_tf.getText().trim().length()>0 && signup_pw_tf.getText().trim().length()>0 && 
+//				signup_name_tf.getText().trim().length()>0 && signup_birth_tf.getText().trim().length()>0 && 
+//				signup_phone_tf.getText().trim().length()>0 && !signup_id_tf.isEditable()) {
+//				result = true;
+//		} else result = false;
+//		
+//		return result;
+//	}
+//	
+//	// 텍스트 필드 초기화
+//	private void init() {
+//		signup_id_tf.setText("");
+//		signup_id_tf.setEditable(true);
+//		signup_pw_tf.setText("");
+//		signup_name_tf.setText("");
+//		signup_birth_tf.setText("6자리로 입력하세요([ex]981216)");
+//		signup_birth_tf.setForeground(Color.LIGHT_GRAY);
+//		signup_phone_tf.setText("");
+//		signup_phone_tf.setText("");
+//	}
+//	
+//	public void dupchk() {
+//		/*
+//		if(c_loginout.idDup != 3) {
+//			if(c_loginout.idDup == 0) {
+//				int r = JOptionPane.showConfirmDialog(getParent(), "사용하실 수 있는 아이디입니다.\n사용하시겠습니까?", "중복확인", JOptionPane.YES_NO_OPTION);
+//				if(r ==0) {
+//					id_tf.setEditable(false);
+//				}
+//			} else {
+//				JOptionPane.showMessageDialog(getParent(), "이미 사용중인 아이디입니다.");
+//			}
+//		}
+//		*/
 		
-		signup_cancel_bt.addActionListener(new ActionListener() {	// 취소 버튼 => 누르면 로그인 전 메인화면으로 돌아간다.
-			public void actionPerformed(ActionEvent e) {
-				init();
-				new Main_logout();
-				setVisible(false);
-			}
-		});
-		
-	}
-	
-
-
-
-	private boolean All() {	// 모든 정보를 입력했는지 확인해야하기 위해
-		boolean result;
-		
-		if(signup_id_tf.getText().trim().length()>0 && signup_pw_tf.getText().trim().length()>0 && 
-				signup_name_tf.getText().trim().length()>0 && signup_birth_tf.getText().trim().length()>0 && 
-				signup_phone_tf.getText().trim().length()>0 && !signup_id_tf.isEditable()) {
-				result = true;
-		} else result = false;
-		
-		return result;
-	}
-	
-	// 텍스트 필드 초기화
-	private void init() {
-		signup_id_tf.setText("");
-		signup_id_tf.setEditable(true);
-		signup_pw_tf.setText("");
-		signup_name_tf.setText("");
-		signup_birth_tf.setText("6자리로 입력하세요([ex]981216)");
-		signup_birth_tf.setForeground(Color.LIGHT_GRAY);
-		signup_phone_tf.setText("");
-		signup_phone_tf.setText("");
-	}
-	
-	public void dupchk() {
-		/*
-		if(c_loginout.idDup != 3) {
-			if(c_loginout.idDup == 0) {
-				int r = JOptionPane.showConfirmDialog(getParent(), "사용하실 수 있는 아이디입니다.\n사용하시겠습니까?", "중복확인", JOptionPane.YES_NO_OPTION);
-				if(r ==0) {
-					id_tf.setEditable(false);
-				}
-			} else {
-				JOptionPane.showMessageDialog(getParent(), "이미 사용중인 아이디입니다.");
-			}
-		}
-		*/
-		
-	}
-	
-	public static void main(String[] args) {
-		new Sign_up();
 	}
 }

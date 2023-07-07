@@ -1,12 +1,13 @@
-package ticket;
+package Pay;
 
 import java.io.Serializable;
 import java.sql.Date;
 
-public class Ticket_VO implements Serializable{
-	
+public class Pay_VO implements Serializable{
 	private String movie_id, cust_id, movie_name, theater_id, movie_date, start_time, end_time, theater_seat;
-	private int ticket_num, ticket_canceled;
+	private String point_date, charge_point, used_point, remaining_point, cust_name;
+	private int ticket_num, point;
+	
 	
 	public String getMovie_id() {
 		return movie_id;
@@ -56,16 +57,46 @@ public class Ticket_VO implements Serializable{
 	public void setTheater_seat(String theater_seat) {
 		this.theater_seat = theater_seat;
 	}
+	public String getPoint_date() {
+		return point_date;
+	}
+	public void setPoint_date(String point_date) {
+		this.point_date = point_date;
+	}
+	public String getCharge_point() {
+		return charge_point;
+	}
+	public void setCharge_point(String charge_point) {
+		this.charge_point = charge_point;
+	}
+	public String getUsed_point() {
+		return used_point;
+	}
+	public void setUsed_point(String used_point) {
+		this.used_point = used_point;
+	}
+	public String getRemaining_point() {
+		return remaining_point;
+	}
+	public void setRemaining_point(String remaining_point) {
+		this.remaining_point = remaining_point;
+	}
+	public String getCust_name() {
+		return cust_name;
+	}
+	public void setCust_name(String cust_name) {
+		this.cust_name = cust_name;
+	}
 	public int getTicket_num() {
 		return ticket_num;
 	}
 	public void setTicket_num(int ticket_num) {
 		this.ticket_num = ticket_num;
 	}
-	public int getTicket_canceled() {
-		return ticket_canceled;
+	public int getPoint() {
+		return point;
 	}
-	public void setTicket_canceled(int ticket_canceled) {
-		this.ticket_canceled = ticket_canceled;
-	}	
+	public void setPoint(int point) {
+		this.point = point;
+	}
 }

@@ -37,9 +37,11 @@ import javax.swing.table.DefaultTableModel;
 
 import com.toedter.calendar.JCalendar;
 
-import project.LJH.DB.DAO;
-import project.LJH.DB.VO;
 import c_loginout.Sign_in;
+import movie_server.Protocol;
+import movie_server.Server_book;
+import movie_server.TicketBox_DAO;
+import movie_server.TicketBox_VO;
 
 
 
@@ -76,12 +78,12 @@ public class Ticket_office_main extends JPanel {
 	Socket s;
 	ObjectOutputStream out;
 	ObjectInputStream in;
-	DB_server server;
+	Server_book server;
 	String ip;
 
 	public Ticket_office_main(Sign_in signin) {
 		this.sign_in = signin;
-		super("매표소");
+		
 
 		/*
 		 * 제일 위의 잔여포인트 패널 잔여포인트는 라벨명이고, 포인트칸은 라벨로, 나중에 DB연동시 이 JLabel point에 붙여서 보일수 있도록
@@ -299,389 +301,409 @@ public class Ticket_office_main extends JPanel {
 		// 매표소의 창 크기 지정.
 		setSize(800, 800);
 		setVisible(true);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setLocationRelativeTo(null);
-		setResizable(false);
+		//setDefaultCloseOperation(EXIT_ON_CLOSE);
+		//setLocationRelativeTo(null);
+		//setResizable(false);
 
-		connected();
+//		connected();
+//
+////		addWindowListener(new WindowAdapter() {
+////			@Override
+////			public void windowClosing(WindowEvent e) {
+////				if (s != null) {
+////					try {
+////						Protocol p = new Protocol();
+////						p.setCmd(300);
+////						out.writeObject(p);
+////						out.flush();
+////					} catch (Exception e2) {
+////
+////					}
+////				} else {
+////					closed();
+////				}
+////			}
+////		});
+////
+////		addWindowListener(new WindowAdapter() {
+////			public void windowOpened(WindowEvent e) {
+////				try {
+////					//영화목록은 성공, 건들지말자.
+////					Protocol p = new Protocol();
+////					p.setCmd(301);
+////					out.writeObject(p);
+////					out.flush();					
+////
+////				} catch (Exception e2) {
+////					e2.printStackTrace();
+////
+////				}
+////			}
+////		});
+////
+////		addWindowListener(new WindowAdapter() {
+////			public void windowOpened(WindowEvent e) {
+////				try {
+////
+////					Protocol p = new Protocol();
+////					p.setCmd(302);
+////					out.writeObject(p);
+////					out.flush();
+////					System.out.println("window 창 오픈이벤트 성공 302 시작시간");
+////
+////				} catch (Exception e2) {
+////					e2.printStackTrace();
+////
+////				}
+////			}
+////		});
+////		
+////		addWindowListener(new WindowAdapter() {
+////			public void windowOpened(WindowEvent e) {
+////				try {
+////
+////					Protocol p = new Protocol();
+////					p.setCmd(303);
+////					out.writeObject(p);
+////					out.flush();
+////					System.out.println("window 창 오픈이벤트 성공 303 종료시간");
+////
+////				} catch (Exception e2) {
+////					e2.printStackTrace();
+////
+////				}
+////			}
+////		});
+//
+//		// 예매하기 버튼을 눌렀을경우에 좌석 선택창으로 넘어가진다.
+//		// 매표소는 숨겨지고, 좌석확인창을 객체 생성하여 보이게 한다.
+//		ticket_bt.addActionListener(new ActionListener() {
+//
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				Ticket_seat con_seat = new Ticket_seat(signin);
+//				setVisible(false);
+//
+//			}
+//		});
+//
+//		// 날짜를 선택했을때, 선택한 영화정보 탭의 날짜에 표시하게하는 이벤트
+//		cal.addPropertyChangeListener("calendar", new PropertyChangeListener() {
+//			@Override
+//			public void propertyChange(PropertyChangeEvent evt) {
+//				if (evt.getPropertyName().equals("calendar")) {
+//					Calendar selectedDate = (Calendar) evt.getNewValue();
+//
+//					// 현재 날짜 가져오기
+//					Calendar currentDate = Calendar.getInstance();
+//					currentDate.set(Calendar.HOUR_OF_DAY, 0);
+//					currentDate.set(Calendar.MINUTE, 0);
+//					currentDate.set(Calendar.SECOND, 0);
+//					currentDate.set(Calendar.MILLISECOND, 0);
+//
+//					// 선택한 날짜와 현재 날짜 비교
+//					if (selectedDate.before(currentDate)) {
+//						// 선택한 날짜가 오늘 이전인 경우
+//						// 이전 날짜는 선택할 수 없도록 처리
+//
+//						// 이전 날짜로 변경된 경우 현재 날짜로 다시 설정
+//						cal.setCalendar(currentDate);
+//
+//						// "과거의 날짜는 선택할 수 없습니다"라는 알림 창 표시
+//						SwingUtilities.invokeLater(() -> {
+//							JOptionPane.showMessageDialog(null, "과거의 날짜는 선택할 수 없습니다.", "경고",
+//									JOptionPane.WARNING_MESSAGE);
+//						});
+//					} else {
+//						// 선택한 날짜가 오늘 이후인 경우
+//						SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//						String formattedDate = dateFormat.format(selectedDate.getTime());
+//						show_date.setText(formattedDate);
+//					}
+//				}
+//			}
+//		});
+//
+//		// 성인과 아동 인원을 선택하였을 경우, 선택한 영화정보에 동적으로 바뀔수있도록 출력하기.
+//		adult.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				JComboBox<String> combo = (JComboBox<String>) e.getSource();
+//				String selectedOption = (String) combo.getSelectedItem();
+//				show_peo1.setText("성인 : " + selectedOption + " 명");
+//				if (selectedOption.equals("0")) {
+//					show_peo1.setText("성인 :   " + " 명");
+//				}
+//
+//				if (selectedOption != null) {
+//					int ad = Integer.parseInt(selectedOption);
+//					res1 = ad * 10000;
+//					price_ad = String.valueOf(res1);
+//					show_price1.setText(price_ad);
+//					updateTotalPrice();
+//				}
+//
+//			}
+//		});
+//		// 성인과 아동 인원을 선택하였을 경우, 선택한 영화정보에 동적으로 바뀔수있도록 출력하기.
+//		child.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				JComboBox<String> combo = (JComboBox<String>) e.getSource();
+//				String selectedOption = (String) combo.getSelectedItem();
+//				show_peo2.setText("아동 : " + selectedOption + " 명");
+//				if (selectedOption.equals("0")) {
+//					show_peo2.setText("아동 :   " + " 명");
+//				}
+//				if (selectedOption != null) {
+//					int ad = Integer.parseInt(selectedOption);
+//					res2 = ad * 5000;
+//					price_ch = String.valueOf(res2);
+//					show_price2.setText(price_ch);
+//					updateTotalPrice();
+//				}
+//
+//			}
+//		});
+//
+//		// 극장관은 1개만 있으므로, ICT관 을 테이블에 추가하고, 그것을 클릭하였을경우
+//		// 발생하는 이벤트 리스너 작성.
+//		table2.addMouseListener(new MouseAdapter() {
+//			@Override
+//			public void mouseClicked(MouseEvent e) {
+//				int select_theater = table2.getSelectedRow();
+//				Object[] rowData = new Object[table2.getColumnCount()];
+//				for (int i = 0; i < table2.getColumnCount(); i++) {
+//					rowData[i] = table2.getValueAt(select_theater, i);
+//				}
+//				show_room.setText(Arrays.toString(rowData));
+//				System.out.println("ICT클릭 이벤트 성공");
+//				// 입력이 잘되었는지 확인하기위한 콘솔출력
+//			}
+//
+//		});
+//		
+//		table3.addMouseListener(new MouseAdapter() {
+//			@Override
+//			public void mouseClicked(MouseEvent e) {
+//				int select_theater = table3.getSelectedRow();
+//				Object[] rowData = new Object[table3.getColumnCount()];
+//				for (int i = 0; i < table3.getColumnCount(); i++) {
+//					rowData[i] = table3.getValueAt(select_theater, i);
+//				}
+//				show_time.setText(Arrays.toString(rowData));
+//				System.out.println("시간클릭시 삽입성공");
+//				// 입력이 잘되었는지 확인하기위한 콘솔출력
+//			}
+//
+//		});
+//		
+//		
+//		//테이블1인 영화목록을 클릭했을때, 이미지 들어갈수있도록 삽입하는 메서드**
+//		table1.addMouseListener(new MouseAdapter() {
+//		    @Override
+//		    public void mouseClicked(MouseEvent e) {
+//		        // 선택된 행의 인덱스 가져오기
+//		        int selectedRow = table1.getSelectedRow();
+//		        
+//		        // 선택된 행에서 영화 제목 가져오기
+//		        String movieTitle = (String) table1.getValueAt(selectedRow, 0);
+// 
+//		        String imagePath = getMovieImagePath(movieTitle); // 해당 영화 제목에 해당하는 이미지 경로를 가져옴
+//		        ImageIcon imageIcon = new ImageIcon(imagePath); // 이미지를 로드하여 ImageIcon 객체 생성
+//		       
+//		        
+//		        show_poster.setIcon(imageIcon);
+//		      
+//		    }
+//
+//			private String getMovieImagePath(String movieTitle) {
+//				String imagesFolder = "src/images/"; // 이미지 폴더 경로
+//			    
+//			    // 영화 제목에 따라 이미지 파일 경로 반환
+//			    if (movieTitle.equals("뽀로로")) {
+//			        return imagesFolder + "뽀로로.PNG";
+//			    } else if (movieTitle.equals("반지의제왕")) {
+//			        return imagesFolder + "반지의제왕.PNG";
+//			    } else if (movieTitle.equals("해리포터와비밀의방")) {
+//			        return imagesFolder + "해리포터.PNG";
+//			    } 
+//			    //이미지 사용할때, 이미지도 같이 보내기, 위치경로 확인하기!!! *********************
+//			    
+//			    // 만약 해당하는 영화 제목에 이미지 파일이 없을 경우 null을 반환하거나 기본 이미지 경로를 반환할 수 있습니다.
+//			    // 예시로 null 반환
+//			    return null;
+//			}
+//		});
+//		
+//	
+//		
+//		//해당 영화를 눌렀을때, 해당 영화가 가진 시간만을 상영시간표에 출력할수있도록, run과 같은 cmd 설정하여 cp_client에 보내기
+//		table1.addMouseListener(new MouseAdapter() {
+//		    @Override
+//		    public void mouseClicked(MouseEvent e) {
+//		    	
+//		    	try {
+//		    		Protocol p = new Protocol();
+//		    		p.setCmd(302);
+//		    		out.writeObject(p);
+//		    		out.flush();
+//				} catch (Exception e2) {
+//
+//				}
+//		   
+//		        }
+//		        
+//		    
+//		});
+//	}
+//
+//	
+//
+//	// 액션리스너 및 화면단 마지막 괄호
+//
+//	/* 메서드 칸 */
+//
+//	// 성인과 아동을 각각 콤보박스를 클릭해서 각 가격이 나온것을 합쳐서 나올수있도록.
+//	private void updateTotalPrice() {
+//		String price_ad = show_price1.getText();
+//		String price_ch = show_price2.getText();
+//
+//		if (price_ad.isEmpty()) {
+//			price_ad = "0";
+//		}
+//
+//		if (price_ch.isEmpty()) {
+//			price_ch = "0";
+//		}
+//		int total = Integer.parseInt(price_ad) + Integer.parseInt(price_ch);
+//		show_price3.setText(String.valueOf(total));
+//	}
+//
+//	// 영화목록을 table1에 추가***
+//
+//	public void addMovieListToTable(List<TicketBox_VO> movieList) {
+//
+//		for (TicketBox_VO movie : movieList) {
+//			model1.addRow(new Object[] { movie.getMovie_name() });
+//
+//		}
+//	}
+//
+//	// 상영 시간을 table3에 추가하기위한 메서드 **
+//	 public void addTimeListToTable(List<TicketBox_VO> timeList) { 
+//	
+//	 int selectedRow = table1.getSelectedRow();
+//     if (selectedRow != -1) {
+//         
+//         String movieTitle = (String) table1.getValueAt(selectedRow, 0);
+//
+//          //해당 영화에 대한 시작 시간과 종료 시간 가져오기
+//         List<TicketBox_VO> movieTimes = TicketBox_DAO.getMovieTimes(movieTitle); // DAO와 mapper를 사용하여 DB에서 가져옴
+//         model3.setRowCount(0);
+//        // 시작 시간과 종료 시간을 한 행으로 만들어 table3에 추가
+//         for (TicketBox_VO movieTime : movieTimes) {
+//            
+//             model3.addRow(new Object[] {movieTime.getStart_time() + " - " + movieTime.getEnd_time()});
+//         }
+//      }
+//	 }
+//
+//	// 접속
+//	public void connected() {
+//		try {
+//			s = new Socket("192.168.0.34", 7780);
+//			// 집에서 연습할떄 이건 포트번호를 바꾸자
+//			// 집 192.168.0.34
+//			// 학원 192.168.0.80
+//			out = new ObjectOutputStream(s.getOutputStream());
+//			in = new ObjectInputStream(s.getInputStream());
+//
+//			new Thread(this).start();
+//		} catch (Exception e) {
+//			System.err.println("연결실패" + e);
+//		}
+//	}
+//	
+//	
+//	
+//	private String getMovieImagePath(String movieTitle) {
+//	    String imagesFolder = "src/images/"; // 이미지 폴더 경로
+//	    
+//	    // 영화 제목에 따라 이미지 파일 경로 반환
+//	    if (movieTitle.equals("뽀로로")) {
+//	        return imagesFolder + "뽀로로.PNG";
+//	    } else if (movieTitle.equals("반지의제왕")) {
+//	        return imagesFolder + "반지의제왕.PNG";
+//	    } else if (movieTitle.equals("해리포터와비밀의방")) {
+//	        return imagesFolder + "해리포터.PNG";
+//	    } 
+//	    //이미지 사용할때, 이미지도 같이 보내기, 위치경로 확인하기!!! *********************
+//	    
+//	    // 만약 해당하는 영화 제목에 이미지 파일이 없을 경우 null을 반환하거나 기본 이미지 경로를 반환할 수 있습니다.
+//	    // 예시로 null 반환
+//	    return null;
+//	}
+//
+//	// 끝내기
+//	public void closed() {
+//		try {
+//			out.close();
+//			in.close();
+//			s.close();
+//			System.exit(0);
+//			System.out.println("종료성공");
+//		} catch (Exception e) {
+//
+//		}
+//	}
+//
+//	
+//	
+//	
+//	public void run() {
+//		esc: while (true) {
+//			// cmd : 0 : 종료, 301:영화목록 출력
+//			// 302: 상영시간표 시작 시간 출력 303 :잔여포인트
+//	
+//			
+//			try {
+//				Object obj = in.readObject();
+//
+//				TicketBox_Protocol p = (TicketBox_Protocol) obj;
+//
+//				if (obj != null) {
+//					p = (TicketBox_Protocol) obj;
+//					switch (p.getCmd()) {
+//					case 0:
+//						break esc;
+//
+//					case 301:
+//						List<TicketBox_VO> movieList = p.getList();
+//						System.out.println(movieList);
+//						addMovieListToTable(movieList);
+//						//영화목록은 성공, 건들지말자.					
+//						break;
+//					case 302:
+//						List<TicketBox_VO> movieTimes= p.getList();
+//						addTimeListToTable(movieTimes);
+//						//상영시간표는 성공, 건들지말자.
+//						break;
+//					case 303:
+//						
+//						
+//						break;
+//					}
+//				}
+//
+//			} catch (Exception e) {
+//
+//			}
+//		} // 무한반복
+//		closed();
 
-		addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				if (s != null) {
-					try {
-						Protocol p = new Protocol();
-						p.setCmd(300);
-						out.writeObject(p);
-						out.flush();
-					} catch (Exception e2) {
-
-					}
-				} else {
-					closed();
-				}
-			}
-		});
-
-		addWindowListener(new WindowAdapter() {
-			public void windowOpened(WindowEvent e) {
-				try {
-					//영화목록은 성공, 건들지말자.
-					Protocol p = new Protocol();
-					p.setCmd(301);
-					out.writeObject(p);
-					out.flush();					
-
-				} catch (Exception e2) {
-					e2.printStackTrace();
-
-				}
-			}
-		});
-
-		addWindowListener(new WindowAdapter() {
-			public void windowOpened(WindowEvent e) {
-				try {
-
-					Protocol p = new Protocol();
-					p.setCmd(302);
-					out.writeObject(p);
-					out.flush();
-					System.out.println("window 창 오픈이벤트 성공 302 시작시간");
-
-				} catch (Exception e2) {
-					e2.printStackTrace();
-
-				}
-			}
-		});
-		
-		addWindowListener(new WindowAdapter() {
-			public void windowOpened(WindowEvent e) {
-				try {
-
-					Protocol p = new Protocol();
-					p.setCmd(303);
-					out.writeObject(p);
-					out.flush();
-					System.out.println("window 창 오픈이벤트 성공 303 종료시간");
-
-				} catch (Exception e2) {
-					e2.printStackTrace();
-
-				}
-			}
-		});
-
-		// 예매하기 버튼을 눌렀을경우에 좌석 선택창으로 넘어가진다.
-		// 매표소는 숨겨지고, 좌석확인창을 객체 생성하여 보이게 한다.
-		ticket_bt.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				ticket_seat con_seat = new ticket_seat();
-				setVisible(false);
-
-			}
-		});
-
-		// 날짜를 선택했을때, 선택한 영화정보 탭의 날짜에 표시하게하는 이벤트
-		cal.addPropertyChangeListener("calendar", new PropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				if (evt.getPropertyName().equals("calendar")) {
-					Calendar selectedDate = (Calendar) evt.getNewValue();
-
-					// 현재 날짜 가져오기
-					Calendar currentDate = Calendar.getInstance();
-					currentDate.set(Calendar.HOUR_OF_DAY, 0);
-					currentDate.set(Calendar.MINUTE, 0);
-					currentDate.set(Calendar.SECOND, 0);
-					currentDate.set(Calendar.MILLISECOND, 0);
-
-					// 선택한 날짜와 현재 날짜 비교
-					if (selectedDate.before(currentDate)) {
-						// 선택한 날짜가 오늘 이전인 경우
-						// 이전 날짜는 선택할 수 없도록 처리
-
-						// 이전 날짜로 변경된 경우 현재 날짜로 다시 설정
-						cal.setCalendar(currentDate);
-
-						// "과거의 날짜는 선택할 수 없습니다"라는 알림 창 표시
-						SwingUtilities.invokeLater(() -> {
-							JOptionPane.showMessageDialog(null, "과거의 날짜는 선택할 수 없습니다.", "경고",
-									JOptionPane.WARNING_MESSAGE);
-						});
-					} else {
-						// 선택한 날짜가 오늘 이후인 경우
-						SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-						String formattedDate = dateFormat.format(selectedDate.getTime());
-						show_date.setText(formattedDate);
-					}
-				}
-			}
-		});
-
-		// 성인과 아동 인원을 선택하였을 경우, 선택한 영화정보에 동적으로 바뀔수있도록 출력하기.
-		adult.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JComboBox<String> combo = (JComboBox<String>) e.getSource();
-				String selectedOption = (String) combo.getSelectedItem();
-				show_peo1.setText("성인 : " + selectedOption + " 명");
-				if (selectedOption.equals("0")) {
-					show_peo1.setText("성인 :   " + " 명");
-				}
-
-				if (selectedOption != null) {
-					int ad = Integer.parseInt(selectedOption);
-					res1 = ad * 10000;
-					price_ad = String.valueOf(res1);
-					show_price1.setText(price_ad);
-					updateTotalPrice();
-				}
-
-			}
-		});
-		// 성인과 아동 인원을 선택하였을 경우, 선택한 영화정보에 동적으로 바뀔수있도록 출력하기.
-		child.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JComboBox<String> combo = (JComboBox<String>) e.getSource();
-				String selectedOption = (String) combo.getSelectedItem();
-				show_peo2.setText("아동 : " + selectedOption + " 명");
-				if (selectedOption.equals("0")) {
-					show_peo2.setText("아동 :   " + " 명");
-				}
-				if (selectedOption != null) {
-					int ad = Integer.parseInt(selectedOption);
-					res2 = ad * 5000;
-					price_ch = String.valueOf(res2);
-					show_price2.setText(price_ch);
-					updateTotalPrice();
-				}
-
-			}
-		});
-
-		// 극장관은 1개만 있으므로, ICT관 을 테이블에 추가하고, 그것을 클릭하였을경우
-		// 발생하는 이벤트 리스너 작성.
-		table2.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				int select_theater = table2.getSelectedRow();
-				Object[] rowData = new Object[table2.getColumnCount()];
-				for (int i = 0; i < table2.getColumnCount(); i++) {
-					rowData[i] = table2.getValueAt(select_theater, i);
-				}
-				show_room.setText(Arrays.toString(rowData));
-				System.out.println("ICT클릭 이벤트 성공");
-				// 입력이 잘되었는지 확인하기위한 콘솔출력
-			}
-
-		});
-		
-		table3.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				int select_theater = table3.getSelectedRow();
-				Object[] rowData = new Object[table3.getColumnCount()];
-				for (int i = 0; i < table3.getColumnCount(); i++) {
-					rowData[i] = table3.getValueAt(select_theater, i);
-				}
-				show_time.setText(Arrays.toString(rowData));
-				System.out.println("시간클릭시 삽입성공");
-				// 입력이 잘되었는지 확인하기위한 콘솔출력
-			}
-
-		});
-		
-		
-		//테이블1인 영화목록을 클릭했을때, 이미지 들어갈수있도록 삽입하는 메서드**
-		table1.addMouseListener(new MouseAdapter() {
-		    @Override
-		    public void mouseClicked(MouseEvent e) {
-		        // 선택된 행의 인덱스 가져오기
-		        int selectedRow = table1.getSelectedRow();
-		        
-		        // 선택된 행에서 영화 제목 가져오기
-		        String movieTitle = (String) table1.getValueAt(selectedRow, 0);
- 
-		        String imagePath = getMovieImagePath(movieTitle); // 해당 영화 제목에 해당하는 이미지 경로를 가져옴
-		        ImageIcon imageIcon = new ImageIcon(imagePath); // 이미지를 로드하여 ImageIcon 객체 생성
-		       
-		        
-		        show_poster.setIcon(imageIcon);
-		      
-		    }
-		});
-		
-			
-		
-		//해당 영화를 눌렀을때, 해당 영화가 가진 시간만을 상영시간표에 출력할수있도록, run과 같은 cmd 설정하여 cp_client에 보내기
-		table1.addMouseListener(new MouseAdapter() {
-		    @Override
-		    public void mouseClicked(MouseEvent e) {
-		    	
-		    	try {
-		    		Protocol p = new Protocol();
-		    		p.setCmd(302);
-		    		out.writeObject(p);
-		    		out.flush();
-				} catch (Exception e2) {
-
-				}
-		   
-		        }
-		        
-		    
-		});
-
-	} // 액션리스너 및 화면단 마지막 괄호
-
-	/* 메서드 칸 */
-
-	// 성인과 아동을 각각 콤보박스를 클릭해서 각 가격이 나온것을 합쳐서 나올수있도록.
-	private void updateTotalPrice() {
-		String price_ad = show_price1.getText();
-		String price_ch = show_price2.getText();
-
-		if (price_ad.isEmpty()) {
-			price_ad = "0";
-		}
-
-		if (price_ch.isEmpty()) {
-			price_ch = "0";
-		}
-		int total = Integer.parseInt(price_ad) + Integer.parseInt(price_ch);
-		show_price3.setText(String.valueOf(total));
-	}
-
-	// 영화목록을 table1에 추가***
-
-	public void addMovieListToTable(List<VO> movieList) {
-
-		for (VO movie : movieList) {
-			model1.addRow(new Object[] { movie.getMovie_name() });
-
-		}
-	}
-
-	// 상영 시간을 table3에 추가하기위한 메서드 **
-	 public void addTimeListToTable(List<VO> timeList) { 
 	
-	 int selectedRow = table1.getSelectedRow();
-     if (selectedRow != -1) {
-         
-         String movieTitle = (String) table1.getValueAt(selectedRow, 0);
-
-          //해당 영화에 대한 시작 시간과 종료 시간 가져오기
-         List<VO> movieTimes = DAO.getMovieTimes(movieTitle); // DAO와 mapper를 사용하여 DB에서 가져옴
-         model3.setRowCount(0);
-        // 시작 시간과 종료 시간을 한 행으로 만들어 table3에 추가
-         for (VO movieTime : movieTimes) {
-            
-             model3.addRow(new Object[] {movieTime.getStart_time() + " - " + movieTime.getEnd_time()});
-         }
-      }
-	 }
-
-	// 접속
-	public void connected() {
-		try {
-			s = new Socket("192.168.0.34", 7780);
-			// 집에서 연습할떄 이건 포트번호를 바꾸자
-			// 집 192.168.0.34
-			// 학원 192.168.0.80
-			out = new ObjectOutputStream(s.getOutputStream());
-			in = new ObjectInputStream(s.getInputStream());
-
-			new Thread(this).start();
-		} catch (Exception e) {
-			System.err.println("연결실패" + e);
-		}
-	}
-	
-	
-	
-	private String getMovieImagePath(String movieTitle) {
-	    String imagesFolder = "src/images/"; // 이미지 폴더 경로
-	    
-	    // 영화 제목에 따라 이미지 파일 경로 반환
-	    if (movieTitle.equals("뽀로로")) {
-	        return imagesFolder + "뽀로로.PNG";
-	    } else if (movieTitle.equals("반지의제왕")) {
-	        return imagesFolder + "반지의제왕.PNG";
-	    } else if (movieTitle.equals("해리포터와비밀의방")) {
-	        return imagesFolder + "해리포터.PNG";
-	    } 
-	    //이미지 사용할때, 이미지도 같이 보내기, 위치경로 확인하기!!! *********************
-	    
-	    // 만약 해당하는 영화 제목에 이미지 파일이 없을 경우 null을 반환하거나 기본 이미지 경로를 반환할 수 있습니다.
-	    // 예시로 null 반환
-	    return null;
-	}
-
-	// 끝내기
-	public void closed() {
-		try {
-			out.close();
-			in.close();
-			s.close();
-			System.exit(0);
-			System.out.println("종료성공");
-		} catch (Exception e) {
-
-		}
-	}
-
-	
-	
-	
-	@Override
-	public void run() {
-		esc: while (true) {
-			// cmd : 0 : 종료, 301:영화목록 출력
-			// 302: 상영시간표 시작 시간 출력 303 :잔여포인트
-	
-			
-			try {
-				Object obj = in.readObject();
-
-				Protocol p = (Protocol) obj;
-
-				if (obj != null) {
-					p = (Protocol) obj;
-					switch (p.getCmd()) {
-					case 0:
-						break esc;
-
-					case 301:
-						List<VO> movieList = p.getList();
-						System.out.println(movieList);
-						addMovieListToTable(movieList);
-						//영화목록은 성공, 건들지말자.					
-						break;
-					case 302:
-						List<VO> movieTimes= p.getList();
-						addTimeListToTable(movieTimes);
-						//상영시간표는 성공, 건들지말자.
-						break;
-					case 303:
-						
-						
-						break;
-					}
-				}
-
-			} catch (Exception e) {
-
-			}
-		} // 무한반복
-		closed();
-
-	}
-	public static void main(String[] args) {
+/*	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 
 			@Override
@@ -689,7 +711,8 @@ public class Ticket_office_main extends JPanel {
 				new Ticket_office_main();
 
 			}
-		});
+		});  
+		*/
 
 
 	} // 메인

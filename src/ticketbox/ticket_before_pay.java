@@ -1,20 +1,23 @@
 package ticketbox;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
-
 import c_loginout.Sign_in;
 //이걸로 합치기!
 //결제정보창, 결제확인창
@@ -30,6 +33,7 @@ public class Ticket_before_pay extends JPanel{
 	 
 	public Ticket_before_pay(Sign_in signin) {
 		this.sign_in = signin;
+	
 		 
 		/*잔여포인트 & 결제확인창 이름 패널*/
 		v_point = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -161,22 +165,38 @@ public class Ticket_before_pay extends JPanel{
 		//setLocationRelativeTo(null);
 		//setResizable(false);
 		
-		
-		//돌아가기 버튼을 눌렀을 경우에 다시 좌석확인창으로 넘어가진다. 
-		//결제확인창은 숨어진다.
-		back_bt.addActionListener(new ActionListener() {
+		pay_bt.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ticket_seat con_seat = new Ticket_seat(signin);
-				con_seat.setVisible(true);
-				setVisible(false);
+				JDialog payDialog = new JDialog(signin, "결제하기", true);
+				payDialog.setSize(350, 250);
+				payDialog.setLocationRelativeTo(signin);
 				
+				JLabel jl1 = new JLabel("  잔여 포인트 :");
+				
+				payDialog.add(jl1);
+				
+				payDialog.add(jl1);
 			}
 		});
 		
 		
-	}
+		//돌아가기 버튼을 눌렀을 경우에 다시 좌석확인창으로 넘어가진다. 
+		//결제확인창은 숨어진다.
+//		back_bt.addActionListener(new ActionListener() {
+//			
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				ticket_seat con_seat = new Ticket_seat();
+//				con_seat.setVisible(true);
+//				setVisible(false);
+//				
+//			}
+//		});
+//		
+//		
+//	}
 	
 
 
@@ -185,8 +205,8 @@ public class Ticket_before_pay extends JPanel{
 
 
 
-
-	public static void main(String[] args) {
-		new Ticket_before_pay();
+//
+//	public static void main(String[] args) {
+//		new Ticket_before_pay();
 	}  //메인
 }   //클래스

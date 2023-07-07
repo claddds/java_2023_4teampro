@@ -1,4 +1,4 @@
-package pay;
+package Pay;
 
 import org.apache.ibatis.session.SqlSession;
 

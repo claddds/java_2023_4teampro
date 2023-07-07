@@ -5,7 +5,6 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
@@ -20,9 +19,17 @@ public class Ticket_seat_map extends JPanel {
 	private ArrayList<String> show_seatnum = new ArrayList<>();
 
 	public Ticket_seat_map(Sign_in signin) {
+
+		
 		this.sign_in = signin;
 		setLayout(new GridLayout(5, 5)); // 5x5 그리드 레이아웃 설정
 
+		JFrame frame = new JFrame("Seat Grid");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//frame.getContentPane().add(new Ticket_seat_map());
+		frame.setSize(450, 450);
+		frame.setVisible(true);
+		
 		char rowLabel = 'A';
 		for (int row = 0; row < 5; row++) {
 			for (int col = 0; col < 5; col++) {
@@ -62,12 +69,7 @@ public class Ticket_seat_map extends JPanel {
 	}
 
 	// 좌석의 사이즈.
-	public static void main(String[] args) {
-		JFrame frame = new JFrame("Seat Grid");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().add(new Ticket_seat_map(sign_in));
-		frame.setSize(450, 450);
-		frame.setVisible(true);
+	
+	
 
 	}
-}

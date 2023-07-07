@@ -24,14 +24,13 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import Pay.Pay;
+import Pay.PointCharge;
+import Pay.Reservation_completed;
+import Ticket.MobileTicket;
+import Ticket.TicketList;
 import movie_server.CustomerVO;
 import movie_server.Protocol;
-import pay.Pay;
-import pay.PointCharge;
-import pay.Reservation_completed;
-import snackbar.Menu;
-import ticket.MobileTicket;
-import ticket.TicketList;
 import ticketbox.Ticket_before_pay;
 import ticketbox.Ticket_office_main;
 import ticketbox.Ticket_seat;
@@ -60,7 +59,7 @@ public class Sign_in extends JFrame implements Runnable{
 	public Pay pay;
 	public PointCharge pointcharge;
 	public Reservation_completed r_completed;
-	public Menu menu;
+	//public Menu menu;
 	public MobileTicket m_ticket;
 	public TicketList t_list;
 	public Ticket_before_pay tb_pay;
@@ -127,12 +126,43 @@ public class Sign_in extends JFrame implements Runnable{
 		// 접속
 		connected();
 		
-		sign_up = new Sign_up();
+		main_login = new Main_login(this);
+		sign_up = new Sign_up(this);
+		//cvo = new CustomerVO(this);
+		pay = new Pay(this);
+		pointcharge = new PointCharge(this);
+		r_completed= new Reservation_completed(this);
+		//public Menu menu;
+		m_ticket = new MobileTicket(this);
+		t_list = new TicketList(this);
+		tb_pay = new Ticket_before_pay(this);
+		to_main = new Ticket_office_main(this);
+		ts_map = new Ticket_seat_map(this);
+		t_seat = new Ticket_seat(this);
 		
 		pg.add(contentPane, "sign_in");
+		pg.add(main_login, "main_login");
+		pg.add(sign_up, "sign_up");
+		pg.add(pay, "pay");
+		pg.add(pointcharge, "pointcharge");
+		pg.add(r_completed, "r_completed");
+		pg.add(t_list, "t_list");
+		pg.add(tb_pay, "tb_pay");
+		pg.add(to_main, "to_main");
+		pg.add(ts_map, "ts_map");
+		pg.add(t_seat, "t_seat");
+		
+		
+		//sign_up = new Sign_up(this);
+		//sign_up.setVisible(false);
+		
+		//pg.add(contentPane, "sign_in");
 		
 		setContentPane(pg);
-		card.show(pg, "sign_in");
+		card.show(pg, "t_list");  // 수정된 위치
+		
+		//setContentPane(pg);
+		//card.show(pg, "sign_in");
 		
 		addWindowListener(new WindowAdapter() {
 			@Override
@@ -181,7 +211,8 @@ public class Sign_in extends JFrame implements Runnable{
 			try {
 				// 혜지-집: 183.96.151.249
 				// 혜지-학원: 192.168.0.41
-				s = new Socket("183.96.151.249", 7780);
+				// 지호 : 192.168.0.78
+				s = new Socket("192.168.0.78", 7780);
 				out = new ObjectOutputStream(s.getOutputStream());
 				in = new ObjectInputStream(s.getInputStream());
 
@@ -242,6 +273,8 @@ public class Sign_in extends JFrame implements Runnable{
 				cvo = vo;
 				c_id = vo.getCust_id();
 				c_pw = vo.getCust_password();
+				
+				card.show(pg, "main_login");
 				
 				init();
 				

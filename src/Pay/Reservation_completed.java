@@ -1,4 +1,4 @@
-package pay;
+package Pay;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -13,7 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import ticket.TicketList;
+import Ticket.TicketList;
 import c_loginout.Sign_in;
 
 public class Reservation_completed extends JPanel {
@@ -59,16 +59,17 @@ public class Reservation_completed extends JPanel {
 		//setResizable(false); 
 		
 		
-		// 모바일티켓 화면으로 전환
-		mobileTicketButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				TicketList ticketlist = new TicketList(signin);
-				setVisible(false); // 현재 예매 완료창 숨기기				
-			}
-		});
+//		// 모바일티켓 화면으로 전환
+//		mobileTicketButton.addActionListener(new ActionListener() {
+//			
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				TicketList ticketlist = new TicketList(signin);
+//				setVisible(false); // 현재 예매 완료창 숨기기				
+//			}
+//		});
 		
 		// 메인 화면으로 전환 (추후 액션 리스너 추가)	
 
 	}
+}

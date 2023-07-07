@@ -1,4 +1,4 @@
-package pay;
+package Pay;
 
 
 import java.awt.BorderLayout;
@@ -21,9 +21,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import c_loginout.Sign_in;
-import common.Network;
-import common.Protocol;
-import common.Session;
 
 /*
 	화면단의 이동이 있을때는
@@ -31,7 +28,7 @@ import common.Session;
 	public Sign_up sign_up;
 */
 
-public class Pay extends JPanel implements Runnable{
+public class Pay extends JPanel{
 	
 	Sign_in sign_in;
 	JPanel northPanel, centerPanel, remainingPanel, payPanel, ButtonPanel;
@@ -40,7 +37,7 @@ public class Pay extends JPanel implements Runnable{
 	
 	int chargepoint;
 	Pay_VO pay_vo;
-	Network network;
+	//Network network;
 	
 	// 이 부분은 나중에 다른곳에 해야함. 로그인 후 메인화면에 해야할 듯.
 	public static String currentUserId; // 현재 로그인한 회원아이디 static 변수로 선언
@@ -51,7 +48,7 @@ public class Pay extends JPanel implements Runnable{
 		setLayout(null);
 		// super("결제");
 		
-        loadRemainingPoint();
+        //loadRemainingPoint();
 				
 		//getContentPane().setBackground(Color.WHITE);
         setBackground(Color.WHITE);
@@ -133,115 +130,114 @@ public class Pay extends JPanel implements Runnable{
 		//setResizable(false); // 크기 조절 비활성화
 	
 		
-		// 결제하기 버튼 -> TICKET DB에 INSERT
-		pay.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				try {
-					System.out.println("===결제하기 버튼 클릭!===");
-					
-					Pay_VO pay_vo = new Pay_VO();
-					
-					pay_vo.setMovie_id("2");
-					pay_vo.setCust_id(currentUserId);
-					pay_vo.setMovie_name("제발!!!");
-					pay_vo.setTheater_id("미나리");
-					pay_vo.setMovie_date("2023-07-02");
-					pay_vo.setStart_time("13:30");
-					pay_vo.setEnd_time("15:50");
-					pay_vo.setTheater_seat("E열1");
-					
-					// 프로토콜 사용 안할 때
-					// int result = Pay_DAO.getInsert(pay_vo);
-					
-					// 프로토콜 사용
-					Protocol p = new Protocol();
-					p.setCmd(103); // cmd에 1 담기
-					p.setPay_vo(pay_vo); // 프로토콜에 VO 객체를 설정
-					
-					network.sendProtocol(p);
-					
-					System.out.println("영화 정보가 입력되었습니다.");
-				} catch (Exception e2) {
-				}
-
-			}
-		});
-
-//		// 결제하기창 닫기 버튼 누르면 종료
-//		addWindowListener(new WindowAdapter() {
+//		// 결제하기 버튼 -> TICKET DB에 INSERT
+//		pay.addActionListener(new ActionListener() {
+//
 //			@Override
-//			public void windowClosing(WindowEvent e) {
-//				if (network.getS() != null) {
-//					System.out.println("결제하기창 닫기 클릭! p.setCmd(100)");
+//			public void actionPerformed(ActionEvent e) {
+//				try {
+//					System.out.println("===결제하기 버튼 클릭!===");
+//					
+//					Pay_VO pay_vo = new Pay_VO();
+//					
+//					pay_vo.setMovie_id("2");
+//					pay_vo.setCust_id(currentUserId);
+//					pay_vo.setMovie_name("제발!!!");
+//					pay_vo.setTheater_id("미나리");
+//					pay_vo.setMovie_date("2023-07-02");
+//					pay_vo.setStart_time("13:30");
+//					pay_vo.setEnd_time("15:50");
+//					pay_vo.setTheater_seat("E열1");
+//					
+//					// 프로토콜 사용 안할 때
+//					// int result = Pay_DAO.getInsert(pay_vo);
+//					
+//					// 프로토콜 사용
 //					Protocol p = new Protocol();
-//					p.setCmd(100);
-//					try {
-//						network.sendProtocol(p);
-//					} catch (Exception e2) {
-//						
-//					}
-//				} else {
-//					System.out.println("결제하기창 닫기 클릭! network.closed()");
-//					network.closed();
+//					p.setCmd(103); // cmd에 1 담기
+//					p.setPay_vo(pay_vo); // 프로토콜에 VO 객체를 설정			
+//					
+//					
+//					System.out.println("영화 정보가 입력되었습니다.");
+//				} catch (Exception e2) {
 //				}
+//
 //			}
 //		});
-	}
-	
-	// 현재 로그인한 회원정보를 불러와서 잔여포인트를 불러오는 메서드
-	private void loadRemainingPoint() {
-	    try {
-	    	System.out.println("===loadRemainingPoint 실행===");
-	    	
-	    	// Session에서 currentUserId 호출
-	    	Pay_VO pay_vo = new Pay_VO();
-        	currentUserId = Session.getCurrentUserId();
-	    	pay_vo.setCust_id(currentUserId);
-	    	
-	    	//잔여 포인트 가져오기
-	        System.out.println("===잔여포인트 가져오기 실행===");
-	        
-	        Protocol p = new Protocol();
-	        p.setCmd(102);
-	        p.setPay_vo(pay_vo);
-	        network.sendProtocol(p);
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
-	}
-		
-	@Override
-	public void run() {
-		esc: while (true) {
-			try {
-				Object obj = network.getIn().readObject();
-				if (obj != null) {
-					Protocol p = (Protocol) obj;
-					switch (p.getCmd()) {
-					case 100:
-						break esc;
-					case 102:
-						System.out.println("===Pay.java의 case1===");
-					    chargepoint = p.getResult(); // 프로토콜에서 잔여 포인트 가져오기
-					    jl2.setText(" " + Integer.toString(chargepoint) + "원"); // JLabel에 잔여포인터 업데이트
-						break;
-					case 103:
-						// 예매 완료창으로 전환
-						network = Network.getInstance();
-						network.connected();
-						Reservation_completed reservationCompleted = new Reservation_completed(sign_in);
-				        setVisible(false); // 현재 Pay 창 숨기기
-						break;
-					case 3:
-						System.out.println("===Pay.java의 case3===");
-						break;
-					}
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
+//
+////		// 결제하기창 닫기 버튼 누르면 종료
+////		addWindowListener(new WindowAdapter() {
+////			@Override
+////			public void windowClosing(WindowEvent e) {
+////				if (network.getS() != null) {
+////					System.out.println("결제하기창 닫기 클릭! p.setCmd(100)");
+////					Protocol p = new Protocol();
+////					p.setCmd(100);
+////					try {
+////						network.sendProtocol(p);
+////					} catch (Exception e2) {
+////						
+////					}
+////				} else {
+////					System.out.println("결제하기창 닫기 클릭! network.closed()");
+////					network.closed();
+////				}
+////			}
+////		});
+//	}
+//	
+//	// 현재 로그인한 회원정보를 불러와서 잔여포인트를 불러오는 메서드
+//	private void loadRemainingPoint() {
+//	    try {
+//	    	System.out.println("===loadRemainingPoint 실행===");
+//	    	
+//	    	// Session에서 currentUserId 호출
+//	    	Pay_VO pay_vo = new Pay_VO();
+//        	currentUserId = Session.getCurrentUserId();
+//	    	pay_vo.setCust_id(currentUserId);
+//	    	
+//	    	//잔여 포인트 가져오기
+//	        System.out.println("===잔여포인트 가져오기 실행===");
+//	        
+//	        Protocol p = new Protocol();
+//	        p.setCmd(102);
+//	        p.setPay_vo(pay_vo);
+//	    } catch (Exception e) {
+//	        e.printStackTrace();
+//	    }
+//	}
+////		
+////	@Override
+////	public void run() {
+////		esc: while (true) {
+////			try {
+////				Object obj = network.getIn().readObject();
+////				if (obj != null) {
+////					Protocol p = (Protocol) obj;
+////					switch (p.getCmd()) {
+////					case 100:
+////						break esc;
+////					case 102:
+////						System.out.println("===Pay.java의 case1===");
+////					    chargepoint = p.getResult(); // 프로토콜에서 잔여 포인트 가져오기
+////					    jl2.setText(" " + Integer.toString(chargepoint) + "원"); // JLabel에 잔여포인터 업데이트
+////						break;
+////					case 103:
+////						// 예매 완료창으로 전환
+////						//network = Network.getInstance();
+////						//network.connected();
+////						Reservation_completed reservationCompleted = new Reservation_completed(sign_in);
+////				        setVisible(false); // 현재 Pay 창 숨기기
+////						break;
+////					case 3:
+////						System.out.println("===Pay.java의 case3===");
+////						break;
+////					}
+////				}
+////			} catch (Exception e) {
+////				e.printStackTrace();
+////			}
+////		}
+////	}
+}
 }

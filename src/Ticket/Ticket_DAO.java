@@ -1,4 +1,4 @@
-package ticket;
+package Ticket;
 
 import java.sql.Date;
 import java.util.ArrayList;
