@@ -11,6 +11,10 @@ public class Protocol implements Serializable{
 		cmd 501 -> 로그인
 		cmd 502 -> 회원가입
 		cmd 503 -> 아이디중복(result, 0 = 없음 / 1이상 = 있음)
+		cmd 504 -> 로그아웃
+		cmd 505 -> 회원정보 수정(비밀번호 수정)
+		cmd 506 -> 회원정보 수정(핸드폰 번호 수정)
+		cmd 507 -> 탈퇴하기
 		
 		100: 종료
 	 	101: 로그인 한 회원 찾기 (나중에)
@@ -38,8 +42,16 @@ public class Protocol implements Serializable{
 	TicketBox_VO t_vo;
 	List<Seat_VO> s_list;
 	
+	LoginInfo_VO l_vo;
 	
 	
+	
+	public LoginInfo_VO getL_vo() {
+		return l_vo;
+	}
+	public void setL_vo(LoginInfo_VO l_vo) {
+		this.l_vo = l_vo;
+	}
 	public int getCmd() {
 		return cmd;
 	}

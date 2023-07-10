@@ -180,6 +180,11 @@ public class CP_Client extends Thread{
 						out.writeObject(p503);
 						out.flush();
 						break;
+						
+					case 504:	// 로그아웃하기(LoginInfo테이블에 데이터 삭제)
+						System.out.println("cp_client cmd504 왔음");
+						
+						
 					}
 				}
 			} catch (Exception e) {

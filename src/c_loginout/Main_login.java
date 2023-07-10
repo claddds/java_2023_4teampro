@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -203,7 +204,18 @@ public class Main_login extends JPanel {
 
 		// 3. 로그아웃 버튼
 		sign_out_bt.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
+				int r = JOptionPane.showConfirmDialog(getParent(), "로그아웃 하시겠습니까 ?", "로그아웃", JOptionPane.YES_NO_OPTION);
+				if(r==0) {
+					try {
+						Protocol p = new Protocol();
+						p.setCmd(504);
+					} catch (Exception e2) {
+						// TODO: handle exception
+					}
+					signin.card.show(signin.pg, "sign_in");
+				}
 			}
 		});
 		
