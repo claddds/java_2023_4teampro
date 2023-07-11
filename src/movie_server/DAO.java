@@ -97,6 +97,23 @@ public class DAO {
 		ss.commit();
 		return result;
 	}
+	
+	// Login_info테이블에 로그아웃한 회원의 정보를 삭제
+	/*
+	 public static int getDelete(CustomerVO vo) {
+		int result = getSession().delete("custdel", vo);
+		ss.commit();
+		return result;
+	}
+	*/
+	public static int loginInfoDelete(String cust_id) {
+		//System.out.println("DAO loginfo delete: "+vo.getCust_id());
+		int result = getSession().delete("logout", cust_id);
+		ss.commit();
+		System.out.println("DAO result:"+result);
+		return result;
+	}
+	
 
 //	public static List<CustomerVO> getLogin(List<CustomerVO> loginchk) {
 //		List<CustomerVO> vo = getSession().selectOne("login", loginchk);

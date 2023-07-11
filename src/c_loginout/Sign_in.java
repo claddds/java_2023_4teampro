@@ -30,6 +30,7 @@ import movie_server.CustomerVO;
 import movie_server.MobileTicket_VO;
 import movie_server.Protocol;
 import movie_server.TicketBox_VO;
+import movie_server.LoginInfo_VO;
 import pay.Pay;
 import pay.PointCharge;
 import pay.Reservation_completed;
@@ -63,7 +64,9 @@ public class Sign_in extends JFrame implements Runnable {
 
 	public Sign_up sign_up;
 	public Main_login main_login;
+	public MyPage mypage;
 	public CustomerVO cvo;
+	public LoginInfo_VO lvo;
 	public Pay pay;
 	public PointCharge pointcharge;
 	public Reservation_completed r_completed;
@@ -205,6 +208,7 @@ public class Sign_in extends JFrame implements Runnable {
 		
 		main_login = new Main_login(this);
 		sign_up = new Sign_up(this);
+		mypage = new MyPage(this);
 		pay = new Pay(this);
 		pointcharge = new PointCharge(this);
 		r_completed = new Reservation_completed(this);
@@ -221,6 +225,7 @@ public class Sign_in extends JFrame implements Runnable {
 		
 		pg.add(main_login, "main_login");
 		pg.add(sign_up, "sign_up");
+		pg.add(mypage,"mypage");
 		pg.add(pay, "pay");
 		pg.add(pointcharge, "pointcharge");
 		pg.add(r_completed, "r_completed");
@@ -351,6 +356,11 @@ public class Sign_in extends JFrame implements Runnable {
 						System.out.println(iddck);
 						sign_up.dupchk();
 						break;
+						
+					case 504:	// 로그아웃
+						System.out.println("signin 504cmd");
+						
+						
 					}
 				}
 			} catch (Exception e) {

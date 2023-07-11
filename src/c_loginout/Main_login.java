@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
+import movie_server.LoginInfo_VO;
 import movie_server.Pay_VO;
 import movie_server.Protocol;
 import pay.PointChargeDialog;
@@ -25,7 +26,6 @@ public class Main_login extends JPanel {
 	Sign_in sign_in;
 	// Movie_chart_view1 v1 = new Movie_chart_view1(); //두개 안씀
 	// Movie_chart_view2 v2 = new Movie_chart_view2();
-
 	// CardLayout card = new CardLayout();
 
 	public Main_login(Sign_in signin) {
@@ -198,7 +198,12 @@ public class Main_login extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//마이페이지 화면단 구성 필요!!!******
-
+				// 화면단 구성 완
+				/* 안에 버튼 활성화 시킨다음에 구성하겟음
+				String mypage_inpw = JOptionPane.showInputDialog("비밀번호를 입력해주세요");	// 비밀번호를 입력받고 맞아야 마이페이지에 들어갈수 있다
+				System.out.println("마이페이지 입장 비밀번호 입력"+ mypage_inpw);
+				*/
+				signin.card.show(signin.pg, "mypage");
 			}
 		});
 
@@ -208,11 +213,23 @@ public class Main_login extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				int r = JOptionPane.showConfirmDialog(getParent(), "로그아웃 하시겠습니까 ?", "로그아웃", JOptionPane.YES_NO_OPTION);
 				if(r==0) {
+					
 					try {
+						System.out.println("다이얼로그 값 받기 완");
+						
+						LoginInfo_VO l_vo = new LoginInfo_VO();
 						Protocol p = new Protocol();
+						System.out.println("로그아웃 프로토콜 생성완");
+						
+						l_vo.setCust_id(signin.p.getC_vo().getCust_id());
 						p.setCmd(504);
+						
+						signin.out.writeObject(p);
+						signin.out.flush();
+						
+						
 					} catch (Exception e2) {
-						// TODO: handle exception
+						System.out.println(e2);
 					}
 					signin.card.show(signin.pg, "sign_in");
 				}

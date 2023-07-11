@@ -30,6 +30,8 @@ public class Protocol implements Serializable{
 	int cmd;
 	int result;
 	String msg;
+	// 로그아웃할때 시험삼아해보지
+	String result_st;
 	
 	List<CustomerVO> c_list;
 	CustomerVO c_vo;	
@@ -119,4 +121,10 @@ public class Protocol implements Serializable{
 		this.s_list = s_list;
 	}
 	
+	public String getResult_st() {
+		return result_st;
+	}
+	public void setResult_st(String result_st) {
+		this.result_st = result_st;
+	}
 }

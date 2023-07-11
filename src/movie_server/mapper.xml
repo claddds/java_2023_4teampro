@@ -25,6 +25,11 @@
 		values (#{cust_id}, #{cust_name}, #{point})
 	</insert>
 
+	<!-- 로그아웃할때 회원 정보 Login_info에 데이터 삭제 -->
+	<update id="logout" parameterType="String">
+		DELETE FROM login_info
+		WHERE cust_id = #{cust_id}
+	</update>
 
 	<!-- 아이디 중복 체크 (탈퇴한 회원의 아이디까지 사용할 수 없게) -->
 	<select id="idchk" resultType="int"
