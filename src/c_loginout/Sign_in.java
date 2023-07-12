@@ -57,6 +57,7 @@ public class Sign_in extends JFrame implements Runnable {
 	public String c_id, c_pw;
 	public int iddck = 2;
 	public int loginRes;
+	public int logoutRes;
 	
 	public Socket s;
 	public ObjectOutputStream out;
@@ -202,9 +203,9 @@ public class Sign_in extends JFrame implements Runnable {
 	 * 따라서 로그인 성공시에만 다음 화면을 생성하여 현재 접속한 회원정보를 다른 화면에서도 사용할 수 있게 수정했습니다.
 	 */
 	public void LoginSuccess() {
-		card = new CardLayout();
-		pg = new JPanel();
-		pg.setLayout(card);
+//		card = new CardLayout();
+//		pg = new JPanel();
+//		pg.setLayout(card);
 		
 		main_login = new Main_login(this);
 		sign_up = new Sign_up(this);
@@ -359,8 +360,10 @@ public class Sign_in extends JFrame implements Runnable {
 						
 					case 504:	// 로그아웃
 						System.out.println("signin 504cmd");
+						logoutRes=p.getResult();
+						logoutRes();
 						
-						
+						break;
 					}
 				}
 			} catch (Exception e) {
@@ -399,6 +402,16 @@ public class Sign_in extends JFrame implements Runnable {
 			JOptionPane.showMessageDialog(getParent(), "아이디 / 비밀번호를 입력해주세요.");
 			System.out.println("입력하지않았을때 뜬다.");
 		}		
+	}
+	
+	public void logoutRes() {
+		if(logoutRes == 1) {
+			JOptionPane.showMessageDialog(getParent(), "로그아웃되었습니다.");
+			card.show(pg, "sign_in");
+			init();
+		} else {
+			JOptionPane.showMessageDialog(getParent(), "로그아웃이 실패했습니다.");
+		}
 	}
 
 	public static void main(String[] args) {

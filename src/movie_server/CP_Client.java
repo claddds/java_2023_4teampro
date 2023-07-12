@@ -183,25 +183,15 @@ public class CP_Client extends Thread{
 						
 					case 504:	// 로그아웃하기(LoginInfo테이블에 데이터 삭제)
 						System.out.println("cp_client cmd504 왔음");
-						/*
-						System.out.println("===CP_Client의 case 102===");
-                    	
-                    	Pay_VO p_vo = p.getP_vo();
-                    	DAO.updatePoint(p_vo);
-                    	
+						
+						int result504 = DAO.loginInfoDelete(p.l_vo.getCust_id());
+						//System.out.println("DAO 다녀옴");
+						//System.out.println(result504);
+						p.setResult(result504);
 						out.writeObject(p);
 						out.flush();
-                        break;
-						*/
-						// 여기까지만 왓음 ㅈㅁㅈㅁ
-						//System.out.println(p.getL_vo());
-						//String logout_cust_id = p.getL_vo().getCust_id();
-						//System.out.println(logout_cust_id+"지금이게 널값?");
-	
-						int result504 = DAO.loginInfoDelete(p.getL_vo().getCust_id());
-						System.out.println(result504);
-						
-						//break;
+						System.out.println("cpc504나가기");
+						break;
 					}
 				}
 			} catch (Exception e) {

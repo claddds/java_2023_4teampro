@@ -222,6 +222,7 @@ public class Main_login extends JPanel {
 						System.out.println("로그아웃 프로토콜 생성완");
 						
 						l_vo.setCust_id(signin.p.getC_vo().getCust_id());
+						p.setL_vo(l_vo);
 						p.setCmd(504);
 						
 						signin.out.writeObject(p);
@@ -231,7 +232,7 @@ public class Main_login extends JPanel {
 					} catch (Exception e2) {
 						System.out.println(e2);
 					}
-					signin.card.show(signin.pg, "sign_in");
+					// signin.card.show(signin.pg, "sign_in");
 				}
 			}
 		});
